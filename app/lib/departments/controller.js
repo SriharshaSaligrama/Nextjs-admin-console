@@ -10,7 +10,7 @@ export const getDepartments = async () => {
     }
     catch (error) {
         console.log({ getDepartmentsError: error });
-        return error
+        throw new Error(error)
     }
 };
 
@@ -37,7 +37,7 @@ export const getDepartment = async (id) => {
     }
     catch (error) {
         console.log({ getDepartmentbyIdError: error });
-        return error
+        throw new Error(error)
     }
 }
 
@@ -61,7 +61,7 @@ export const getParentDepartments = async (id) => {
     }
     catch (error) {
         console.log({ getParentDepartmentsError: error });
-        return error
+        throw new Error(error)
     }
 }
 
@@ -72,7 +72,7 @@ export const getChildrenDepartments = async (id) => {
         return JSON.parse(JSON.stringify(childrenDepartments))
     } catch (error) {
         console.log({ getChildrenDepartmentsError: error });
-        return error
+        throw new Error(error)
     }
 }
 

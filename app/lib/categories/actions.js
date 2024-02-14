@@ -20,13 +20,22 @@ export async function addCategoryAction(prevState, data) {
         const { name, code, description, parent } = await getFormData(data)
 
         const errors = await categoryValidator({ name, code })
-        if (errors?.code?.length > 0 || errors?.name?.length > 0) {
+        if (errors?.code?.length > 0 || errors?.name?.length > 0 || errors?.message) {
             return errors
         }
 
-        await addCategory({ name, code, description, parent })
+        const addedCategoryError = await addCategory({ name, code, description, parent })
+
+        if (addedCategoryError?.errors?.name) {
+            throw new Error(addedCategoryError?.errors?.name?.message)
+        } else if (addedCategoryError?.errors?.code) {
+            throw new Error(addedCategoryError?.errors?.code?.message)
+        } else if (addedCategoryError?.errors?.message) {
+            throw new Error(addedCategoryError?.errors?.message)
+        }
     } catch (error) {
         console.log({ addCategoryError: error })
+        throw new Error(error)
     }
 
     revalidatePath("/categories")
@@ -44,10 +53,18 @@ export async function editCategoryAction(prevState, data) {
             return errors
         }
 
-        await editCategory(id, { name, code, description, parent })
-    }
-    catch (error) {
+        const updatedCategoryError = await editCategory(id, { name, code, description, parent })
+
+        if (updatedCategoryError?.errors?.name) {
+            throw new Error(updatedCategoryError?.errors?.name?.message)
+        } else if (updatedCategoryError?.errors?.code) {
+            throw new Error(updatedCategoryError?.errors?.code?.message)
+        } else if (updatedCategoryError?.errors) {
+            throw new Error(updatedCategoryError?.errors?.message)
+        }
+    } catch (error) {
         console.log({ editCategoryError: error })
+        throw new Error(error)
     }
 
     revalidatePath("/categories")
@@ -56,9 +73,14 @@ export async function editCategoryAction(prevState, data) {
 
 export async function deleteCategoryAction({ id, parentId }) {
     try {
-        await deleteCategory({ id, parentId })
+        const deleteCategoryError = await deleteCategory({ id, parentId })
+
+        if (deleteCategoryError?.errors) {
+            throw new Error(deleteCategoryError?.errors?.message)
+        }
     } catch (error) {
         console.log({ deleteCategoryError: error })
+        throw new Error(error)
     }
     revalidatePath("/categories")
     redirect("/categories")

@@ -10,7 +10,7 @@ export const getCategories = async () => {
     }
     catch (error) {
         console.log({ getCategoriesError: error });
-        return error
+        throw new Error(error)
     }
 };
 
@@ -37,7 +37,7 @@ export const getCategory = async (id) => {
     }
     catch (error) {
         console.log({ getCategorybyIdError: error });
-        return error
+        throw new Error(error)
     }
 }
 
@@ -61,7 +61,7 @@ export const getParentCategories = async (id) => {
     }
     catch (error) {
         console.log({ getParentCategoriesError: error });
-        return error
+        throw new Error(error)
     }
 }
 
@@ -72,7 +72,7 @@ export const getChildrenCategories = async (id) => {
         return JSON.parse(JSON.stringify(childrenCategories))
     } catch (error) {
         console.log({ getChildrenCategoriesError: error });
-        return error
+        throw new Error(error)
     }
 }
 

@@ -15,7 +15,7 @@ const Form = (props) => {
     const returnLink = pathname.includes('departments') ? '/departments' : pathname.includes('categories') ? '/categories' : ''
     const addAction = pathname.includes('departments') ? addDepartmentAction : pathname.includes('categories') ? addCategoryAction : () => { }
     const editAction = pathname.includes('departments') ? editDepartmentAction : pathname.includes('categories') ? editCategoryAction : () => { }
-    const initialErrorState = { name: '', code: '' }
+    const initialErrorState = { name: '', code: '', message: '' }
     const [state, dispatch] = useFormState(editingData?.id ? editAction : addAction, initialErrorState);
 
     const handleSubmit = (event) => {

@@ -24,9 +24,18 @@ export async function addDepartmentAction(prevState, data) {
             return errors
         }
 
-        await addDepartment({ name, code, description, parent })
+        const addedDepartmentError = await addDepartment({ name, code, description, parent })
+
+        if (addedDepartmentError?.errors?.name) {
+            throw new Error(addedDepartmentError?.errors?.name?.message)
+        } else if (addedDepartmentError?.errors?.code) {
+            throw new Error(addedDepartmentError?.errors?.code?.message)
+        } else if (addedDepartmentError?.errors?.message) {
+            throw new Error(addedDepartmentError?.errors?.message)
+        }
     } catch (error) {
         console.log({ addDepartmentError: error })
+        throw new Error(error)
     }
 
     revalidatePath("/departments")
@@ -44,10 +53,19 @@ export async function editDepartmentAction(prevState, data) {
             return errors
         }
 
-        await editDepartment(id, { name, code, description, parent })
+        const updatedDepartmentError = await editDepartment(id, { name, code, description, parent })
+
+        if (updatedDepartmentError?.errors?.name) {
+            throw new Error(updatedDepartmentError?.errors?.name?.message)
+        } else if (updatedDepartmentError?.errors?.code) {
+            throw new Error(updatedDepartmentError?.errors?.code?.message)
+        } else if (updatedDepartmentError?.errors?.message) {
+            throw new Error(updatedDepartmentError?.errors?.message)
+        }
     }
     catch (error) {
         console.log({ editDepartmentError: error })
+        throw new Error(error)
     }
 
     revalidatePath("/departments")
@@ -56,9 +74,14 @@ export async function editDepartmentAction(prevState, data) {
 
 export async function deleteDepartmentAction({ id, parentId }) {
     try {
-        await deleteDepartment({ id, parentId })
+        const deleteDepartmentError = await deleteDepartment({ id, parentId })
+
+        if (deleteDepartmentError?.errors) {
+            throw new Error(deleteDepartmentError?.errors?.message)
+        }
     } catch (error) {
         console.log({ deleteDepartmentError: error })
+        throw new Error(error)
     }
     revalidatePath("/departments")
     redirect("/departments")

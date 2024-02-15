@@ -37,7 +37,7 @@ export const getDepartment = async (id) => {
     }
     catch (error) {
         console.log({ getDepartmentbyIdError: error });
-        throw new Error(error)
+        return null          //returning null for handling not found error
     }
 }
 
@@ -45,19 +45,22 @@ export const getParentDepartments = async (id) => {
     try {
         const allDepartments = await getDepartments()
         const department = await getDepartment(id)
-        const childrenDepartments = []
+        if (department?.id) {
+            const childrenDepartments = []
 
-        const filterChildrenDepartments = (department) => {
-            childrenDepartments.push(String(department.id), department.name)
-            const children = allDepartments.filter(dept => dept.parent?.id?.toString() === department.id?.toString())
-            for (let child of children) {
-                filterChildrenDepartments(child)
+            const filterChildrenDepartments = (department) => {
+                childrenDepartments.push(String(department.id), department.name)
+                const children = allDepartments.filter(dept => dept.parent?.id?.toString() === department.id?.toString())
+                for (let child of children) {
+                    filterChildrenDepartments(child)
+                }
             }
-        }
 
-        filterChildrenDepartments(department)
-        const parentDepartments = allDepartments.filter(department => !childrenDepartments.includes(String(department.id)))
-        return JSON.parse(JSON.stringify(parentDepartments))
+            filterChildrenDepartments(department)
+            const parentDepartments = allDepartments.filter(department => !childrenDepartments.includes(String(department.id)))
+            return JSON.parse(JSON.stringify(parentDepartments))
+        }
+        return []
     }
     catch (error) {
         console.log({ getParentDepartmentsError: error });

@@ -37,7 +37,7 @@ export const getCategory = async (id) => {
     }
     catch (error) {
         console.log({ getCategorybyIdError: error });
-        throw new Error(error)
+        return null          //returning null for handling not found error
     }
 }
 
@@ -45,19 +45,22 @@ export const getParentCategories = async (id) => {
     try {
         const allCategories = await getCategories()
         const category = await getCategory(id)
-        const childrenCategories = []
+        if (category?.id) {
+            const childrenCategories = []
 
-        const filterChildrenCategories = (category) => {
-            childrenCategories.push(String(category.id), category.name)
-            const children = allCategories.filter(dept => dept.parent?.id?.toString() === category.id?.toString())
-            for (let child of children) {
-                filterChildrenCategories(child)
+            const filterChildrenCategories = (category) => {
+                childrenCategories.push(String(category.id), category.name)
+                const children = allCategories.filter(dept => dept.parent?.id?.toString() === category.id?.toString())
+                for (let child of children) {
+                    filterChildrenCategories(child)
+                }
             }
-        }
 
-        filterChildrenCategories(category)
-        const parentCategories = allCategories.filter(category => !childrenCategories.includes(String(category.id)))
-        return JSON.parse(JSON.stringify(parentCategories))
+            filterChildrenCategories(category)
+            const parentCategories = allCategories.filter(category => !childrenCategories.includes(String(category.id)))
+            return JSON.parse(JSON.stringify(parentCategories))
+        }
+        return []
     }
     catch (error) {
         console.log({ getParentCategoriesError: error });

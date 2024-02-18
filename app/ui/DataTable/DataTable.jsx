@@ -5,7 +5,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 const DataTable = (props) => {
     const { columns, rows } = props
     return (
-        <Box sx={{ height: '420px' }}>
+        <Box sx={{ height: '70vh' }}>
             <DataGrid
                 columns={columns}
                 rows={rows}

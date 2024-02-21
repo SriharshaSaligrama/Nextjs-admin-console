@@ -4,10 +4,10 @@ import React, { useContext } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Box, Toolbar, IconButton, Typography, Divider, useTheme, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Tooltip } from '@mui/material'
 import { ChevronLeft, ChevronRight, DarkModeOutlined, LightModeOutlined, Menu } from '@mui/icons-material';
-import { ColorModeContext } from '../Theme/Theme';
-import DrawerHeader from './DrawerHeader/DrawerHeader';
-import Drawer from './Drawer/Drawer';
-import AppBar from './AppBar/AppBar';
+import { ColorModeContext } from '../Theme';
+import DrawerHeader from './DrawerHeader';
+import Drawer from './Drawer';
+import AppBar from './AppBar';
 import useNavbar from './hook';
 import { navbarListItems } from '@/app/lib/constants';
 

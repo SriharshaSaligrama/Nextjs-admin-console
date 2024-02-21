@@ -1,5 +1,5 @@
 import React from 'react'
-import HomeSkeleton from '../ui/DepartmentCategory/HomeSkeleton'
+import HomeSkeleton from '../ui/FeatureHome/HomeSkeleton'
 
 const Loading = () => {
     return (

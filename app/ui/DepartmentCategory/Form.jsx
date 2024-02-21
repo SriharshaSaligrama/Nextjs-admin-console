@@ -76,7 +76,7 @@ const Form = (props) => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box display={'flex'} justifyContent={'center'} columnGap={2}>
+                <Box sx={{ ...styles.buttonsContainer }}>
                     <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
                     <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} {heading}</Button>
                 </Box>
@@ -92,6 +92,11 @@ const styles = {
         fontSize: "24px",
         fontWeight: 600,
         paddingBottom: "16px",
+    },
+    buttonsContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        columnGap: '16px',
     },
     buttons: {
         width: '50%',

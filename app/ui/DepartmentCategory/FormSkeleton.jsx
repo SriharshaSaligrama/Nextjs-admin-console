@@ -5,7 +5,7 @@ const FormSkeleton = () => {
     return (
         <>
             <Stack spacing={2}>
-                <Skeleton variant="text" width={'210px'} sx={{ fontSize: '36px', }} />
+                <Skeleton variant="text" sx={{ ...styles.title }} />
                 <Skeleton variant="rectangular" height={'8vh'} />
                 <Skeleton variant="rectangular" height={'8vh'} />
                 <Skeleton variant="rectangular" height={'16vh'} />
@@ -16,3 +16,10 @@ const FormSkeleton = () => {
 }
 
 export default FormSkeleton
+
+const styles = {
+    title: {
+        fontSize: '36px',
+        width: '210px',
+    }
+}

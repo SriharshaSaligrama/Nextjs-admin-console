@@ -4,10 +4,14 @@ import { Box, IconButton, Tooltip } from '@mui/material'
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material'
 
 const DataTableActions = (props) => {
-    const { cellValues } = props
+    const { cellValues, handleDelete } = props
     const router = useRouter()
     const pathname = usePathname()
-    const returnLink = pathname.includes('departments') ? 'departments' : pathname.includes('categories') ? 'categories' : ''
+    const returnLink = pathname.includes('departments') ? 'departments' :
+        pathname.includes('categories') ? 'categories' :
+            pathname.includes('locations') ? 'locations' :
+                pathname.includes('buildings') ? 'buildings' :
+                    pathname.includes('users') ? 'users' : ''
 
     return (
         <Box sx={{ ...styles.actionButtonsContainer }}>
@@ -17,7 +21,7 @@ const DataTableActions = (props) => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
-                <IconButton onClick={() => router.push(`/${returnLink}/dependencies/${cellValues.row.id}`)}>
+                <IconButton onClick={handleDelete ? () => handleDelete(cellValues.row.id) : () => router.push(`/${returnLink}/dependencies/${cellValues.row.id}`)}>
                     <DeleteOutlined fontSize='small' color='error' />
                 </IconButton>
             </Tooltip>

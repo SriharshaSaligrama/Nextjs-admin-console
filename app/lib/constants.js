@@ -173,14 +173,14 @@ export const userColumns = [
 export const locationColumns = [
     {
         field: 'name',
-        headerName: 'name',
-        width: 250,
+        headerName: 'Name',
+        width: 700,
         editable: false,
     },
     {
         field: 'Actions',
         renderCell: (cellValues) => (<DataTableActions cellValues={cellValues} />),
-        width: 150,
+        width: 700,
         editable: false,
     },
 ]

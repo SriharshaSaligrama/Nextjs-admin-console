@@ -1,8 +1,9 @@
+import LocationsForm from '@/app/ui/Locations/Form'
 import React from 'react'
 
-const AddLocation = () => {
+const AddLocation = async () => {
     return (
-        <div>AddLocation</div>
+        <LocationsForm />
     )
 }
 

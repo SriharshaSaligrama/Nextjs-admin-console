@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { departmentValidator } from "../utils";
-import { addDepartment, deleteDepartment, editDepartment } from "./controller";
+import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "./controller";
 import mongoose from "mongoose";
 
 const getFormData = async (data) => {
@@ -22,6 +22,11 @@ export async function addDepartmentAction(prevState, data) {
         const errors = await departmentValidator({ name, code })
         if (errors?.code?.length > 0 || errors?.name?.length > 0) {
             return errors
+        }
+
+        const parentDepartment = await getDepartment(parent)
+        if (!parentDepartment?.id) {
+            throw new Error('Parent department not found')
         }
 
         const addedDepartmentError = await addDepartment({ name, code, description, parent })
@@ -43,7 +48,6 @@ export async function addDepartmentAction(prevState, data) {
 }
 
 export async function editDepartmentAction(prevState, data) {
-
     try {
         const id = data.get('id')  //**need to handle id not found error
         const { name, code, description, parent } = await getFormData(data)
@@ -51,6 +55,11 @@ export async function editDepartmentAction(prevState, data) {
         const errors = await departmentValidator({ name, code, editId: id })
         if (errors?.code?.length > 0 || errors?.name?.length > 0) {
             return errors
+        }
+
+        const parentDepartment = await getDepartment(parent)
+        if (!parentDepartment?.id) {
+            throw new Error('Parent department not found')
         }
 
         const updatedDepartmentError = await editDepartment(id, { name, code, description, parent })
@@ -74,6 +83,11 @@ export async function editDepartmentAction(prevState, data) {
 
 export async function deleteDepartmentAction({ id, parentId }) {
     try {
+        const parentDepartment = await getDepartment(parentId)
+        if (!parentDepartment?.id) {
+            throw new Error('Parent department not found')
+        }
+
         const deleteDepartmentError = await deleteDepartment({ id, parentId })
 
         if (deleteDepartmentError?.errors) {
@@ -83,6 +97,7 @@ export async function deleteDepartmentAction({ id, parentId }) {
         console.log({ deleteDepartmentError: error })
         throw new Error(error)
     }
+
     revalidatePath("/departments")
     redirect("/departments")
 }

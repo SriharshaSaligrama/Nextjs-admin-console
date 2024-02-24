@@ -7,7 +7,12 @@ const locationsSchema = new mongoose.Schema({
         required: [true, "Name is required"],
         minLength: [2, "Name should be minimum 2 characters"],
         maxLength: [120, "Name should not exceed 120 characters"],
+        unique: true
     },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true,
     toJSON: {

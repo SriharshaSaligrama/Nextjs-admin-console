@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { categoryValidator } from "../utils";
-import { addCategory, deleteCategory, editCategory } from "./controller";
+import { addCategory, deleteCategory, editCategory, getCategory } from "./controller";
 import mongoose from "mongoose";
 
 const getFormData = async (data) => {
@@ -22,6 +22,11 @@ export async function addCategoryAction(prevState, data) {
         const errors = await categoryValidator({ name, code })
         if (errors?.code?.length > 0 || errors?.name?.length > 0 || errors?.message) {
             return errors
+        }
+
+        const parentCategory = await getCategory(parent)
+        if (!parentCategory?.id) {
+            throw new Error('Parent category not found')
         }
 
         const addedCategoryError = await addCategory({ name, code, description, parent })
@@ -43,7 +48,6 @@ export async function addCategoryAction(prevState, data) {
 }
 
 export async function editCategoryAction(prevState, data) {
-
     try {
         const id = data.get('id')  //**need to handle id not found error
         const { name, code, description, parent } = await getFormData(data)
@@ -51,6 +55,11 @@ export async function editCategoryAction(prevState, data) {
         const errors = await categoryValidator({ name, code, editId: id })
         if (errors?.code?.length > 0 || errors?.name?.length > 0) {
             return errors
+        }
+
+        const parentCategory = await getCategory(parent)
+        if (!parentCategory?.id) {
+            throw new Error('Parent category not found')
         }
 
         const updatedCategoryError = await editCategory(id, { name, code, description, parent })
@@ -73,6 +82,11 @@ export async function editCategoryAction(prevState, data) {
 
 export async function deleteCategoryAction({ id, parentId }) {
     try {
+        const parentCategory = await getCategory(parentId)
+        if (!parentCategory?.id) {
+            throw new Error('Parent category not found')
+        }
+
         const deleteCategoryError = await deleteCategory({ id, parentId })
 
         if (deleteCategoryError?.errors) {
@@ -82,6 +96,7 @@ export async function deleteCategoryAction({ id, parentId }) {
         console.log({ deleteCategoryError: error })
         throw new Error(error)
     }
+
     revalidatePath("/categories")
     redirect("/categories")
 }

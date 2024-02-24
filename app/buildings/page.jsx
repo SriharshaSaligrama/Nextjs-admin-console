@@ -1,9 +1,12 @@
 import React from 'react'
 import Home from '../ui/FeatureHome'
+import { getBuildings } from '../lib/buildings/controller'
 
-const BuildingsPage = () => {
+const BuildingsPage = async () => {
+    const data = await getBuildings()
+
     return (
-        <Home data={[]} />
+        <Home data={data || []} />
     )
 }
 

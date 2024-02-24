@@ -11,7 +11,11 @@ const buildingsSchema = new mongoose.Schema({
     location: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "locations",
-        required: true,
+        required: [true, "Location is required"],
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true,

@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Box, Button, IconButton, InputAdornment, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { Box, IconButton, InputAdornment, MenuItem, Stack, TextField } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
+import PageHeading from '../PageHeading'
 
 const UserForm = () => {
     const router = useRouter()
@@ -32,7 +34,7 @@ const UserForm = () => {
             onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
-                <Typography sx={{ ...styles.heading }}>Add User</Typography>
+                <PageHeading heading='Add User' />
                 <TextField
                     required
                     label='Name'
@@ -114,29 +116,13 @@ const UserForm = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box sx={{ ...styles.buttonsContainer }}>
-                    <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
-                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">Create User</Button>
-                </Box>
+                <FormSubmitCancelButtons
+                    handleCancelClick={handleCancelClick}
+                    submitText={`Create User`}
+                />
             </Stack>
         </Box>
     )
 }
 
 export default UserForm
-
-const styles = {
-    heading: {
-        fontSize: "24px",
-        fontWeight: 600,
-        paddingBottom: "16px",
-    },
-    buttonsContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        columnGap: '16px',
-    },
-    buttons: {
-        width: '50%',
-    },
-}

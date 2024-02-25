@@ -1,9 +1,9 @@
-import LocationsFormSkeleton from '@/app/_lib/ui/Locations/FormSkeleton'
+import BuildingsLocationsFormSkeleton from '@/app/_lib/ui/BuildingLocation/FormSkeleton'
 import React from 'react'
 
 const Loading = () => {
     return (
-        <LocationsFormSkeleton />
+        <BuildingsLocationsFormSkeleton />
     )
 }
 

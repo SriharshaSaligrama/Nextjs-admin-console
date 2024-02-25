@@ -2,9 +2,10 @@
 
 import React from 'react'
 import { useFormState } from 'react-dom';
-import { Box, Button, MenuItem, Paper, TextField, Typography } from '@mui/material'
+import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import { addBuildingAction, editBuildingAction } from '@/app/_lib/db/buildings/actions';
+import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 
 const BuildingsForm = (props) => {
     const { editingData, allLocations } = props
@@ -64,10 +65,10 @@ const BuildingsForm = (props) => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box sx={{ ...styles.buttonsContainer }}>
-                    <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
-                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} Building</Button>
-                </Box>
+                <FormSubmitCancelButtons
+                    handleCancelClick={handleCancelClick}
+                    submitText={editingData?.id ? 'Update Building' : 'Create Building'}
+                />
             </Paper>
         </Box>
     )
@@ -95,13 +96,5 @@ const styles = {
         fontSize: '26px',
         fontWeight: 600,
         textAlign: 'center',
-    },
-    buttonsContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        columnGap: '16px',
-    },
-    buttons: {
-        width: '50%',
-    },
+    }
 }

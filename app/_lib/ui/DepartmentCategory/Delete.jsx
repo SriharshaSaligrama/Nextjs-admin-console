@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Box, Button, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import globalStyles from '@/app/globalStyles'
 import { deleteDepartmentAction } from '@/app/_lib/db/departments/actions'
 import { deleteCategoryAction } from '@/app/_lib/db/categories/actions'
+import PageHeading from '../PageHeading'
+import DeleteCancelButtons from '../DeleteCancelButtons'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData } = props
@@ -18,13 +20,17 @@ const Delete = (props) => {
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
 
+    const handleCancelClick = () => {
+        router.push(returnLink)
+    }
+
     const handleDeleteClick = async () => {
         await deleteAction({ id: deletingData.id, parentId: parent })
     }
 
     return (
         <>
-            <Typography sx={{ ...styles.heading }}>Delete Dependencies</Typography>
+            <PageHeading heading='Delete Dependencies' />
             {
                 childrenData?.length > 0 ? <Stack sx={{ ...styles.dependenciesContainer }}>
                     <Stack spacing={2}>
@@ -65,18 +71,12 @@ const Delete = (props) => {
                                 <Typography>Are you sure to delete <b>{deletingData.name}</b> {label}?</Typography>
                             </>
                         }
-                        <Box sx={{ ...styles.actionButtonsContainer }}>
-                            <Button variant='contained' color='error' sx={{ width: '100%' }} onClick={() => router.push(returnLink)}>Cancel</Button>
-                            <Button variant='contained' sx={{ width: '100%' }} disabled={!parent} onClick={handleDeleteClick}>Delete</Button>
-                        </Box>
+                        <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={!parent} />
                     </Stack>
                 </Stack> : <Stack spacing={4} sx={{ ...styles.noDependenciesContainer }} >
                     <Typography><b>{deletingData.name}</b> {label} has no dependencies</Typography>
                     <Typography>Are you sure you want to delete <b>{deletingData.name}</b> {label}?</Typography>
-                    <Box sx={{ ...styles.actionButtonsContainer }}>
-                        <Button variant='contained' color='error' sx={{ width: '100%' }} onClick={() => router.push(returnLink)}>Cancel</Button>
-                        <Button variant='contained' sx={{ width: '100%' }} onClick={handleDeleteClick}>Delete</Button>
-                    </Box>
+                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} />
                 </Stack>
             }
         </>
@@ -86,11 +86,6 @@ const Delete = (props) => {
 export default Delete
 
 const styles = {
-    heading: {
-        fontSize: "24px",
-        fontWeight: 600,
-        paddingBottom: "16px",
-    },
     dependenciesContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -113,11 +108,5 @@ const styles = {
         margin: 0,
         padding: 0,
         paddingBottom: 1
-    },
-    actionButtonsContainer: {
-        display: "flex",
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        columnGap: "16px",
     }
 }

@@ -3,9 +3,11 @@
 import React from 'react'
 import { useFormState } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
-import { Box, TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
+import { Box, TextField, Stack, MenuItem } from '@mui/material'
 import { addDepartmentAction, editDepartmentAction } from '@/app/_lib/db/departments/actions';
 import { addCategoryAction, editCategoryAction } from '@/app/_lib/db/categories/actions';
+import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
+import PageHeading from '../PageHeading';
 
 const Form = (props) => {
     const { allData, editingData } = props
@@ -35,7 +37,7 @@ const Form = (props) => {
             onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
-                <Typography sx={{ ...styles.heading }}>{editingData?.id ? `Edit ${heading}` : `Add ${heading}`}</Typography>
+                <PageHeading heading={editingData?.id ? `Edit ${heading}` : `Add ${heading}`} />
                 <TextField
                     name='id'
                     sx={{ display: 'none' }}
@@ -76,29 +78,13 @@ const Form = (props) => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box sx={{ ...styles.buttonsContainer }}>
-                    <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
-                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} {heading}</Button>
-                </Box>
+                <FormSubmitCancelButtons
+                    handleCancelClick={handleCancelClick}
+                    submitText={editingData?.id ? `Update ${heading}` : `Create ${heading}`}
+                />
             </Stack>
         </Box>
     )
 }
 
 export default Form
-
-const styles = {
-    heading: {
-        fontSize: "24px",
-        fontWeight: 600,
-        paddingBottom: "16px",
-    },
-    buttonsContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        columnGap: '16px',
-    },
-    buttons: {
-        width: '50%',
-    },
-}

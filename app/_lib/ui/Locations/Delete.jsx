@@ -1,14 +1,20 @@
 'use client'
 
 import React from 'react'
-import { Box, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
+import { List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { deleteLocationAction } from '@/app/_lib/db/locations/actions'
 import globalStyles from '@/app/globalStyles'
+import PageHeading from '../PageHeading'
+import DeleteCancelButtons from '../DeleteCancelButtons'
 
 const DeleteLocation = (props) => {
     const { deletingData, dependantBuildings } = props
     const router = useRouter()
+
+    const handleCancelClick = () => {
+        router.push('/locations')
+    }
 
     const handleDeleteClick = async () => {
         await deleteLocationAction({ id: deletingData?.id })
@@ -16,7 +22,7 @@ const DeleteLocation = (props) => {
 
     return (
         <>
-            <Typography sx={{ ...styles.heading }}>Delete Dependencies</Typography>
+            <PageHeading heading='Delete Dependencies' />
             {
                 dependantBuildings?.length > 0 ? <Stack sx={{ ...styles.dependenciesContainer }} spacing={2}>
                     <Typography><b>{deletingData.name}</b> location has <b>{dependantBuildings.length}</b> building(s):</Typography>
@@ -30,18 +36,12 @@ const DeleteLocation = (props) => {
                         }
                     </List>
                     <Typography>Please delete all the buildings of this location before deleting this location.</Typography>
-                    <Box sx={{ ...styles.actionButtonsContainer }}>
-                        <Button variant='contained' color='error' sx={{ width: '100%' }} onClick={() => router.push('/locations')}>Cancel</Button>
-                        <Button variant='contained' sx={{ width: '100%' }} disabled={dependantBuildings?.length} onClick={handleDeleteClick}>Delete</Button>
-                    </Box>
+                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
                 </Stack> :
                     <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
                         <Typography><b>{deletingData.name}</b> location has no building(s).</Typography>
                         <Typography>Are you sure you want to delete <b>{deletingData.name}</b> location?</Typography>
-                        <Box sx={{ ...styles.actionButtonsContainer }}>
-                            <Button variant='contained' color='error' sx={{ width: '100%' }} onClick={() => router.push('/locations')}>Cancel</Button>
-                            <Button variant='contained' sx={{ width: '100%' }} disabled={dependantBuildings?.length} onClick={handleDeleteClick}>Delete</Button>
-                        </Box>
+                        <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
                     </Stack>
             }
 
@@ -52,11 +52,6 @@ const DeleteLocation = (props) => {
 export default DeleteLocation
 
 const styles = {
-    heading: {
-        fontSize: "24px",
-        fontWeight: 600,
-        paddingBottom: "16px",
-    },
     dependenciesContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -79,11 +74,5 @@ const styles = {
         margin: 0,
         padding: 0,
         paddingBottom: 1
-    },
-    actionButtonsContainer: {
-        display: "flex",
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        columnGap: "16px",
     }
 }

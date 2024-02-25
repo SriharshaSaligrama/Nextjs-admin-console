@@ -2,9 +2,10 @@
 
 import React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { Typography, Box, Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import DataTable from '../DataTable'
 import { buildingColumns, categoryColumns, departmentColumns, locationColumns, userColumns } from '@/app/_lib/constants'
+import PageHeading from '../PageHeading'
 
 const Home = (props) => {
     const { data } = props
@@ -33,7 +34,7 @@ const Home = (props) => {
 
     return (
         <>
-            <Typography sx={{ ...styles.heading }}>{heading}</Typography>
+            <PageHeading heading={heading} />
             <Box sx={{ ...styles.addButton }}>
                 <Button variant='contained' onClick={() => router.push(`/${returnLink}/add`)}>Add New {addButtonLabel}</Button>
             </Box>
@@ -45,11 +46,6 @@ const Home = (props) => {
 export default Home
 
 const styles = {
-    heading: {
-        fontSize: "24px",
-        fontWeight: 600,
-        marginBottom: "16px",
-    },
     addButton: {
         display: "flex",
         justifyContent: "flex-end",

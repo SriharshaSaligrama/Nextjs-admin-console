@@ -2,9 +2,10 @@
 
 import React from 'react'
 import { useFormState } from 'react-dom';
-import { Box, Button, Paper, TextField, Typography } from '@mui/material'
+import { Box, Paper, TextField, Typography } from '@mui/material'
 import { addLocationAction, editLocationAction } from '@/app/_lib/db/locations/actions';
 import { useRouter } from 'next/navigation';
+import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 
 const LocationsForm = (props) => {
     const { editingData } = props
@@ -48,10 +49,10 @@ const LocationsForm = (props) => {
                     helperText={state?.name || ''}
                     size='small'
                 />
-                <Box sx={{ ...styles.buttonsContainer }}>
-                    <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
-                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} Location</Button>
-                </Box>
+                <FormSubmitCancelButtons
+                    handleCancelClick={handleCancelClick}
+                    submitText={editingData?.id ? `Update Location` : `Create Location`}
+                />
             </Paper>
         </Box>
     )
@@ -79,13 +80,5 @@ const styles = {
         fontSize: '26px',
         fontWeight: 600,
         textAlign: 'center',
-    },
-    buttonsContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        columnGap: '16px',
-    },
-    buttons: {
-        width: '50%',
-    },
+    }
 }

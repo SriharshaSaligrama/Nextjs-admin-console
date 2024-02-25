@@ -1,17 +1,19 @@
 import React from 'react'
 import { Box, Skeleton } from '@mui/material'
 
-const BuildingsFormSkeleton = ({ height }) => {
+const BuildingsLocationsFormSkeleton = (props) => {
+    const { height } = props
+
     return (
         <Box sx={{ ...styles.container }}>
             <Box sx={{ ...styles.card }}>
-                <Skeleton variant="rectangular" height={height || '260px'} sx={{ ...styles.skeleton }} />
+                <Skeleton variant="rectangular" height={height || '220px'} sx={{ ...styles.skeleton }} />
             </Box>
         </Box>
     )
 }
 
-export default BuildingsFormSkeleton
+export default BuildingsLocationsFormSkeleton
 
 const styles = {
     container: {

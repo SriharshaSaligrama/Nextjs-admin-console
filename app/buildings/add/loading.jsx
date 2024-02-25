@@ -1,9 +1,9 @@
-import BuildingsFormSkeleton from '@/app/_lib/ui/Buildings/FormSkeleton'
+import BuildingsLocationsFormSkeleton from '@/app/_lib/ui/BuildingLocation/FormSkeleton'
 import React from 'react'
 
 const Loading = () => {
     return (
-        <BuildingsFormSkeleton />
+        <BuildingsLocationsFormSkeleton height={'260px'} />
     )
 }
 

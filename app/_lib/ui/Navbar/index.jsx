@@ -9,7 +9,7 @@ import DrawerHeader from './DrawerHeader';
 import Drawer from './Drawer';
 import AppBar from './AppBar';
 import useNavbar from './hook';
-import { navbarListItems } from '@/app/lib/constants';
+import { navbarListItems } from '@/app/_lib/constants';
 
 const drawerWidth = 240;
 

@@ -1,4 +1,4 @@
-import DefaultNotFound from '@/app/ui/NotFound'
+import DefaultNotFound from '@/app/_lib/ui/NotFound'
 import React from 'react'
 
 const NotFound = () => {

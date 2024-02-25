@@ -4,8 +4,8 @@ import React from 'react'
 import { useFormState } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
 import { Box, TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
-import { addDepartmentAction, editDepartmentAction } from '@/app/lib/departments/actions';
-import { addCategoryAction, editCategoryAction } from '@/app/lib/categories/actions';
+import { addDepartmentAction, editDepartmentAction } from '@/app/_lib/db/departments/actions';
+import { addCategoryAction, editCategoryAction } from '@/app/_lib/db/categories/actions';
 
 const Form = (props) => {
     const { allData, editingData } = props

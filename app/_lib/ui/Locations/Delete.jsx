@@ -3,7 +3,7 @@
 import React from 'react'
 import { Box, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { deleteLocationAction } from '@/app/lib/locations/actions'
+import { deleteLocationAction } from '@/app/_lib/db/locations/actions'
 import globalStyles from '@/app/globalStyles'
 
 const DeleteLocation = (props) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
-import { getBuilding } from '@/app/lib/buildings/controller'
-import DeleteBuilding from '@/app/ui/Buildings/Delete'
+import { getBuilding } from '@/app/_lib/db/buildings/controller'
+import DeleteBuilding from '@/app/_lib/ui/Buildings/Delete'
 
 const DeleteDependencies = async (props) => {
     const { params } = props

@@ -1,5 +1,5 @@
-import { getLocations } from '@/app/lib/locations/controller'
-import BuildingsForm from '@/app/ui/Buildings/Form'
+import { getLocations } from '@/app/_lib/db/locations/controller'
+import BuildingsForm from '@/app/_lib/ui/Buildings/Form'
 import React from 'react'
 
 const AddBuilding = async () => {

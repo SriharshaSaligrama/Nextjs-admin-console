@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { locations } from "../locations/model"; //importing locations model to avoid error of accessing buildings model without registering locations model, error occurs if you directly try to access buildings page before accessing locations page in ui.
 import { buildings } from "./model";
 import { connectToDatabase } from "../mongodb";
 
@@ -10,6 +11,7 @@ export const getBuildings = async () => {
     }
     catch (error) {
         console.log({ getBuildingsError: error });
+        console.log({ locations })
         throw new Error(error)
     }
 };

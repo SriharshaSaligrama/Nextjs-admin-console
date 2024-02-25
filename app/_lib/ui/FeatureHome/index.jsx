@@ -4,7 +4,7 @@ import React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Typography, Box, Button } from '@mui/material'
 import DataTable from '../DataTable'
-import { buildingColumns, categoryColumns, departmentColumns, locationColumns, userColumns } from '@/app/lib/constants'
+import { buildingColumns, categoryColumns, departmentColumns, locationColumns, userColumns } from '@/app/_lib/constants'
 
 const Home = (props) => {
     const { data } = props

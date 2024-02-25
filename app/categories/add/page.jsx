@@ -1,5 +1,5 @@
-import { getCategories } from '@/app/lib/categories/controller'
-import Form from '@/app/ui/DepartmentCategory/Form'
+import { getCategories } from '@/app/_lib/db/categories/controller'
+import Form from '@/app/_lib/ui/DepartmentCategory/Form'
 import React from 'react'
 
 const AddCategory = async () => {

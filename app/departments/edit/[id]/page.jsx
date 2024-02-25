@@ -1,5 +1,5 @@
-import { getDepartment, getParentDepartments } from '@/app/lib/departments/controller'
-import Form from '@/app/ui/DepartmentCategory/Form'
+import { getDepartment, getParentDepartments } from '@/app/_lib/db/departments/controller'
+import Form from '@/app/_lib/ui/DepartmentCategory/Form'
 import React from 'react'
 import { notFound } from 'next/navigation'
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { getDepartments } from '../lib/departments/controller'
-import Home from '../ui/FeatureHome'
+import { getDepartments } from '../_lib/db/departments/controller'
+import Home from '../_lib/ui/FeatureHome'
 
 const Departments = async () => {
     const data = await getDepartments()

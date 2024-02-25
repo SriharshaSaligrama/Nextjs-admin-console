@@ -4,8 +4,8 @@ import React, { useState } from 'react'
 import { Box, Button, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import globalStyles from '@/app/globalStyles'
-import { deleteDepartmentAction } from '@/app/lib/departments/actions'
-import { deleteCategoryAction } from '@/app/lib/categories/actions'
+import { deleteDepartmentAction } from '@/app/_lib/db/departments/actions'
+import { deleteCategoryAction } from '@/app/_lib/db/categories/actions'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData } = props

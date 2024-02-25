@@ -2,18 +2,18 @@
 
 import React from 'react'
 import { useFormState } from 'react-dom';
-import { Box, Button, MenuItem, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
+import { addLocationAction, editLocationAction } from '@/app/_lib/db/locations/actions';
 import { useRouter } from 'next/navigation';
-import { addBuildingAction, editBuildingAction } from '@/app/lib/buildings/actions';
 
-const BuildingsForm = (props) => {
-    const { editingData, allLocations } = props
+const LocationsForm = (props) => {
+    const { editingData } = props
 
     const router = useRouter()
 
-    const initialErrorState = { name: '', location: '' }
+    const initialErrorState = { name: '' }
 
-    const [state, dispatch] = useFormState(editingData?.id ? editBuildingAction : addBuildingAction, initialErrorState);
+    const [state, dispatch] = useFormState(editingData?.id ? editLocationAction : addLocationAction, initialErrorState);
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -21,7 +21,7 @@ const BuildingsForm = (props) => {
     }
 
     const handleCancelClick = () => {
-        router.push('/buildings')
+        router.push('/locations')
     }
 
     return (
@@ -33,7 +33,7 @@ const BuildingsForm = (props) => {
             onSubmit={handleSubmit}
         >
             <Paper sx={{ ...styles.card }}>
-                <Typography sx={{ ...styles.title }}>{editingData?.id ? 'Update building' : 'Add a building'}</Typography>
+                <Typography sx={{ ...styles.title }}>{editingData?.id ? 'Update location' : 'Add a location'}</Typography>
                 <TextField
                     name='id'
                     sx={{ display: 'none' }}
@@ -41,39 +41,23 @@ const BuildingsForm = (props) => {
                 />
                 <TextField
                     required
-                    label='Building Name'
+                    label='Location Name'
                     name='name'
                     defaultValue={editingData?.name}
                     error={state?.name?.length > 0}
                     helperText={state?.name || ''}
                     size='small'
                 />
-                <TextField
-                    label={'Location Name'}
-                    select
-                    name='location'
-                    defaultValue={editingData?.location?.id}
-                    error={state?.location?.length > 0}
-                    helperText={state?.location || ''}
-                    size='small'
-                    sx={{ display: editingData?.id && 'none' }}
-                >
-                    {allLocations?.map((location) => (
-                        <MenuItem key={location?.id} value={location?.id}>
-                            {location?.name}
-                        </MenuItem>
-                    ))}
-                </TextField>
                 <Box sx={{ ...styles.buttonsContainer }}>
                     <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>Cancel</Button>
-                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} Building</Button>
+                    <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{editingData?.id ? 'Update' : 'Create'} Location</Button>
                 </Box>
             </Paper>
         </Box>
     )
 }
 
-export default BuildingsForm
+export default LocationsForm
 
 const styles = {
     container: {

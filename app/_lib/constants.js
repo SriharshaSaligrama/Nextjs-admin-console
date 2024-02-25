@@ -1,5 +1,5 @@
 import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined, SpaceDashboardOutlined } from "@mui/icons-material";
-import DataTableActions from "../ui/FeatureHome/DataTableActions";
+import DataTableActions from "../_lib/ui/FeatureHome/DataTableActions";
 
 export const navbarListItems = [
     {

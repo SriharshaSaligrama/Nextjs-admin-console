@@ -1,4 +1,4 @@
-import UserForm from '@/app/ui/UserManagement/Form'
+import UserForm from '@/app/_lib/ui/UserManagement/Form'
 import React from 'react'
 
 const AddUser = () => {

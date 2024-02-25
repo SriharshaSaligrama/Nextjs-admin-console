@@ -1,6 +1,6 @@
 import React from 'react'
-import Delete from '@/app/ui/DepartmentCategory/Delete'
-import { getCategory, getChildrenCategories, getParentCategories } from '@/app/lib/categories/controller'
+import Delete from '@/app/_lib/ui/DepartmentCategory/Delete'
+import { getCategory, getChildrenCategories, getParentCategories } from '@/app/_lib/db/categories/controller'
 import { notFound } from 'next/navigation'
 
 const DeleteDependencies = async (props) => {

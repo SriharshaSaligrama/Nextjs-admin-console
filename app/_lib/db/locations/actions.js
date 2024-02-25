@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { addLocation, deleteLocation, editLocation } from "./controller";
-import { locationValidator } from "../utils";
+import { locationValidator } from "../validators";
 
 const getFormData = async (data) => {
     const name = data.get('name')

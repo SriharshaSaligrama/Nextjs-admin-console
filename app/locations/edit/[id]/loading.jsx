@@ -1,4 +1,4 @@
-import LocationsFormSkeleton from '@/app/ui/Locations/FormSkeleton'
+import LocationsFormSkeleton from '@/app/_lib/ui/Locations/FormSkeleton'
 import React from 'react'
 
 const Loading = () => {

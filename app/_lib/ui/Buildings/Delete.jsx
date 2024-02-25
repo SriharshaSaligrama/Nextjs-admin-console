@@ -3,7 +3,7 @@
 import React from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { deleteBuildingAction } from '@/app/lib/buildings/actions'
+import { deleteBuildingAction } from '@/app/_lib/db/buildings/actions'
 
 const DeleteBuilding = (props) => {
     const { deletingData } = props

@@ -1,5 +1,5 @@
 import React from 'react'
-import Home from '../ui/FeatureHome'
+import Home from '../_lib/ui/FeatureHome'
 
 const UserManagementHome = () => {
     return (

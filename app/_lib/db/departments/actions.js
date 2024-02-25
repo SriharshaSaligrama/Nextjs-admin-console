@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { departmentValidator } from "../utils";
+import { departmentValidator } from "../validators";
 import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "./controller";
 import mongoose from "mongoose";
 

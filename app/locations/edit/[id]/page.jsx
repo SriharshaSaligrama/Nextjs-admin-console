@@ -1,7 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
-import { getLocation } from '@/app/lib/locations/controller'
-import LocationsForm from '@/app/ui/Locations/Form'
+import { getLocation } from '@/app/_lib/db/locations/controller'
+import LocationsForm from '@/app/_lib/ui/Locations/Form'
 
 const EditLocation = async (props) => {
     const { params } = props

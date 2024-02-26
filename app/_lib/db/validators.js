@@ -1,6 +1,9 @@
+import { getBuildings, getBuildingsByLocationId } from "./buildings/controller"
 import { getAllCategoriesIncludingDeleted } from "./categories/controller"
 import { getAllDepartmentsIncludingDeleted } from "./departments/controller"
 import { getAllLocationsIncludingDeleted, getLocations } from "./locations/controller"
+import { getAllUsersIncludingDeleted } from "./user/controller"
+import isEmail from 'validator/lib/isEmail';
 
 export const departmentValidator = async ({ name, code, editId }) => {
     try {
@@ -92,10 +95,12 @@ export const locationValidator = async ({ name, editId }) => {
     }
 }
 
-export const buildingValidator = async ({ name, locationId }) => {
+export const buildingValidator = async ({ name, locationId, editId }) => {
     try {
         const errors = {}
         const allLocations = await getLocations()
+        const allBuildingsOfSelectedLocation = await getBuildingsByLocationId(locationId)
+        const duplicateBuildingName = allBuildingsOfSelectedLocation?.find((building) => building?.name?.toLowerCase() === name?.toLowerCase() && building?.id?.toString() !== editId?.toString())
 
         if (!name || !name?.trim()) {
             errors.name = 'Name is required'
@@ -109,10 +114,85 @@ export const buildingValidator = async ({ name, locationId }) => {
         else if (!locationId || !locationId?.trim()) {
             errors.location = 'Location is required'
         }
+        else if (duplicateBuildingName?.name) {
+            errors.name = 'Building with the same name already exists in the selected location'
+        }
 
         return errors
     } catch (error) {
         console.log({ buildingValidatorError: error })
+        return { errors: { message: error.message } }
+    }
+}
+
+export const addUserValidator = async ({ fullName, email, password, role, buildingAssignedTo, managingBuildings }) => {
+    try {
+        const errors = {}
+        const allUsers = await getAllUsersIncludingDeleted()
+        const allBuildings = await getBuildings()
+        const duplicateUserEmail = allUsers?.find((user) => user?.email?.toLowerCase() === email?.toLowerCase())
+
+        if (!fullName?.trim()) {
+            errors.fullName = 'Name is required'
+        } else if (fullName?.trim().length < 3 || fullName?.trim().length > 120) {
+            errors.fullName = 'Name must be between 3 and 120 characters'
+        } else if (!email?.trim()) {
+            errors.email = 'Email is required'
+        } else if (!isEmail(email?.trim())) {
+            errors.email = 'Invalid email'
+        } else if (duplicateUserEmail?.email) {
+            errors.email = 'Email already exists'
+        } else if (!password?.trim()) {
+            errors.password = 'Password is required'
+        } else if (password?.trim().length < 6 || password?.trim().length > 128) {
+            errors.password = 'Password must be between 6 and 128 characters'
+        } else if (!role?.trim()) {
+            errors.role = 'Role is required'
+        } else if (role !== 'admin' && role !== 'employee' && role !== 'facility manager') {
+            errors.role = 'Role must be either admin, employee or facility manager'
+        } else if (!allBuildings?.length) {
+            errors.buildingAssignedTo = 'No buildings added. Please add a building to add a user.'
+        } else if (buildingAssignedTo === null) {
+            errors.buildingAssignedTo = 'Building is required'
+        } else if (role === 'facility manager' && !managingBuildings?.length) {
+            errors.managingBuildings = 'Buildings being managed by the facility manager should be selected'
+        } else if (role === 'employee' && managingBuildings?.length > 0) {
+            errors.managingBuildings = 'Employees can not manage any building.'
+        }
+
+        return errors
+    } catch (error) {
+        console.log({ addUserValidatorError: error })
+        return { errors: { message: error.message } }
+    }
+}
+
+export const editUserValidator = async ({ fullName, role, buildingAssignedTo, managingBuildings }) => {
+    try {
+        const errors = {}
+        const allBuildings = await getBuildings()
+
+        if (!fullName?.trim()) {
+            errors.fullName = 'Name is required'
+        } else if (fullName?.trim().length < 3 || fullName?.trim().length > 120) {
+            errors.fullName = 'Name must be between 3 and 120 characters'
+        } else if (!role?.trim()) {
+            errors.role = 'Role is required'
+        } else if (role !== 'admin' && role !== 'employee' && role !== 'facility manager') {
+            errors.role = 'Role must be either admin, employee or facility manager'
+        } else if (!allBuildings?.length) {
+            errors.buildingAssignedTo = 'No buildings added. Please add a building to add a user.'
+        } else if (buildingAssignedTo === null) {
+            errors.buildingAssignedTo = 'Building is required'
+        } else if (role === 'facility manager' && !managingBuildings?.length) {
+            errors.managingBuildings = 'Buildings being managed by the facility manager should be selected'
+        } else if (role === 'employee' && managingBuildings?.length > 0) {
+            errors.managingBuildings = 'Employees can not manage any building.'
+        }
+
+        return errors
+    } catch (error) {
+        console.log({ editUserValidatorError: error })
         return { errors: { message: error.message } }
     }
 }

@@ -65,6 +65,9 @@ const BuildingsForm = (props) => {
                         </MenuItem>
                     ))}
                 </TextField>
+                {editingData?.location?.id && (
+                    <Typography sx={{ textAlign: 'center' }}><b>Location:</b> {editingData?.location?.name}</Typography>
+                )}
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={editingData?.id ? 'Update Building' : 'Create Building'}

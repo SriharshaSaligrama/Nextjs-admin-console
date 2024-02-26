@@ -141,7 +141,7 @@ export const userColumns = [
     {
         field: 'role',
         headerName: 'Role',
-        width: 250,
+        width: 150,
         editable: false,
     },
     {
@@ -149,18 +149,33 @@ export const userColumns = [
         headerName: 'Building',
         width: 150,
         editable: false,
+        valueGetter: (params) => {
+            if (params.row.buildingAssignedTo) {
+                return params.row.buildingAssignedTo?.name
+            }
+        }
     },
     {
         field: 'managingBuildings',
-        headerName: 'Building Managing',
-        width: 150,
+        headerName: 'Buildings Managing',
+        width: 250,
         editable: false,
+        valueGetter: (params) => {
+            if (params.row.managingBuildings?.length > 0) {
+                return params.row.managingBuildings?.map((building) => building.name).join(', ')
+            }
+        }
     },
     {
         field: 'departmentAssignedTo',
         headerName: 'Department',
         width: 150,
         editable: false,
+        valueGetter: (params) => {
+            if (params.row.departmentAssignedTo) {
+                return params.row.departmentAssignedTo?.name
+            }
+        }
     },
     {
         field: 'Actions',

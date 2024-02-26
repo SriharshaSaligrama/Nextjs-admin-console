@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { addLocation, deleteLocation, editLocation } from "./controller";
 import { locationValidator } from "../validators";
+import { getFormDataObject, mongoErrorHandler } from "../utils";
 
 const getFormData = async (data) => {
-    const name = data.get('name')
-    return { name }
+    const formData = getFormDataObject(data)
+
+    return { ...formData }
 }
 
 export async function addLocationAction(prevState, data) {
@@ -15,17 +17,14 @@ export async function addLocationAction(prevState, data) {
         const { name } = await getFormData(data)
 
         const errors = await locationValidator({ name })
-        if (errors?.name?.length > 0) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
         const addedLocationError = await addLocation({ name })
 
-        if (addedLocationError?.errors?.name) {
-            throw new Error(addedLocationError?.errors?.name?.message)
-        } else if (addedLocationError?.errors?.message) {
-            throw new Error(addedLocationError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name'], mongoError: addedLocationError })
     } catch (error) {
         console.log({ addLocationError: error })
         throw new Error(error)
@@ -37,21 +36,17 @@ export async function addLocationAction(prevState, data) {
 
 export async function editLocationAction(prevState, data) {
     try {
-        const id = data.get('id')  //**need to handle id not found error
-        const { name } = await getFormData(data)
+        const { id, name } = await getFormData(data)
 
         const errors = await locationValidator({ name, editId: id })
-        if (errors?.name?.length > 0) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
         const updatedLocationError = await editLocation(id, { name })
 
-        if (updatedLocationError?.errors?.name) {
-            throw new Error(updatedLocationError?.errors?.name?.message)
-        } else if (updatedLocationError?.errors?.message) {
-            throw new Error(updatedLocationError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name'], mongoError: updatedLocationError })
     }
     catch (error) {
         console.log({ editLocationError: error })

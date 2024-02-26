@@ -5,14 +5,15 @@ import { revalidatePath } from "next/cache";
 import { departmentValidator } from "../validators";
 import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "./controller";
 import mongoose from "mongoose";
+import { getFormDataObject, mongoErrorHandler } from "../utils";
 
 const getFormData = async (data) => {
-    const name = data.get('name')
-    const code = data.get('code')
-    const description = data.get('description')
-    const parent = data.get('parent')
+    const formData = getFormDataObject(data)
 
-    return { name, code, description, parent: (!parent || parent.trim() === '' ? null : new mongoose.Types.ObjectId(parent)) }
+    return {
+        ...formData,
+        parent: ((!formData?.parent || formData?.parent.trim() === '') ? null : new mongoose.Types.ObjectId(formData?.parent))
+    }
 }
 
 export async function addDepartmentAction(prevState, data) {
@@ -20,7 +21,8 @@ export async function addDepartmentAction(prevState, data) {
         const { name, code, description, parent } = await getFormData(data)
 
         const errors = await departmentValidator({ name, code })
-        if (errors?.code?.length > 0 || errors?.name?.length > 0) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
@@ -31,13 +33,7 @@ export async function addDepartmentAction(prevState, data) {
 
         const addedDepartmentError = await addDepartment({ name, code, description, parent })
 
-        if (addedDepartmentError?.errors?.name) {
-            throw new Error(addedDepartmentError?.errors?.name?.message)
-        } else if (addedDepartmentError?.errors?.code) {
-            throw new Error(addedDepartmentError?.errors?.code?.message)
-        } else if (addedDepartmentError?.errors?.message) {
-            throw new Error(addedDepartmentError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedDepartmentError })
     } catch (error) {
         console.log({ addDepartmentError: error })
         throw new Error(error)
@@ -49,11 +45,11 @@ export async function addDepartmentAction(prevState, data) {
 
 export async function editDepartmentAction(prevState, data) {
     try {
-        const id = data.get('id')  //**need to handle id not found error
-        const { name, code, description, parent } = await getFormData(data)
+        const { id, name, code, description, parent } = await getFormData(data)
 
         const errors = await departmentValidator({ name, code, editId: id })
-        if (errors?.code?.length > 0 || errors?.name?.length > 0) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
@@ -64,13 +60,7 @@ export async function editDepartmentAction(prevState, data) {
 
         const updatedDepartmentError = await editDepartment(id, { name, code, description, parent })
 
-        if (updatedDepartmentError?.errors?.name) {
-            throw new Error(updatedDepartmentError?.errors?.name?.message)
-        } else if (updatedDepartmentError?.errors?.code) {
-            throw new Error(updatedDepartmentError?.errors?.code?.message)
-        } else if (updatedDepartmentError?.errors?.message) {
-            throw new Error(updatedDepartmentError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: updatedDepartmentError })
     }
     catch (error) {
         console.log({ editDepartmentError: error })

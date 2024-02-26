@@ -1,30 +1,21 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormState } from 'react-dom';
-import { Box, IconButton, InputAdornment, MenuItem, Stack, TextField } from '@mui/material'
+import { Box, MenuItem, Stack, TextField } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
-import { addUserAction } from '../../db/user/actions';
+import { editUserAction } from '../../db/user/actions';
 
-const UserForm = (props) => {
-    const { allBuildings, allDepartments } = props
+const EditUserForm = (props) => {
+    const { allBuildings, allDepartments, editingData } = props
 
     const router = useRouter()
 
-    const initialErrorState = { fullName: '', email: '', password: '', role: '', buildingAssignedTo: '', managingBuildings: '', departmentAssignedTo: '' }
+    const initialErrorState = { fullName: '', role: '', buildingAssignedTo: '', managingBuildings: '', departmentAssignedTo: '' }
 
-    const [state, dispatch] = useFormState(addUserAction, initialErrorState);
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    const [state, dispatch] = useFormState(editUserAction, initialErrorState);
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -43,47 +34,26 @@ const UserForm = (props) => {
             onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
-                <PageHeading heading='Add User' />
+                <PageHeading heading='Update User' />
+                <TextField
+                    name='id'
+                    defaultValue={editingData?.id}
+                    sx={{ display: 'none' }}
+                />
                 <TextField
                     required
                     label='Name'
                     name='fullName'
+                    defaultValue={editingData?.fullName}
                     error={state?.fullName?.length > 0}
                     helperText={state?.fullName || ''}
-                />
-                <TextField
-                    required
-                    type='email'
-                    label='Email'
-                    name='email'
-                    error={state?.email?.length > 0}
-                    helperText={state?.email || ''}
-                />
-                <TextField
-                    required
-                    label='Password'
-                    name='password'
-                    error={state?.password?.length > 0}
-                    helperText={state?.password || ''}
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                >
-                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
                 />
                 <TextField
                     required
                     label='Role'
                     select
                     name='role'
+                    defaultValue={editingData?.role}
                     error={state?.role?.length > 0}
                     helperText={state?.role || ''}
                 >
@@ -98,6 +68,7 @@ const UserForm = (props) => {
                     select
                     required
                     name='buildingAssignedTo'
+                    defaultValue={editingData?.buildingAssignedTo?.id}
                     error={state?.buildingAssignedTo?.length > 0}
                     helperText={state?.buildingAssignedTo || ''}
                 >
@@ -114,7 +85,7 @@ const UserForm = (props) => {
                     SelectProps={{
                         multiple: true
                     }}
-                    defaultValue={[]}
+                    defaultValue={editingData?.managingBuildings || []}
                     error={state?.managingBuildings?.length > 0}
                     helperText={state?.managingBuildings || ''}
                 >
@@ -128,6 +99,7 @@ const UserForm = (props) => {
                     label='Department'
                     select
                     name='departmentAssignedTo'
+                    defaultValue={editingData?.departmentAssignedTo?.id || 'selectDepartment'}
                     error={state?.departmentAssignedTo?.length > 0}
                     helperText={state?.departmentAssignedTo || ''}
                 >
@@ -140,11 +112,11 @@ const UserForm = (props) => {
                 </TextField>
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
-                    submitText={`Create User`}
+                    submitText={`Update User`}
                 />
             </Stack>
         </Box>
     )
 }
 
-export default UserForm
+export default EditUserForm

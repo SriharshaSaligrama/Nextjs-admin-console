@@ -1,9 +1,12 @@
 import React from 'react'
 import Home from '../_lib/ui/FeatureHome'
+import { getUsers } from '../_lib/db/user/controller'
 
-const UserManagementHome = () => {
+const UserManagementHome = async () => {
+    const data = await getUsers()
+
     return (
-        <Home data={[]} />
+        <Home data={data || []} />
     )
 }
 

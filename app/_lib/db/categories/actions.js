@@ -5,14 +5,15 @@ import { revalidatePath } from "next/cache";
 import { categoryValidator } from "../validators";
 import { addCategory, deleteCategory, editCategory, getCategory } from "./controller";
 import mongoose from "mongoose";
+import { getFormDataObject, mongoErrorHandler } from "../utils";
 
 const getFormData = async (data) => {
-    const name = data.get('name')
-    const code = data.get('code')
-    const description = data.get('description')
-    const parent = data.get('parent')
+    const formData = getFormDataObject(data)
 
-    return { name, code, description, parent: (!parent || parent.trim() === '' ? null : new mongoose.Types.ObjectId(parent)) }
+    return {
+        ...formData,
+        parent: ((!formData?.parent || formData?.parent.trim() === '') ? null : new mongoose.Types.ObjectId(formData?.parent))
+    }
 }
 
 export async function addCategoryAction(prevState, data) {
@@ -20,7 +21,8 @@ export async function addCategoryAction(prevState, data) {
         const { name, code, description, parent } = await getFormData(data)
 
         const errors = await categoryValidator({ name, code })
-        if (errors?.code?.length > 0 || errors?.name?.length > 0 || errors?.message) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
@@ -31,13 +33,7 @@ export async function addCategoryAction(prevState, data) {
 
         const addedCategoryError = await addCategory({ name, code, description, parent })
 
-        if (addedCategoryError?.errors?.name) {
-            throw new Error(addedCategoryError?.errors?.name?.message)
-        } else if (addedCategoryError?.errors?.code) {
-            throw new Error(addedCategoryError?.errors?.code?.message)
-        } else if (addedCategoryError?.errors?.message) {
-            throw new Error(addedCategoryError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedCategoryError })
     } catch (error) {
         console.log({ addCategoryError: error })
         throw new Error(error)
@@ -49,11 +45,11 @@ export async function addCategoryAction(prevState, data) {
 
 export async function editCategoryAction(prevState, data) {
     try {
-        const id = data.get('id')  //**need to handle id not found error
-        const { name, code, description, parent } = await getFormData(data)
+        const { id, name, code, description, parent } = await getFormData(data)
 
         const errors = await categoryValidator({ name, code, editId: id })
-        if (errors?.code?.length > 0 || errors?.name?.length > 0) {
+
+        if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
@@ -64,13 +60,7 @@ export async function editCategoryAction(prevState, data) {
 
         const updatedCategoryError = await editCategory(id, { name, code, description, parent })
 
-        if (updatedCategoryError?.errors?.name) {
-            throw new Error(updatedCategoryError?.errors?.name?.message)
-        } else if (updatedCategoryError?.errors?.code) {
-            throw new Error(updatedCategoryError?.errors?.code?.message)
-        } else if (updatedCategoryError?.errors) {
-            throw new Error(updatedCategoryError?.errors?.message)
-        }
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: updatedCategoryError })
     } catch (error) {
         console.log({ editCategoryError: error })
         throw new Error(error)

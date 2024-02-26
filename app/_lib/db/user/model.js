@@ -25,15 +25,21 @@ const usersSchema = new mongoose.Schema({
     role: {
         type: String,  //admin, employee, facility manager
         trim: true,
+        enum: ["admin", "employee", "facility manager"],
         required: [true, "Role is required"],
-        default: "employee",
     },
     buildingAssignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "buildings",
-        default: null
+        required: [true, "Building is required"],
     },
-    managingBuildings: [],
+    managingBuildings: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'buildings',
+            default: null
+        },
+    ],
     departmentAssignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "departments",

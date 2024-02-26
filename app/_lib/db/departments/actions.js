@@ -61,8 +61,7 @@ export async function editDepartmentAction(prevState, data) {
         const updatedDepartmentError = await editDepartment(id, { name, code, description, parent })
 
         mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: updatedDepartmentError })
-    }
-    catch (error) {
+    } catch (error) {
         console.log({ editDepartmentError: error })
         throw new Error(error)
     }

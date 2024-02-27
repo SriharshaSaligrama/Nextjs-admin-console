@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { editUserAction } from '../../db/user/actions';
+import { userRoles } from '../../constants';
 
 const EditUserForm = (props) => {
     const { allBuildings, allDepartments, editingData } = props
@@ -57,7 +58,7 @@ const EditUserForm = (props) => {
                     error={state?.role?.length > 0}
                     helperText={state?.role || ''}
                 >
-                    {['admin', 'employee', 'facility manager']?.map((role) => (
+                    {userRoles?.map((role) => (
                         <MenuItem key={role} value={role}>
                             {role}
                         </MenuItem>

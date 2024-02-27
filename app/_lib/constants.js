@@ -224,3 +224,5 @@ export const buildingColumns = [
         editable: false,
     },
 ]
+
+export const userRoles = ["admin", "employee", "facility manager"]

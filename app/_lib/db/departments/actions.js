@@ -79,8 +79,8 @@ export async function deleteDepartmentAction({ id, parentId }) {
 
         const deleteDepartmentError = await deleteDepartment({ id, parentId })
 
-        if (deleteDepartmentError?.errors) {
-            throw new Error(deleteDepartmentError?.errors?.message)
+        if (deleteDepartmentError?.message || deleteDepartmentError?.error) {
+            throw new Error(deleteDepartmentError?.message || deleteDepartmentError?.error?.message)
         }
     } catch (error) {
         console.log({ deleteDepartmentError: error })

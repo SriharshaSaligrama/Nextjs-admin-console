@@ -8,6 +8,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { addUserAction } from '../../db/user/actions';
+import { userRoles } from '../../constants';
 
 const UserForm = (props) => {
     const { allBuildings, allDepartments } = props
@@ -87,7 +88,7 @@ const UserForm = (props) => {
                     error={state?.role?.length > 0}
                     helperText={state?.role || ''}
                 >
-                    {['admin', 'employee', 'facility manager']?.map((role) => (
+                    {userRoles?.map((role) => (
                         <MenuItem key={role} value={role}>
                             {role}
                         </MenuItem>

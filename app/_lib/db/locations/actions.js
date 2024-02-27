@@ -61,8 +61,8 @@ export async function deleteLocationAction({ id }) {
     try {
         const deleteLocationError = await deleteLocation({ id })
 
-        if (deleteLocationError?.errors) {
-            throw new Error(deleteLocationError?.errors?.message)
+        if (deleteLocationError?.message || deleteLocationError?.error) {
+            throw new Error(deleteLocationError?.message || deleteLocationError?.error?.message)
         }
     } catch (error) {
         console.log({ deleteLocationError: error })

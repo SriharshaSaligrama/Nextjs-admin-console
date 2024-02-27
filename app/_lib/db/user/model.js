@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { userRoles } from "../../constants";
 
 const usersSchema = new mongoose.Schema({
     fullName: {
@@ -25,7 +26,10 @@ const usersSchema = new mongoose.Schema({
     role: {
         type: String,  //admin, employee, facility manager
         trim: true,
-        enum: ["admin", "employee", "facility manager"],
+        enum: {
+            values: userRoles,
+            message: 'Role must be one of admin, employee or facility manager',
+        },
         required: [true, "Role is required"],
     },
     buildingAssignedTo: {

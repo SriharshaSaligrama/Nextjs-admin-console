@@ -3,7 +3,7 @@ import React from 'react'
 
 const Loading = () => {
     return (
-        <BuildingsLocationsFormSkeleton />
+        <BuildingsLocationsFormSkeleton height={'250px'} />
     )
 }
 

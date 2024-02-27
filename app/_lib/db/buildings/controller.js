@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { locations } from "../locations/model"; //importing locations model to avoid error of accessing buildings model without registering locations model, error occurs if you directly try to access buildings page before accessing locations page in ui.
 import { buildings } from "./model";
 import { connectToDatabase } from "../mongodb";
+import { updateAllManagingBuildingsOfFMs, updateAssignedBuildingOfSelectedUsers } from "../user/controller";
 
 export const getBuildings = async () => {
     try {
@@ -81,8 +82,12 @@ export const editBuilding = async (id, { name }) => {
     }
 }
 
-export const deleteBuilding = async ({ id }) => {
+export const deleteBuilding = async ({ id, transferringBuildingId }) => {
     try {
+        if (transferringBuildingId) {
+            await updateAssignedBuildingOfSelectedUsers({ deletingBuildingId: id, transferringBuildingId })
+        }
+        await updateAllManagingBuildingsOfFMs(id);
         await buildings.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
     }
     catch (error) {

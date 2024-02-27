@@ -70,16 +70,16 @@ export async function editBuildingAction(prevState, data) {
     redirect("/buildings")
 }
 
-export async function deleteBuildingAction({ id }) {
+export async function deleteBuildingAction({ id, transferringBuildingId }) {
     try {
-        const deleteBuildingError = await deleteBuilding({ id })
+        const deleteBuildingError = await deleteBuilding({ id, transferringBuildingId })
 
-        if (deleteBuildingError?.errors) {
-            throw new Error(deleteBuildingError?.errors?.message)
+        if (deleteBuildingError?.message || deleteBuildingError?.error) {
+            throw new Error(deleteBuildingError?.message || deleteBuildingError?.error?.message)
         }
     } catch (error) {
         console.log({ deleteBuildingError: error })
-        throw new Error(error)
+        throw new Error(error?.message)
     }
 
     revalidatePath("/buildings")

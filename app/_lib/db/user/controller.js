@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { locations } from "../locations/model"; //importing locations model to avoid error of accessing buildings model without registering locations model, error occurs if you directly try to access buildings page before accessing locations page in ui.
 import { buildings } from "../buildings/model"; //importing buildings model to avoid error of accessing users model without registering buildings model, error occurs if you directly try to access users page before accessing buildings page in ui.
+import { departments } from "../departments/model"; //importing departments model to avoid error of accessing users model without registering departments model, error occurs if you directly try to access users page before accessing departments page in ui.
 import { users } from "./model";
 import { connectToDatabase } from "../mongodb";
 import bcrypt from 'bcrypt';
@@ -13,10 +14,22 @@ export const getUsers = async () => {
     }
     catch (error) {
         console.log({ getUsersError: error });
-        console.log({ locations, buildings })
+        console.log({ locations, buildings, departments })
         throw new Error(error)
     }
 };
+
+export const getUsersByBuildingId = async (buildingId) => {
+    try {
+        await connectToDatabase()
+        const allUsersOfSelectedBuilding = await users.find({ buildingAssignedTo: buildingId, isDeleted: false }).sort({ createdAt: -1 });
+        return JSON.parse(JSON.stringify(allUsersOfSelectedBuilding))
+    }
+    catch (error) {
+        console.log({ getUsersByBuildingIdError: error });
+        throw new Error(error)
+    }
+}
 
 export const getAllUsersIncludingDeleted = async () => {
     try {
@@ -83,5 +96,35 @@ export const deleteUser = async ({ id }) => {
     catch (error) {
         console.log({ deleteUserError: error });
         return error
+    }
+}
+
+export const updateAllManagingBuildingsOfFMs = async (buildingId) => {
+    try {
+        await connectToDatabase()
+        await users.updateMany(
+            { managingBuildings: { $in: [buildingId] }, isDeleted: false },
+            { $pull: { managingBuildings: buildingId } },
+            { runValidators: true }
+        );
+    }
+    catch (error) {
+        console.log({ getAllManagingBuildingsError: error });
+        throw new Error(error)
+    }
+}
+
+export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId, transferringBuildingId }) => {
+    try {
+        await connectToDatabase()
+        await users.updateMany(
+            { buildingAssignedTo: new mongoose.Types.ObjectId(deletingBuildingId), isDeleted: false },
+            { $set: { buildingAssignedTo: new mongoose.Types.ObjectId(transferringBuildingId) } },
+            { runValidators: true }
+        );
+    }
+    catch (error) {
+        console.log({ updateAssignedBuildingOfSelectedUsersError: error });
+        throw new Error(error.message || error)
     }
 }

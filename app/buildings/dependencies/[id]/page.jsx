@@ -1,6 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
-import { getBuilding } from '@/app/_lib/db/buildings/controller'
+import { getBuilding, getBuildings } from '@/app/_lib/db/buildings/controller'
+import { getUsersByBuildingId } from '@/app/_lib/db/user/controller'
 import DeleteBuilding from '@/app/_lib/ui/Buildings/Delete'
 
 const DeleteDependencies = async (props) => {
@@ -10,9 +11,15 @@ const DeleteDependencies = async (props) => {
     if (!deletingBuilding) {
         notFound()
     }
+    const usersofSelectedBuilding = await getUsersByBuildingId(id)
+    const allBuildings = await getBuildings()
 
     return (
-        <DeleteBuilding deletingData={deletingBuilding || {}} />
+        <DeleteBuilding
+            deletingData={deletingBuilding || {}}
+            usersData={usersofSelectedBuilding || []}
+            buildingsData={allBuildings || []}
+        />
     )
 }
 

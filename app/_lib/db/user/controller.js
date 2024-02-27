@@ -31,6 +31,18 @@ export const getUsersByBuildingId = async (buildingId) => {
     }
 }
 
+export const getUsersByDepartmentId = async (departmentId) => {
+    try {
+        await connectToDatabase()
+        const allUsersOfSelectedDepartment = await users.find({ departmentAssignedTo: departmentId, isDeleted: false }).sort({ createdAt: -1 });
+        return JSON.parse(JSON.stringify(allUsersOfSelectedDepartment))
+    }
+    catch (error) {
+        console.log({ getUsersByDepartmentIdError: error });
+        throw new Error(error)
+    }
+}
+
 export const getAllUsersIncludingDeleted = async () => {
     try {
         await connectToDatabase()
@@ -99,7 +111,7 @@ export const deleteUser = async ({ id }) => {
     }
 }
 
-export const updateAllManagingBuildingsOfFMs = async (buildingId) => {
+export const updateAllManagingBuildingsOfFMs = async (buildingId) => { //runs only while deleting a building, if it is managed by FM or admin
     try {
         await connectToDatabase()
         await users.updateMany(
@@ -110,11 +122,11 @@ export const updateAllManagingBuildingsOfFMs = async (buildingId) => {
     }
     catch (error) {
         console.log({ getAllManagingBuildingsError: error });
-        throw new Error(error)
+        throw new Error(error.message || error)
     }
 }
 
-export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId, transferringBuildingId }) => {
+export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId, transferringBuildingId }) => { //runs only while deleting a building, if there are users assigned to it
     try {
         await connectToDatabase()
         await users.updateMany(
@@ -125,6 +137,21 @@ export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId
     }
     catch (error) {
         console.log({ updateAssignedBuildingOfSelectedUsersError: error });
+        throw new Error(error.message || error)
+    }
+}
+
+export const updateAssignedDepartmentOfSelectedUsers = async ({ deletingDepartmentId, transferringDepartmentId }) => { //runs only while deleting a department, if there are users assigned to it
+    try {
+        await connectToDatabase()
+        await users.updateMany(
+            { departmentAssignedTo: new mongoose.Types.ObjectId(deletingDepartmentId), isDeleted: false },
+            { $set: { departmentAssignedTo: new mongoose.Types.ObjectId(transferringDepartmentId) } },
+            { runValidators: true }
+        );
+    }
+    catch (error) {
+        console.log({ updateAssignedDepartmentOfSelectedUsersError: error });
         throw new Error(error.message || error)
     }
 }

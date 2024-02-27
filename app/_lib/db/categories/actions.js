@@ -27,7 +27,7 @@ export async function addCategoryAction(prevState, data) {
         }
 
         const parentCategory = await getCategory(parent)
-        if (!parentCategory?.id) {
+        if (parent && !parentCategory?.id) {
             throw new Error('Parent category not found')
         }
 
@@ -54,7 +54,7 @@ export async function editCategoryAction(prevState, data) {
         }
 
         const parentCategory = await getCategory(parent)
-        if (!parentCategory?.id) {
+        if (parent && !parentCategory?.id) {
             throw new Error('Parent category not found')
         }
 
@@ -73,7 +73,7 @@ export async function editCategoryAction(prevState, data) {
 export async function deleteCategoryAction({ id, parentId }) {
     try {
         const parentCategory = await getCategory(parentId)
-        if (!parentCategory?.id) {
+        if (parentId && !parentCategory?.id) {
             throw new Error('Parent category not found')
         }
 

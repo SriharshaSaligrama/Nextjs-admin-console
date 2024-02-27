@@ -29,7 +29,7 @@ const DeleteBuilding = (props) => {
             {
                 usersData?.length > 0 ? <Stack sx={{ ...styles.dependenciesContainer }} spacing={2}>
                     <Stack spacing={2}>
-                        <Typography><b>{deletingData.name}</b> building has <b>{usersData.length}</b> user(s):</Typography>
+                        <Typography><b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building has <b>{usersData.length}</b> user(s):</Typography>
                         <List sx={{ ...styles.childList }}>
                             {
                                 usersData.map((user) => (
@@ -52,7 +52,7 @@ const DeleteBuilding = (props) => {
                                 >
                                     {
                                         restOfBuildings?.map((building) => (
-                                            <MenuItem key={building?.id} value={building?.id}>{building?.name}</MenuItem>
+                                            <MenuItem key={building?.id} value={building?.id}>{building?.name} {building?.location?.name && `(${building?.location?.name})`}</MenuItem>
                                         ))
                                     }
                                 </TextField>
@@ -63,16 +63,16 @@ const DeleteBuilding = (props) => {
                         }
                         {
                             transferringBuilding && <>
-                                <Typography>The users listed above will be transferred to <b>{transferringBuildingData?.name}</b> building</Typography>
-                                <Typography>Are you sure to delete <b>{deletingData.name}</b> building?</Typography>
+                                <Typography>The users listed above will be transferred to <b>{transferringBuildingData?.name} {transferringBuildingData?.location?.name && `(${transferringBuildingData?.location?.name})`}</b> building</Typography>
+                                <Typography>Are you sure to delete <b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building?</Typography>
                             </>
                         }
                         <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={!transferringBuilding} />
                     </Stack>
                 </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
-                    <Typography><b>{deletingData.name}</b> building has no dependencies</Typography>
+                    <Typography><b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building has no dependencies</Typography>
                     <Typography textAlign={'center'} maxWidth={'500px'}>If the building is being managed by any facility managers, the building will be removed from their managing buildings list.</Typography>
-                    <Typography>Are you sure you want to delete <b>{deletingData.name}</b> building?</Typography>
+                    <Typography>Are you sure you want to delete <b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building?</Typography>
                     <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={usersData?.length} />
                 </Stack>
             }

@@ -1,8 +1,10 @@
 import React from 'react'
 import Home from '../_lib/ui/FeatureHome'
 import { getLocations } from '../_lib/db/locations/controller'
+import { unstable_noStore as noStore } from 'next/cache';
 
 const LocationsPage = async () => {
+    noStore()
     const data = await getLocations()
 
     return (

@@ -1,8 +1,10 @@
 import React from 'react'
 import { getCategories } from '../_lib/db/categories/controller'
 import Home from '../_lib/ui/FeatureHome'
+import { unstable_noStore as noStore } from 'next/cache';
 
 const Categories = async () => {
+    noStore()
     const data = await getCategories()
 
     return (

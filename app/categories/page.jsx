@@ -3,6 +3,10 @@ import { getCategories } from '../_lib/db/categories/controller'
 import Home from '../_lib/ui/FeatureHome'
 import { unstable_noStore as noStore } from 'next/cache';
 
+export const metadata = {
+    title: 'Categories',
+}
+
 const Categories = async () => {
     noStore()
     const data = await getCategories()

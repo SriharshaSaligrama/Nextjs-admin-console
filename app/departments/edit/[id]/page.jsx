@@ -3,6 +3,10 @@ import Form from '@/app/_lib/ui/DepartmentCategory/Form'
 import React from 'react'
 import { notFound } from 'next/navigation'
 
+export const metadata = {
+    title: 'Edit Department',
+}
+
 const EditDepartment = async (props) => {
     const { params } = props
     const id = params.id

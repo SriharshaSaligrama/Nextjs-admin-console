@@ -4,6 +4,10 @@ import Delete from '@/app/_lib/ui/DepartmentCategory/Delete'
 import { notFound } from 'next/navigation'
 import { getUsersByDepartmentId } from '@/app/_lib/db/user/controller'
 
+export const metadata = {
+    title: 'Delete Department',
+}
+
 const DeleteDependencies = async (props) => {
     const { params } = props
     const id = params.id

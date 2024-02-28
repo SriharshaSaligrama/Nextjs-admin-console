@@ -4,6 +4,10 @@ import { notFound } from 'next/navigation'
 import BuildingsForm from '@/app/_lib/ui/Buildings/Form'
 import { getLocations } from '@/app/_lib/db/locations/controller'
 
+export const metadata = {
+    title: 'Edit Building',
+}
+
 const EditBuilding = async (props) => {
     const { params } = props
     const id = params.id

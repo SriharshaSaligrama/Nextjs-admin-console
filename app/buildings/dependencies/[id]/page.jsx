@@ -4,6 +4,10 @@ import { getBuilding, getBuildings } from '@/app/_lib/db/buildings/controller'
 import { getUsersByBuildingId } from '@/app/_lib/db/user/controller'
 import DeleteBuilding from '@/app/_lib/ui/Buildings/Delete'
 
+export const metadata = {
+    title: 'Delete Building',
+}
+
 const DeleteDependencies = async (props) => {
     const { params } = props
     const id = params.id

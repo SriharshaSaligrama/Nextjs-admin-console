@@ -5,6 +5,10 @@ import { getBuildings } from '@/app/_lib/db/buildings/controller'
 import { getDepartments } from '@/app/_lib/db/departments/controller'
 import { getUser } from '@/app/_lib/db/user/controller'
 
+export const metadata = {
+    title: 'Edit User',
+}
+
 const EditUser = async (props) => {
     const { params } = props
     const id = params.id

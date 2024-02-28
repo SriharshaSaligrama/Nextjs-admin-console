@@ -4,6 +4,10 @@ import { getLocation } from '@/app/_lib/db/locations/controller'
 import DeleteLocation from '@/app/_lib/ui/Locations/Delete'
 import { getBuildingsByLocationId } from '@/app/_lib/db/buildings/controller'
 
+export const metadata = {
+    title: 'Delete Location',
+}
+
 const DeleteDependencies = async (props) => {
     const { params } = props
     const id = params.id

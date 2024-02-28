@@ -3,6 +3,10 @@ import Home from '../_lib/ui/FeatureHome'
 import { getBuildings } from '../_lib/db/buildings/controller'
 import { unstable_noStore as noStore } from 'next/cache';
 
+export const metadata = {
+    title: 'Buildings',
+}
+
 const BuildingsPage = async () => {
     noStore();
     const data = await getBuildings()

@@ -3,6 +3,10 @@ import Delete from '@/app/_lib/ui/DepartmentCategory/Delete'
 import { getCategory, getChildrenCategories, getParentCategories } from '@/app/_lib/db/categories/controller'
 import { notFound } from 'next/navigation'
 
+export const metadata = {
+    title: 'Delete Category',
+}
+
 const DeleteDependencies = async (props) => {
     const { params } = props
     const id = params.id

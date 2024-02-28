@@ -42,7 +42,13 @@ const Navbar = (props) => {
                     >
                         <Menu />
                     </IconButton>
-                    <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} spacing={2} width={'100%'}>
+                    <Stack
+                        direction={'row'}
+                        alignItems={'center'}
+                        justifyContent={'space-between'}
+                        spacing={2}
+                        width={'100%'}
+                    >
                         <Typography variant="h6" noWrap component="div">
                             Admin Console
                         </Typography>
@@ -62,7 +68,13 @@ const Navbar = (props) => {
                 <List>
                     {navbarListItems?.map((item) => (
                         <Tooltip key={item?.title} title={item?.title} placement='right'>
-                            <ListItem disablePadding sx={{ display: 'block', bgcolor: pathname === item?.path && theme.palette.action.selected }}>
+                            <ListItem
+                                disablePadding
+                                sx={{
+                                    display: 'block',
+                                    bgcolor: pathname === item?.path && theme.palette.action.selected
+                                }}
+                            >
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,

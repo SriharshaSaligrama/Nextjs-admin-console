@@ -1,5 +1,7 @@
 import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined, SpaceDashboardOutlined } from "@mui/icons-material";
 import DataTableActions from "../_lib/ui/FeatureHome/DataTableActions";
+import { addDepartmentAction, deleteDepartmentAction, editDepartmentAction } from "./db/departments/actions";
+import { addCategoryAction, deleteCategoryAction, editCategoryAction } from "./db/categories/actions";
 
 export const navbarListItems = [
     {
@@ -226,3 +228,86 @@ export const buildingColumns = [
 ]
 
 export const userRoles = ["admin", "employee", "facility manager"]
+
+export const pageMappings = [
+    {
+        keyword: 'departments',
+        heading: 'Departments',
+        returnLink: 'departments',
+        addButtonLabel: 'Department',
+        columns: departmentColumns
+    },
+    {
+        keyword: 'categories',
+        heading: 'Categories',
+        returnLink: 'categories',
+        addButtonLabel: 'Category',
+        columns: categoryColumns
+    },
+    {
+        keyword: 'locations',
+        heading: 'Locations',
+        returnLink: 'locations',
+        addButtonLabel: 'Location',
+        columns: locationColumns
+    },
+    {
+        keyword: 'buildings',
+        heading: 'Buildings',
+        returnLink: 'buildings',
+        addButtonLabel: 'Building',
+        columns: buildingColumns
+    },
+    {
+        keyword: 'users',
+        heading: 'Users',
+        returnLink: 'users',
+        addButtonLabel: 'User',
+        columns: userColumns
+    },
+    {
+        keyword: 'groups',
+        heading: 'Groups',
+        returnLink: 'groups',
+        addButtonLabel: 'Group',
+        columns: []
+    },
+];
+
+export const dataTableActionsPageLinks = {
+    'departments': 'departments',
+    'categories': 'categories',
+    'locations': 'locations',
+    'buildings': 'buildings',
+    'users': 'users',
+};
+
+export const departmentCategoryDeletePageDetails = {
+    'departments': {
+        label: 'department',
+        childrenLabel: 'departments',
+        returnLink: '/departments',
+        deleteAction: deleteDepartmentAction
+    },
+    'categories': {
+        label: 'category',
+        childrenLabel: 'categories',
+        returnLink: '/categories',
+        deleteAction: deleteCategoryAction
+    },
+};
+
+export const departmentCategoryAddEditFormPageDetails = {
+    'departments': {
+        heading: 'Department',
+        returnLink: '/departments',
+        addAction: addDepartmentAction,
+        editAction: editDepartmentAction
+    },
+    'categories': {
+        heading: 'Category',
+        returnLink: '/categories',
+        addAction: addCategoryAction,
+        editAction: editCategoryAction
+    },
+};

@@ -6,8 +6,21 @@ const FormSubmitCancelButtons = (props) => {
 
     return (
         <Box sx={{ ...styles.buttonsContainer }}>
-            <Button sx={{ ...styles.buttons }} variant='contained' color='error' onClick={handleCancelClick}>{cancelText || 'Cancel'}</Button>
-            <Button sx={{ ...styles.buttons }} variant='contained' type="submit">{submitText}</Button>
+            <Button
+                sx={{ ...styles.buttons }}
+                variant='contained'
+                color='error'
+                onClick={handleCancelClick}
+            >
+                {cancelText || 'Cancel'}
+            </Button>
+            <Button
+                sx={{ ...styles.buttons }}
+                variant='contained'
+                type="submit"
+            >
+                {submitText}
+            </Button>
         </Box>
     )
 }

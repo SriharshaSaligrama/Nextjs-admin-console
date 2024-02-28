@@ -4,19 +4,21 @@ import React, { useState } from 'react'
 import { List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import globalStyles from '@/app/globalStyles'
-import { deleteDepartmentAction } from '@/app/_lib/db/departments/actions'
-import { deleteCategoryAction } from '@/app/_lib/db/categories/actions'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
+import { departmentCategoryDeletePageDetails } from '../../constants'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData, usersData } = props
     const router = useRouter()
     const pathname = usePathname();
-    const label = pathname.includes('departments') ? 'department' : pathname.includes('categories') ? 'category' : ''
-    const childrenLabel = pathname.includes('departments') ? 'departments' : pathname.includes('categories') ? 'categories' : ''
-    const returnLink = pathname.includes('departments') ? '/departments' : pathname.includes('categories') ? '/categories' : ''
-    const deleteAction = pathname.includes('departments') ? deleteDepartmentAction : pathname.includes('categories') ? deleteCategoryAction : () => { }
+    const currentPage = departmentCategoryDeletePageDetails[pathname.split('/')[1]] || {
+        label: '',
+        childrenLabel: '',
+        returnLink: '',
+        deleteAction: () => { }
+    };
+    const { label, childrenLabel, returnLink, deleteAction } = currentPage
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
     const ifUsersOfDeletingDepartmentExist = pathname.includes('departments') && usersData?.length > 0
@@ -26,7 +28,11 @@ const Delete = (props) => {
     }
 
     const handleDeleteClick = async () => {
-        await deleteAction({ id: deletingData.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist })
+        await deleteAction({
+            id: deletingData.id,
+            parentId: parent,
+            userExists: ifUsersOfDeletingDepartmentExist
+        })
     }
 
     return (

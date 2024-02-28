@@ -4,19 +4,21 @@ import React from 'react'
 import { useFormState } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
 import { Box, TextField, Stack, MenuItem } from '@mui/material'
-import { addDepartmentAction, editDepartmentAction } from '@/app/_lib/db/departments/actions';
-import { addCategoryAction, editCategoryAction } from '@/app/_lib/db/categories/actions';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 import PageHeading from '../PageHeading';
+import { departmentCategoryAddEditFormPageDetails } from '../../constants';
 
 const Form = (props) => {
     const { allData, editingData } = props
     const router = useRouter()
     const pathname = usePathname();
-    const heading = pathname.includes('departments') ? 'Department' : pathname.includes('categories') ? 'Category' : ''
-    const returnLink = pathname.includes('departments') ? '/departments' : pathname.includes('categories') ? '/categories' : ''
-    const addAction = pathname.includes('departments') ? addDepartmentAction : pathname.includes('categories') ? addCategoryAction : () => { }
-    const editAction = pathname.includes('departments') ? editDepartmentAction : pathname.includes('categories') ? editCategoryAction : () => { }
+    const currentPage = departmentCategoryAddEditFormPageDetails[pathname.split('/')[1]] || {
+        heading: '',
+        returnLink: '',
+        addAction: () => { },
+        editAction: () => { }
+    };
+    const { heading, returnLink, addAction, editAction } = currentPage;
     const initialErrorState = { name: '', code: '', message: '' }
     const [state, dispatch] = useFormState(editingData?.id ? editAction : addAction, initialErrorState);
 

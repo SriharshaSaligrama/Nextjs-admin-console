@@ -37,12 +37,11 @@ const DeleteLocation = (props) => {
                     </List>
                     <Typography>Please delete all the buildings of this location before deleting this location.</Typography>
                     <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
-                </Stack> :
-                    <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
-                        <Typography><b>{deletingData.name}</b> location has no building(s).</Typography>
-                        <Typography>Are you sure you want to delete <b>{deletingData.name}</b> location?</Typography>
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
-                    </Stack>
+                </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
+                    <Typography><b>{deletingData.name}</b> location has no building(s).</Typography>
+                    <Typography>Are you sure you want to delete <b>{deletingData.name}</b> location?</Typography>
+                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
+                </Stack>
             }
 
         </>

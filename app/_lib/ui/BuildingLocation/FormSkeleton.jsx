@@ -7,7 +7,10 @@ const BuildingsLocationsFormSkeleton = (props) => {
     return (
         <Box sx={{ ...styles.container }}>
             <Box sx={{ ...styles.card }}>
-                <Skeleton variant="rectangular" sx={{ ...styles.skeleton, height: height || '220px' }} />
+                <Skeleton
+                    variant="rectangular"
+                    sx={{ ...styles.skeleton, height: height || '220px' }}
+                />
             </Box>
         </Box>
     )

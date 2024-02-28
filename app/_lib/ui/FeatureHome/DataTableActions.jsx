@@ -2,16 +2,13 @@ import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material'
+import { dataTableActionsPageLinks } from '../../constants'
 
 const DataTableActions = (props) => {
-    const { cellValues, handleDelete } = props
+    const { cellValues } = props
     const router = useRouter()
     const pathname = usePathname()
-    const returnLink = pathname.includes('departments') ? 'departments' :
-        pathname.includes('categories') ? 'categories' :
-            pathname.includes('locations') ? 'locations' :
-                pathname.includes('buildings') ? 'buildings' :
-                    pathname.includes('users') ? 'users' : ''
+    const returnLink = dataTableActionsPageLinks[pathname.split('/')[1]] || '';
 
     return (
         <Box sx={{ ...styles.actionButtonsContainer }}>
@@ -21,7 +18,7 @@ const DataTableActions = (props) => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
-                <IconButton onClick={handleDelete ? () => handleDelete(cellValues.row.id) : () => router.push(`/${returnLink}/dependencies/${cellValues.row.id}`)}>
+                <IconButton onClick={() => router.push(`/${returnLink}/dependencies/${cellValues.row.id}`)}>
                     <DeleteOutlined fontSize='small' color='error' />
                 </IconButton>
             </Tooltip>

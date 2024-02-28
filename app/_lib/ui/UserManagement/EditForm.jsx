@@ -14,7 +14,13 @@ const EditUserForm = (props) => {
 
     const router = useRouter()
 
-    const initialErrorState = { fullName: '', role: '', buildingAssignedTo: '', managingBuildings: '', departmentAssignedTo: '' }
+    const initialErrorState = {
+        fullName: '',
+        role: '',
+        buildingAssignedTo: '',
+        managingBuildings: '',
+        departmentAssignedTo: ''
+    }
 
     const [state, dispatch] = useFormState(editUserAction, initialErrorState);
 

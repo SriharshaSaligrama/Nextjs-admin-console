@@ -34,7 +34,9 @@ const LocationsForm = (props) => {
             onSubmit={handleSubmit}
         >
             <Paper sx={{ ...styles.card }}>
-                <Typography sx={{ ...styles.title }}>{editingData?.id ? 'Update location' : 'Add a location'}</Typography>
+                <Typography sx={{ ...styles.title }}>
+                    {editingData?.id ? 'Update location' : 'Add a location'}
+                </Typography>
                 <TextField
                     name='id'
                     sx={{ display: 'none' }}

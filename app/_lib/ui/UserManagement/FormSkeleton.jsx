@@ -6,7 +6,13 @@ const UsersFormSkeleton = ({ numberOfInputs }) => {
         <>
             <Stack spacing={2}>
                 <Skeleton variant="text" sx={{ ...styles.title }} />
-                {Array(numberOfInputs || 1).fill(0).map((_, index) => <Skeleton key={index} variant="rectangular" sx={{ ...styles.input }} />)}
+                {
+                    Array(numberOfInputs || 1).fill(0).map((_, index) => <Skeleton
+                        key={index}
+                        variant="rectangular"
+                        sx={{ ...styles.input }}
+                    />)
+                }
             </Stack>
         </>
     )

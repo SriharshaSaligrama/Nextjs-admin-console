@@ -1,17 +1,16 @@
 import React from 'react'
 import { unstable_noStore as noStore } from 'next/cache';
-import Home from '../_lib/ui/FeatureHome';
 
 export const metadata = {
-    title: 'Groups',
+    title: 'Add Group',
 }
 
-const Groups = () => {
+const AddGroup = async () => {
     noStore()
 
     return (
-        <Home />
+        <div>AddGroup</div>
     )
 }
 
-export default Groups
+export default AddGroup

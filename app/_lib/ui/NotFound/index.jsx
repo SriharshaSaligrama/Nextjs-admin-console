@@ -8,7 +8,9 @@ const DefaultNotFound = ({ entity, returnLink, returnPageName }) => {
         <Stack sx={{ ...styles.container }} spacing={2}>
             <SentimentVeryDissatisfiedOutlined sx={{ ...styles.icon }} />
             <Typography sx={{ ...styles.notFoundTypography }}>404 Not Found</Typography>
-            <Typography sx={{ ...styles.returnTypography }}>Unable to find the {entity} for the given id</Typography>
+            <Typography sx={{ ...styles.returnTypography }}>
+                Unable to find the {entity} for the given id
+            </Typography>
             <Link href={returnLink}>Return to {returnPageName}</Link>
         </Stack>
     )

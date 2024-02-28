@@ -15,7 +15,15 @@ const UserForm = (props) => {
 
     const router = useRouter()
 
-    const initialErrorState = { fullName: '', email: '', password: '', role: '', buildingAssignedTo: '', managingBuildings: '', departmentAssignedTo: '' }
+    const initialErrorState = {
+        fullName: '',
+        email: '',
+        password: '',
+        role: '',
+        buildingAssignedTo: '',
+        managingBuildings: '',
+        departmentAssignedTo: ''
+    }
 
     const [state, dispatch] = useFormState(addUserAction, initialErrorState);
 

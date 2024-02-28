@@ -23,7 +23,7 @@ export const navbarListItems = [
         path: '/departments',
     },
     {
-        title: 'User Management',
+        title: 'Users',
         icon: <ManageAccountsOutlined />,
         path: '/users',
     },

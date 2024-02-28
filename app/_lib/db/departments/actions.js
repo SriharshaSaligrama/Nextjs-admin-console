@@ -6,7 +6,6 @@ import { departmentValidator } from "../validators";
 import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "./controller";
 import mongoose from "mongoose";
 import { getFormDataObject, mongoErrorHandler } from "../utils";
-import { updateAssignedDepartmentOfSelectedUsers } from "../user/controller";
 
 const getFormData = async (data) => {
     const formData = getFormDataObject(data)
@@ -78,15 +77,9 @@ export async function deleteDepartmentAction({ id, parentId, userExists }) {
             throw new Error('Parent department not found')
         }
 
-        if (userExists) {
-            await updateAssignedDepartmentOfSelectedUsers({ deletingDepartmentId: id, transferringDepartmentId: parentId })
-        }
+        const deleteDepartmentError = await deleteDepartment({ id, parentId, userExists })
 
-        const deleteDepartmentError = await deleteDepartment({ id, parentId })
-
-        if (deleteDepartmentError?.message || deleteDepartmentError?.error) {
-            throw new Error(deleteDepartmentError?.message || deleteDepartmentError?.error?.message)
-        }
+        mongoErrorHandler({ mongoError: deleteDepartmentError })
     } catch (error) {
         console.log({ deleteDepartmentError: error })
         throw new Error(error)

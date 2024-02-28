@@ -1,10 +1,16 @@
 export const mongoErrorHandler = ({ errorProneFields, mongoError }) => {
-    for (const errorProneField of errorProneFields) {
-        if (mongoError?.errors?.[errorProneField]) {
-            throw new Error(mongoError?.errors?.[errorProneField]?.message)
-        } else if (mongoError?.errors?.message) {
-            throw new Error(mongoError?.errors?.message)
+    if (mongoError?.error) {
+        throw new Error(mongoError?.error?.message)
+    } else if (mongoError?.message) {
+        throw new Error(mongoError?.message)
+    } else if (errorProneFields?.length > 0) {
+        for (const errorProneField of errorProneFields) {
+            if (mongoError?.errors?.[errorProneField]) {
+                throw new Error(mongoError?.errors?.[errorProneField]?.message)
+            }
         }
+    } else if (mongoError?.errors?.message) {
+        throw new Error(mongoError?.errors?.message)
     }
 }
 

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { departments } from "./model";
 import { connectToDatabase } from "../mongodb";
+import { updateAssignedDepartmentOfSelectedUsers } from "../user/controller";
 
 export const getDepartments = async () => {
     try {
@@ -111,8 +112,15 @@ export const editDepartment = async (id, { name, code, description, parent }) =>
     }
 }
 
-export const deleteDepartment = async ({ id, parentId }) => {
+export const deleteDepartment = async ({ id, parentId, userExists }) => {
     try {
+        if (userExists) {
+            const updateAssignedDepartmentOfSelectedUsersError = await updateAssignedDepartmentOfSelectedUsers({ deletingDepartmentId: id, transferringDepartmentId: parentId })
+            if (updateAssignedDepartmentOfSelectedUsersError) {
+                return updateAssignedDepartmentOfSelectedUsersError
+            }
+        }
+
         const childrenDepartments = await getChildrenDepartments(id)
 
         if (childrenDepartments.length > 0) {

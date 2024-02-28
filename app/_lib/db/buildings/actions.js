@@ -25,7 +25,7 @@ export async function addBuildingAction(prevState, data) {
         }
 
         const location = await getLocation(locationId)
-        if (!location?.id) {
+        if (locationId && !location?.id) {
             throw new Error('Selected location not found')
         }
 
@@ -53,7 +53,7 @@ export async function editBuildingAction(prevState, data) {
         }
 
         const location = await getLocation(locationId)
-        if (!location?.id) {
+        if (locationId && !location?.id) {
             throw new Error('Selected location not found')
         }
 
@@ -74,9 +74,7 @@ export async function deleteBuildingAction({ id, transferringBuildingId }) {
     try {
         const deleteBuildingError = await deleteBuilding({ id, transferringBuildingId })
 
-        if (deleteBuildingError?.message || deleteBuildingError?.error) {
-            throw new Error(deleteBuildingError?.message || deleteBuildingError?.error?.message)
-        }
+        mongoErrorHandler({ mongoError: deleteBuildingError })
     } catch (error) {
         console.log({ deleteBuildingError: error })
         throw new Error(error?.message)

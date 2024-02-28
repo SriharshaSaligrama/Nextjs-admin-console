@@ -157,9 +157,7 @@ export async function deleteUserAction({ id }) {
     try {
         const deleteUserError = await deleteUser({ id })
 
-        if (deleteUserError?.message || deleteUserError?.error) {
-            throw new Error(deleteUserError?.message || deleteUserError?.error?.message)
-        }
+        mongoErrorHandler({ mongoError: deleteUserError })
     } catch (error) {
         console.log({ deleteUserError: error })
         throw new Error(error)

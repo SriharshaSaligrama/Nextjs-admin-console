@@ -122,7 +122,7 @@ export const updateAllManagingBuildingsOfFMs = async (buildingId) => { //runs on
     }
     catch (error) {
         console.log({ getAllManagingBuildingsError: error });
-        throw new Error(error.message || error)
+        return error
     }
 }
 
@@ -137,7 +137,7 @@ export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId
     }
     catch (error) {
         console.log({ updateAssignedBuildingOfSelectedUsersError: error });
-        throw new Error(error.message || error)
+        return error
     }
 }
 
@@ -152,6 +152,6 @@ export const updateAssignedDepartmentOfSelectedUsers = async ({ deletingDepartme
     }
     catch (error) {
         console.log({ updateAssignedDepartmentOfSelectedUsersError: error });
-        throw new Error(error.message || error)
+        return error
     }
 }

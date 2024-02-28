@@ -79,9 +79,7 @@ export async function deleteCategoryAction({ id, parentId }) {
 
         const deleteCategoryError = await deleteCategory({ id, parentId })
 
-        if (deleteCategoryError?.message || deleteCategoryError?.error) {
-            throw new Error(deleteCategoryError?.message || deleteCategoryError?.error?.message)
-        }
+        mongoErrorHandler({ mongoError: deleteCategoryError })
     } catch (error) {
         console.log({ deleteCategoryError: error })
         throw new Error(error)

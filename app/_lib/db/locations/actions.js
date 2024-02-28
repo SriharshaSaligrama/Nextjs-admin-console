@@ -61,9 +61,7 @@ export async function deleteLocationAction({ id }) {
     try {
         const deleteLocationError = await deleteLocation({ id })
 
-        if (deleteLocationError?.message || deleteLocationError?.error) {
-            throw new Error(deleteLocationError?.message || deleteLocationError?.error?.message)
-        }
+        mongoErrorHandler({ mongoError: deleteLocationError })
     } catch (error) {
         console.log({ deleteLocationError: error })
         throw new Error(error)

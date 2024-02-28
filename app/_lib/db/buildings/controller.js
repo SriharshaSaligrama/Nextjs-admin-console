@@ -20,7 +20,7 @@ export const getBuildings = async () => {
 export const getBuildingsByLocationId = async (locationId) => {
     try {
         await connectToDatabase()
-        const allBuildingsOfSelectedLocation = await buildings.find({ location: locationId, isDeleted: false });
+        const allBuildingsOfSelectedLocation = await buildings.find({ location: locationId || null, isDeleted: false });
         return JSON.parse(JSON.stringify(allBuildingsOfSelectedLocation))
     } catch (error) {
         console.log({ getBuildingsByLocationIdError: error });
@@ -85,9 +85,15 @@ export const editBuilding = async (id, { name }) => {
 export const deleteBuilding = async ({ id, transferringBuildingId }) => {
     try {
         if (transferringBuildingId) {
-            await updateAssignedBuildingOfSelectedUsers({ deletingBuildingId: id, transferringBuildingId })
+            const updateAssignedBuildingOfSelectedUsersError = await updateAssignedBuildingOfSelectedUsers({ deletingBuildingId: id, transferringBuildingId })
+            if (updateAssignedBuildingOfSelectedUsersError) {
+                return updateAssignedBuildingOfSelectedUsersError
+            }
         }
-        await updateAllManagingBuildingsOfFMs(id);
+        const updateAllManagingBuildingsOfFMsError = await updateAllManagingBuildingsOfFMs(id);
+        if (updateAllManagingBuildingsOfFMsError) {
+            return updateAllManagingBuildingsOfFMsError
+        }
         await buildings.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
     }
     catch (error) {

@@ -1,3 +1,4 @@
+import Modal from '@/app/_lib/ui/Modal'
 import React from 'react'
 
 export const metadata = {
@@ -9,7 +10,9 @@ const EditGroup = async (props) => {
     const id = params.id
 
     return (
-        <div>Edit Group {id}</div>
+        <Modal title='Edit Group'>
+            <div>Edit Group {id}</div>
+        </Modal>
     )
 }
 

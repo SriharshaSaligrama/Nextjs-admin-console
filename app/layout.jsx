@@ -24,6 +24,7 @@ export default function RootLayout({ children }) {
                         <CssBaseline />
                         <Navbar>
                             {children}
+                            <div id="modal-root" />
                         </Navbar>
                     </Theme>
                 </AppRouterCacheProvider>

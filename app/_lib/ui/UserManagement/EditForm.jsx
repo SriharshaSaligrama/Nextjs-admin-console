@@ -8,6 +8,7 @@ import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { editUserAction } from '../../db/user/actions';
 import { userRoles } from '../../constants';
+import { submitFormData } from '../../db/utils';
 
 const EditUserForm = (props) => {
     const { allBuildings, allDepartments, editingData } = props
@@ -24,11 +25,6 @@ const EditUserForm = (props) => {
 
     const [state, dispatch] = useFormState(editUserAction, initialErrorState);
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        dispatch(new FormData(event.target))
-    }
-
     const handleCancelClick = () => {
         router.push('/users')
     }
@@ -36,9 +32,9 @@ const EditUserForm = (props) => {
     return (
         <Box
             component="form"
+            action={(formData) => submitFormData(formData, dispatch)}
             noValidate
             autoComplete="off"
-            onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
                 <PageHeading heading='Update User' />
@@ -120,6 +116,7 @@ const EditUserForm = (props) => {
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={`Update User`}
+                    submitPendingText={`Updating User...`}
                 />
             </Stack>
         </Box>

@@ -1,8 +1,11 @@
 import React from 'react'
+import { useFormStatus } from 'react-dom';
 import { Box, Button } from '@mui/material'
 
 const FormSubmitCancelButtons = (props) => {
-    const { cancelText, submitText, handleCancelClick } = props
+    const { cancelText, submitText, submitPendingText, handleCancelClick } = props
+
+    const { pending } = useFormStatus()
 
     return (
         <Box sx={{ ...styles.buttonsContainer }}>
@@ -18,8 +21,9 @@ const FormSubmitCancelButtons = (props) => {
                 sx={{ ...styles.buttons }}
                 variant='contained'
                 type="submit"
+                disabled={pending}
             >
-                {submitText}
+                {pending ? submitPendingText : submitText}
             </Button>
         </Box>
     )
@@ -35,5 +39,6 @@ const styles = {
     },
     buttons: {
         width: '50%',
+        fontSize: '11px',
     },
 }

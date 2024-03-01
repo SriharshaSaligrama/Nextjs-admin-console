@@ -6,6 +6,7 @@ import { Box, Paper, TextField, Typography } from '@mui/material'
 import { addLocationAction, editLocationAction } from '@/app/_lib/db/locations/actions';
 import { useRouter } from 'next/navigation';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
+import { submitFormData } from '../../db/utils';
 
 const LocationsForm = (props) => {
     const { editingData } = props
@@ -16,11 +17,6 @@ const LocationsForm = (props) => {
 
     const [state, dispatch] = useFormState(editingData?.id ? editLocationAction : addLocationAction, initialErrorState);
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        dispatch(new FormData(event.target))
-    }
-
     const handleCancelClick = () => {
         router.push('/locations')
     }
@@ -29,9 +25,9 @@ const LocationsForm = (props) => {
         <Box
             sx={{ ...styles.container }}
             component="form"
+            action={(formData) => submitFormData(formData, dispatch)}
             noValidate
             autoComplete="off"
-            onSubmit={handleSubmit}
         >
             <Paper sx={{ ...styles.card }}>
                 <Typography sx={{ ...styles.title }}>
@@ -54,6 +50,7 @@ const LocationsForm = (props) => {
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={editingData?.id ? `Update Location` : `Create Location`}
+                    submitPendingText={editingData?.id ? `Updating Location...` : `Creating Location...`}
                 />
             </Paper>
         </Box>

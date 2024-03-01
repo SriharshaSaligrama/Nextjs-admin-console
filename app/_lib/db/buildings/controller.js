@@ -55,10 +55,10 @@ export const getBuilding = async (id) => {
     }
 }
 
-export const addBuilding = async ({ name, locationId }) => {
+export const addBuilding = async ({ name, location }) => {
     try {
         await connectToDatabase()
-        const building = new buildings({ name, location: locationId })
+        const building = new buildings({ name, location })
         await building.save()
     }
     catch (error) {

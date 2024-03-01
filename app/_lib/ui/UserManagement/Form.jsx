@@ -1,14 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormState } from 'react-dom';
-import { Box, IconButton, InputAdornment, MenuItem, Stack, TextField } from '@mui/material'
+import { Box, MenuItem, Stack, TextField } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { addUserAction } from '../../db/user/actions';
 import { userRoles } from '../../constants';
+import { submitFormData } from '../../db/utils';
+import PasswordInput from '../PasswordInput';
 
 const UserForm = (props) => {
     const { allBuildings, allDepartments } = props
@@ -27,19 +28,6 @@ const UserForm = (props) => {
 
     const [state, dispatch] = useFormState(addUserAction, initialErrorState);
 
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        dispatch(new FormData(event.target))
-    }
-
     const handleCancelClick = () => {
         router.push('/users')
     }
@@ -47,9 +35,9 @@ const UserForm = (props) => {
     return (
         <Box
             component="form"
+            action={(formData) => submitFormData(formData, dispatch)}
             noValidate
             autoComplete="off"
-            onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
                 <PageHeading heading='Add User' />
@@ -68,26 +56,7 @@ const UserForm = (props) => {
                     error={state?.email?.length > 0}
                     helperText={state?.email || ''}
                 />
-                <TextField
-                    required
-                    label='Password'
-                    name='password'
-                    error={state?.password?.length > 0}
-                    helperText={state?.password || ''}
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                >
-                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                <PasswordInput error={state?.password?.length > 0} helperText={state?.password} />
                 <TextField
                     required
                     label='Role'
@@ -150,6 +119,7 @@ const UserForm = (props) => {
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={`Create User`}
+                    submitPendingText={`Creating User...`}
                 />
             </Stack>
         </Box>

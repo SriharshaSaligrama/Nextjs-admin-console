@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
-import { List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { useFormState } from 'react-dom';
+import { Box, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
 import { departmentCategoryDeletePageDetails } from '../../constants'
+import { submitFormData } from '../../db/utils'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData, usersData } = props
@@ -27,13 +29,9 @@ const Delete = (props) => {
         router.push(returnLink)
     }
 
-    const handleDeleteClick = async () => {
-        await deleteAction({
-            id: deletingData.id,
-            parentId: parent,
-            userExists: ifUsersOfDeletingDepartmentExist
-        })
-    }
+    const initialState = { id: deletingData?.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist }
+
+    const [state, dispatch] = useFormState(deleteAction, initialState);
 
     return (
         <>
@@ -96,12 +94,26 @@ const Delete = (props) => {
                                 <Typography>Are you sure to delete <b>{deletingData.name}</b> {label}?</Typography>
                             </>
                         }
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={!parent} />
+                        <Box
+                            component="form"
+                            action={() => submitFormData(state, dispatch)}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={!parent} />
+                        </Box>
                     </Stack>
                 </Stack> : <Stack spacing={4} sx={{ ...styles.noDependenciesContainer }} >
                     <Typography><b>{deletingData.name}</b> {label} has no dependencies</Typography>
                     <Typography>Are you sure you want to delete <b>{deletingData.name}</b> {label}?</Typography>
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} />
+                    <Box
+                        component="form"
+                        action={() => submitFormData(state, dispatch)}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <DeleteCancelButtons handleCancelClick={handleCancelClick} />
+                    </Box>
                 </Stack>
             }
         </>

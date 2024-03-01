@@ -6,15 +6,9 @@ import { addLocation, deleteLocation, editLocation } from "./controller";
 import { locationValidator } from "../validators";
 import { getFormDataObject, mongoErrorHandler } from "../utils";
 
-const getFormData = async (data) => {
-    const formData = getFormDataObject(data)
-
-    return { ...formData }
-}
-
 export async function addLocationAction(prevState, data) {
     try {
-        const { name } = await getFormData(data)
+        const { name } = getFormDataObject(data)
 
         const errors = await locationValidator({ name })
 
@@ -36,7 +30,7 @@ export async function addLocationAction(prevState, data) {
 
 export async function editLocationAction(prevState, data) {
     try {
-        const { id, name } = await getFormData(data)
+        const { id, name } = getFormDataObject(data)
 
         const errors = await locationValidator({ name, editId: id })
 
@@ -60,13 +54,14 @@ export async function editLocationAction(prevState, data) {
 export async function deleteLocationAction({ id }) {
     try {
         const deleteLocationError = await deleteLocation({ id })
-
+        if (!deleteLocationError) {
+            revalidatePath("/locations")
+        }
         mongoErrorHandler({ mongoError: deleteLocationError })
     } catch (error) {
         console.log({ deleteLocationError: error })
         throw new Error(error)
     }
 
-    revalidatePath("/locations")
     redirect("/locations")
 }

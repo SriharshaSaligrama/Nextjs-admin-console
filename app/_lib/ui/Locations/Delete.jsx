@@ -1,12 +1,14 @@
 'use client'
 
 import React from 'react'
-import { List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
+import { useFormState } from 'react-dom';
+import { Box, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { deleteLocationAction } from '@/app/_lib/db/locations/actions'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
+import { submitFormData } from '../../db/utils'
 
 const DeleteLocation = (props) => {
     const { deletingData, dependantBuildings } = props
@@ -16,9 +18,9 @@ const DeleteLocation = (props) => {
         router.push('/locations')
     }
 
-    const handleDeleteClick = async () => {
-        await deleteLocationAction({ id: deletingData?.id })
-    }
+    const initialState = { id: deletingData?.id }
+
+    const [state, dispatch] = useFormState(deleteLocationAction, initialState);
 
     return (
         <>
@@ -36,14 +38,20 @@ const DeleteLocation = (props) => {
                         }
                     </List>
                     <Typography>Please delete all the buildings of this location before deleting this location.</Typography>
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
+                    <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={dependantBuildings?.length} />
                 </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
                     <Typography><b>{deletingData.name}</b> location has no building(s).</Typography>
                     <Typography>Are you sure you want to delete <b>{deletingData.name}</b> location?</Typography>
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={dependantBuildings?.length} />
+                    <Box
+                        component="form"
+                        action={() => submitFormData(state, dispatch)}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <DeleteCancelButtons handleCancelClick={handleCancelClick} />
+                    </Box>
                 </Stack>
             }
-
         </>
     )
 }

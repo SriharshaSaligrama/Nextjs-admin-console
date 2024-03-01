@@ -95,11 +95,11 @@ export const locationValidator = async ({ name, editId }) => {
     }
 }
 
-export const buildingValidator = async ({ name, locationId, editId }) => {
+export const buildingValidator = async ({ name, location, editId }) => {
     try {
         const errors = {}
         const allLocations = await getLocations()
-        const allBuildingsOfSelectedLocation = await getBuildingsByLocationId(locationId)
+        const allBuildingsOfSelectedLocation = await getBuildingsByLocationId(location)
         const duplicateBuildingName = allBuildingsOfSelectedLocation?.find((building) => building?.name?.toLowerCase() === name?.toLowerCase() && building?.id?.toString() !== editId?.toString())
 
         if (!name || !name?.trim()) {
@@ -111,7 +111,7 @@ export const buildingValidator = async ({ name, locationId, editId }) => {
         else if (!allLocations?.length) {
             errors.location = 'No locations added. Please add a location to add a building.'
         }
-        else if (!locationId || !locationId?.trim()) {
+        else if (!location || !location?.trim()) {
             errors.location = 'Location is required'
         }
         else if (duplicateBuildingName?.name) {

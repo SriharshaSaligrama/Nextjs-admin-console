@@ -7,6 +7,7 @@ import { Box, TextField, Stack, MenuItem } from '@mui/material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 import PageHeading from '../PageHeading';
 import { departmentCategoryAddEditFormPageDetails } from '../../constants';
+import { submitFormData } from '../../db/utils';
 
 const Form = (props) => {
     const { allData, editingData } = props
@@ -22,11 +23,6 @@ const Form = (props) => {
     const initialErrorState = { name: '', code: '', message: '' }
     const [state, dispatch] = useFormState(editingData?.id ? editAction : addAction, initialErrorState);
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        dispatch(new FormData(event.target))
-    }
-
     const handleCancelClick = () => {
         router.push(returnLink)
     }
@@ -34,9 +30,9 @@ const Form = (props) => {
     return (
         <Box
             component="form"
+            action={(formData) => submitFormData(formData, dispatch)}
             noValidate
             autoComplete="off"
-            onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
                 <PageHeading heading={editingData?.id ? `Edit ${heading}` : `Add ${heading}`} />
@@ -83,6 +79,7 @@ const Form = (props) => {
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={editingData?.id ? `Update ${heading}` : `Create ${heading}`}
+                    submitPendingText={editingData?.id ? `Updating ${heading}...` : `Creating ${heading}...`}
                 />
             </Stack>
         </Box>

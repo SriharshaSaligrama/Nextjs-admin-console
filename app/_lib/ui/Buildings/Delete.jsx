@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
-import { List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { useFormState } from 'react-dom';
+import { Box, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { deleteBuildingAction } from '@/app/_lib/db/buildings/actions'
+import globalStyles from '@/app/globalStyles'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
-import globalStyles from '@/app/globalStyles'
+import { submitFormData } from '../../db/utils'
 
 const DeleteBuilding = (props) => {
     const { deletingData, usersData, buildingsData } = props
@@ -19,9 +21,9 @@ const DeleteBuilding = (props) => {
         router.push('/buildings')
     }
 
-    const handleDeleteClick = async () => {
-        await deleteBuildingAction({ id: deletingData?.id, transferringBuildingId: transferringBuilding })
-    }
+    const initialState = { id: deletingData?.id, transferringBuildingId: transferringBuilding }
+
+    const [state, dispatch] = useFormState(deleteBuildingAction, initialState);
 
     return (
         <>
@@ -67,13 +69,27 @@ const DeleteBuilding = (props) => {
                                 <Typography>Are you sure to delete <b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building?</Typography>
                             </>
                         }
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={!transferringBuilding} />
+                        <Box
+                            component="form"
+                            action={() => submitFormData(state, dispatch)}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={!transferringBuilding} />
+                        </Box>
                     </Stack>
                 </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
                     <Typography><b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building has no dependencies</Typography>
                     <Typography textAlign={'center'} maxWidth={'500px'}>If the building is being managed by any facility managers, the building will be removed from their managing buildings list.</Typography>
                     <Typography>Are you sure you want to delete <b>{deletingData.name} {deletingData?.location?.name && `(${deletingData?.location?.name})`}</b> building?</Typography>
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} handleDeleteClick={handleDeleteClick} disabled={usersData?.length} />
+                    <Box
+                        component="form"
+                        action={() => submitFormData(state, dispatch)}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={usersData?.length} />
+                    </Box>
                 </Stack>
             }
         </>

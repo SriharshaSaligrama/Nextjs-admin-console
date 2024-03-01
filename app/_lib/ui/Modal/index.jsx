@@ -10,7 +10,7 @@ const Modal = ({ children, title }) => {
     const router = useRouter();
     const theme = useTheme()
     const dialogRef = useRef(null);
-    console.log({ theme })
+
     useEffect(() => {
         const handleOutsideClick = (event) => {
             // Check if the click is outside the modal

@@ -18,3 +18,7 @@ export const getFormDataObject = (formData) => {
     const formObject = Object.fromEntries(formData.entries())
     return formObject
 }
+
+export const submitFormData = async (formData, dispatch) => {
+    await dispatch(formData);
+}

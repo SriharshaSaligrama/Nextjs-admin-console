@@ -5,31 +5,24 @@ import { revalidatePath } from "next/cache";
 import { addBuilding, editBuilding, deleteBuilding } from "./controller";
 import { buildingValidator } from "../validators";
 import { getLocation } from "../locations/controller";
-import { mongoErrorHandler } from "../utils";
-
-const getFormData = async (data) => {
-    const id = data.get('id')  //**need to handle id not found error
-    const name = data.get('name')
-    const locationId = data.get('location')
-    return { id, name, locationId }
-}
+import { getFormDataObject, mongoErrorHandler } from "../utils";
 
 export async function addBuildingAction(prevState, data) {
     try {
-        const { name, locationId } = await getFormData(data)
+        const { name, location } = getFormDataObject(data)
 
-        const errors = await buildingValidator({ name, locationId })
+        const errors = await buildingValidator({ name, location })
 
         if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
-        const location = await getLocation(locationId)
-        if (locationId && !location?.id) {
+        const locationData = await getLocation(location)
+        if (location && !locationData?.id) {
             throw new Error('Selected location not found')
         }
 
-        const addedBuildingError = await addBuilding({ name, locationId })
+        const addedBuildingError = await addBuilding({ name, location })
 
         mongoErrorHandler({ errorProneFields: ['name', 'location'], mongoError: addedBuildingError })
     } catch (error) {
@@ -44,16 +37,16 @@ export async function addBuildingAction(prevState, data) {
 
 export async function editBuildingAction(prevState, data) {
     try {
-        const { id, name, locationId } = await getFormData(data)
+        const { id, name, location } = getFormDataObject(data)
 
-        const errors = await buildingValidator({ name, locationId, editId: id })
+        const errors = await buildingValidator({ name, location, editId: id })
 
         if (Object.values(errors).some(error => error.length > 0)) {
             return errors
         }
 
-        const location = await getLocation(locationId)
-        if (locationId && !location?.id) {
+        const locationData = await getLocation(location)
+        if (location && !locationData?.id) {
             throw new Error('Selected location not found')
         }
 
@@ -73,13 +66,14 @@ export async function editBuildingAction(prevState, data) {
 export async function deleteBuildingAction({ id, transferringBuildingId }) {
     try {
         const deleteBuildingError = await deleteBuilding({ id, transferringBuildingId })
-
+        if (!deleteBuildingError) {
+            revalidatePath("/buildings")
+        }
         mongoErrorHandler({ mongoError: deleteBuildingError })
     } catch (error) {
         console.log({ deleteBuildingError: error })
-        throw new Error(error?.message)
+        throw new Error(error)
     }
 
-    revalidatePath("/buildings")
     redirect("/buildings")
 }

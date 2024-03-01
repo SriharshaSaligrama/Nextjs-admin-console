@@ -6,6 +6,7 @@ import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import { addBuildingAction, editBuildingAction } from '@/app/_lib/db/buildings/actions';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
+import { submitFormData } from '../../db/utils';
 
 const BuildingsForm = (props) => {
     const { editingData, allLocations } = props
@@ -16,11 +17,6 @@ const BuildingsForm = (props) => {
 
     const [state, dispatch] = useFormState(editingData?.id ? editBuildingAction : addBuildingAction, initialErrorState);
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        dispatch(new FormData(event.target))
-    }
-
     const handleCancelClick = () => {
         router.push('/buildings')
     }
@@ -29,9 +25,9 @@ const BuildingsForm = (props) => {
         <Box
             sx={{ ...styles.container }}
             component="form"
+            action={(formData) => submitFormData(formData, dispatch)}
             noValidate
             autoComplete="off"
-            onSubmit={handleSubmit}
         >
             <Paper sx={{ ...styles.card }}>
                 <Typography sx={{ ...styles.title }}>{editingData?.id ? 'Update building' : 'Add a building'}</Typography>
@@ -71,6 +67,7 @@ const BuildingsForm = (props) => {
                 <FormSubmitCancelButtons
                     handleCancelClick={handleCancelClick}
                     submitText={editingData?.id ? 'Update Building' : 'Create Building'}
+                    submitPendingText={editingData?.id ? `Updating Building...` : `Creating Building...`}
                 />
             </Paper>
         </Box>

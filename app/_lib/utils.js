@@ -22,3 +22,15 @@ export const getFormDataObject = (formData) => {
 export const submitFormData = async (formData, dispatch) => {
     await dispatch(formData);
 }
+
+export const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+};

@@ -7,7 +7,7 @@ import { Box, TextField, Stack, MenuItem } from '@mui/material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 import PageHeading from '../PageHeading';
 import { departmentCategoryAddEditFormPageDetails } from '../../constants';
-import { submitFormData } from '../../db/utils';
+import { submitFormData } from '../../utils';
 
 const Form = (props) => {
     const { allData, editingData } = props

@@ -8,7 +8,7 @@ import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { addUserAction } from '../../db/user/actions';
 import { userRoles } from '../../constants';
-import { submitFormData } from '../../db/utils';
+import { submitFormData } from '../../utils';
 import PasswordInput from '../PasswordInput';
 
 const UserForm = (props) => {

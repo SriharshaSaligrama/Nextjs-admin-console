@@ -8,7 +8,7 @@ import { deleteBuildingAction } from '@/app/_lib/db/buildings/actions'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
-import { submitFormData } from '../../db/utils'
+import { submitFormData } from '../../utils'
 
 const DeleteBuilding = (props) => {
     const { deletingData, usersData, buildingsData } = props

@@ -19,6 +19,28 @@ export const getUsers = async () => {
     }
 };
 
+export const getFilteredUsers = async (query) => { // used by groups for searching users
+    try {
+        await connectToDatabase()
+        const filteredUsers = await users.find({
+            $and: [
+                { isDeleted: false }, // Only fetch users where isDeleted is false
+                {
+                    $or: [
+                        { fullName: { $regex: query, $options: 'i' } }, // Case-insensitive search for name
+                        { email: { $regex: query, $options: 'i' } } // Case-insensitive search for email
+                    ]
+                }
+            ]
+        })
+        return JSON.parse(JSON.stringify(filteredUsers))
+    }
+    catch (error) {
+        console.log({ getFilteredUsersError: error });
+        return error
+    }
+}
+
 export const getUsersByBuildingId = async (buildingId) => {
     try {
         await connectToDatabase()

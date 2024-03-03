@@ -8,7 +8,7 @@ import globalStyles from '@/app/globalStyles'
 import PageHeading from '../PageHeading'
 import DeleteCancelButtons from '../DeleteCancelButtons'
 import { departmentCategoryDeletePageDetails } from '../../constants'
-import { submitFormData } from '../../db/utils'
+import { submitFormData } from '../../utils'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData, usersData } = props

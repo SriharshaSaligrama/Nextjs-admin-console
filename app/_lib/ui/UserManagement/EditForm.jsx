@@ -8,7 +8,7 @@ import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
 import { editUserAction } from '../../db/user/actions';
 import { userRoles } from '../../constants';
-import { submitFormData } from '../../db/utils';
+import { submitFormData } from '../../utils';
 
 const EditUserForm = (props) => {
     const { allBuildings, allDepartments, editingData } = props

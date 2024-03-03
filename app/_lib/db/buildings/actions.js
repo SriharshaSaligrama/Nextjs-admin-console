@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { addBuilding, editBuilding, deleteBuilding } from "./controller";
 import { buildingValidator } from "../validators";
 import { getLocation } from "../locations/controller";
-import { getFormDataObject, mongoErrorHandler } from "../utils";
+import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
 export async function addBuildingAction(prevState, data) {
     try {
@@ -66,14 +66,13 @@ export async function editBuildingAction(prevState, data) {
 export async function deleteBuildingAction({ id, transferringBuildingId }) {
     try {
         const deleteBuildingError = await deleteBuilding({ id, transferringBuildingId })
-        if (!deleteBuildingError) {
-            revalidatePath("/buildings")
-        }
+
         mongoErrorHandler({ mongoError: deleteBuildingError })
     } catch (error) {
         console.log({ deleteBuildingError: error })
         throw new Error(error)
     }
 
+    revalidatePath("/buildings")
     redirect("/buildings")
 }

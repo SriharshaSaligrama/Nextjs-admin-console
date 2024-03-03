@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import mongoose from "mongoose";
 import { addUserValidator, editUserValidator } from "../validators";
-import { addUser, deleteUser, editUser } from "./controller";
+import { addUser, deleteUser, editUser, getFilteredUsers } from "./controller";
 import { getBuilding } from "../buildings/controller";
 import { getDepartment } from "../departments/controller";
-import { getFormDataObject, mongoErrorHandler } from "../utils";
+import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
 const getFormData = async (data) => {
     const formData = getFormDataObject(data)
@@ -165,4 +165,14 @@ export async function deleteUserAction({ id }) {
 
     revalidatePath("/users")
     redirect("/users")
+}
+
+export const getFilteredUsersAction = async (query) => {
+    try {
+        const users = await getFilteredUsers(query)
+        return users
+    } catch (error) {
+        console.log({ getFilteredUsersError: error })
+        throw new Error(error)
+    }
 }

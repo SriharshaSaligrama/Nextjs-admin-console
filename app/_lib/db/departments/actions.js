@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { departmentValidator } from "../validators";
 import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "./controller";
 import mongoose from "mongoose";
-import { getFormDataObject, mongoErrorHandler } from "../utils";
+import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
 const getFormData = async (data) => {
     const formData = getFormDataObject(data)

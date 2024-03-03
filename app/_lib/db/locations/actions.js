@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { addLocation, deleteLocation, editLocation } from "./controller";
 import { locationValidator } from "../validators";
-import { getFormDataObject, mongoErrorHandler } from "../utils";
+import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
 export async function addLocationAction(prevState, data) {
     try {
@@ -54,14 +54,13 @@ export async function editLocationAction(prevState, data) {
 export async function deleteLocationAction({ id }) {
     try {
         const deleteLocationError = await deleteLocation({ id })
-        if (!deleteLocationError) {
-            revalidatePath("/locations")
-        }
+
         mongoErrorHandler({ mongoError: deleteLocationError })
     } catch (error) {
         console.log({ deleteLocationError: error })
         throw new Error(error)
     }
 
+    revalidatePath("/locations")
     redirect("/locations")
 }

@@ -6,7 +6,7 @@ import { Box, Paper, TextField, Typography } from '@mui/material'
 import { addLocationAction, editLocationAction } from '@/app/_lib/db/locations/actions';
 import { useRouter } from 'next/navigation';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
-import { submitFormData } from '../../db/utils';
+import { submitFormData } from '../../utils';
 
 const LocationsForm = (props) => {
     const { editingData } = props

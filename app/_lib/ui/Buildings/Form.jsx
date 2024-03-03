@@ -6,7 +6,7 @@ import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import { addBuildingAction, editBuildingAction } from '@/app/_lib/db/buildings/actions';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
-import { submitFormData } from '../../db/utils';
+import { submitFormData } from '../../utils';
 
 const BuildingsForm = (props) => {
     const { editingData, allLocations } = props

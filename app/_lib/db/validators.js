@@ -1,6 +1,7 @@
 import { getBuildings, getBuildingsByLocationId } from "./buildings/controller"
 import { getAllCategoriesIncludingDeleted } from "./categories/controller"
 import { getAllDepartmentsIncludingDeleted } from "./departments/controller"
+import { getAllGroupsIncludingDeleted } from "./groups/controller"
 import { getAllLocationsIncludingDeleted, getLocations } from "./locations/controller"
 import { getAllUsersIncludingDeleted } from "./user/controller"
 import isEmail from 'validator/lib/isEmail';
@@ -35,7 +36,6 @@ export const departmentValidator = async ({ name, code, editId }) => {
     } catch (error) {
         console.log({ departmentValidatorError: error })
         return { errors: { message: error.message } }
-
     }
 }
 
@@ -193,6 +193,45 @@ export const editUserValidator = async ({ fullName, role, buildingAssignedTo, ma
         return errors
     } catch (error) {
         console.log({ editUserValidatorError: error })
+        return { errors: { message: error.message } }
+    }
+}
+
+export const groupValidator = async ({ name, code, members, editId }) => {
+    try {
+        const errors = {}
+        const allGroups = await getAllGroupsIncludingDeleted()
+        const duplicateGroupName = allGroups?.find((group) => group?.name?.toLowerCase() === name?.toLowerCase())
+        const duplicateGroupCode = allGroups?.find((group) => group?.code?.toLowerCase() === code?.toLowerCase())
+
+        if (!name || !name?.trim()) {
+            errors.name = 'Name is required'
+        }
+        else if (name?.trim().length < 2 || name?.trim().length > 120) {
+            errors.name = 'Name must be between 2 and 120 characters'
+        }
+        else if (duplicateGroupName?.id && duplicateGroupName?.id?.toString() !== editId) {
+            errors.name = 'Name already exists'
+        }
+        else if (!code || !code?.trim()) {
+            errors.code = 'Code is required'
+        }
+        else if (code?.trim().length < 2 || code?.trim().length > 120) {
+            errors.code = 'Code must be between 2 and 120 characters'
+        }
+        else if (duplicateGroupCode?.id && duplicateGroupCode?.id?.toString() !== editId) {
+            errors.code = 'Code already exists'
+        }
+        else if (members?.length) {
+            const invalidEmail = members?.find(member => !isEmail(member))
+            if (invalidEmail) {
+                errors.members = `Invalid email ${invalidEmail}`
+            }
+        }
+
+        return errors
+    } catch (error) {
+        console.log({ groupValidatorError: error })
         return { errors: { message: error.message } }
     }
 }

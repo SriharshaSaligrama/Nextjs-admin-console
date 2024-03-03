@@ -16,7 +16,11 @@ const Modal = ({ children, title }) => {
             // Check if the click is outside the modal
             const clickTarget = event.target;
 
-            if (!clickTarget.closest('dialog') && clickTarget !== dialogRef.current) {
+            if (
+                !clickTarget.closest('dialog') &&
+                !clickTarget.closest('.MuiAutocomplete-listbox') &&
+                clickTarget !== dialogRef.current
+            ) {
                 router.back();
             }
         };

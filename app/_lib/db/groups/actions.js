@@ -7,11 +7,11 @@ import { addGroup, addGroupModal, deleteGroup, editGroup, editGroupModal } from 
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
 import { getUsers } from "../user/controller";
 
-export async function addGroupAction(prevState, data) {
+export async function addEditGroupAction(prevState, data) {
     try {
-        const { name, code, description, members } = getFormDataObject(data)
+        const { id, name, code, description, members } = getFormDataObject(data)
 
-        const errors = await groupValidator({ name, code, members: JSON.parse(members) })
+        const errors = await groupValidator({ name, code, members: JSON.parse(members), editId: id })
 
         if (Object.values(errors).some(error => error.length > 0)) {
             return errors
@@ -26,11 +26,13 @@ export async function addGroupAction(prevState, data) {
             return data
         }) : []
 
-        const addedGroupError = await addGroup({ name, code, description, members: membersType })
+        const addedOrUpdatedGroupError = id ?
+            await editGroup(id, { name, code, description, members: membersType }) :
+            await addGroup({ name, code, description, members: membersType })
 
-        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedGroupError })
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedOrUpdatedGroupError })
     } catch (error) {
-        console.log({ addGroupError: error })
+        console.log({ addedOrUpdatedGroupError: error })
         throw new Error(error)
     }
 
@@ -63,36 +65,14 @@ export async function addEditGroupModalAction(data) {
 
         if (addedOrUpdatedGroup?.error || addedOrUpdatedGroup?.errors || addedOrUpdatedGroup?.message) {
             mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedOrUpdatedGroup })
-        } else return addedOrUpdatedGroup
+        } else {
+            revalidatePath("/groups")
+            return addedOrUpdatedGroup
+        }
     } catch (error) {
         console.log({ addGroupError: error })
         throw new Error(error)
     }
-
-    revalidatePath("/groups")
-    redirect("/groups")
-}
-
-export async function editGroupAction(prevState, data) {
-    try {
-        const { id, name, code, description, members } = getFormDataObject(data)
-
-        const errors = await groupValidator({ name, code, members, editId: id })
-
-        if (Object.values(errors).some(error => error.length > 0)) {
-            return errors
-        }
-
-        const updatedGroupError = await editGroup({ name, code, description, members })
-
-        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: updatedGroupError })
-    } catch (error) {
-        console.log({ editGroupError: error })
-        throw new Error(error)
-    }
-
-    revalidatePath("/groups")
-    redirect("/groups")
 }
 
 export async function deleteGroupAction({ id }) {

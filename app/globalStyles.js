@@ -12,6 +12,16 @@ const globalStyles = {
             borderRadius: '10px',
             // outline: '0.5px solid slategrey'
         }
+    },
+    centerDiv: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    justifySpaceBetweenAlignCenter: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 }
 

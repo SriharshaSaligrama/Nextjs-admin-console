@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
-import { Autocomplete, Box, Button, Checkbox, Stack, TextField } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Stack, TextField, Tooltip } from '@mui/material'
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import useAddEditGroup from './formModalHook';
+import useAddEditGroupModal from './formModalHook';
+import globalStyles from '@/app/globalStyles';
 
 const GroupsModalForm = (props) => {
     const { editingData } = props
@@ -17,7 +18,7 @@ const GroupsModalForm = (props) => {
         handleChange,
         handleSearch,
         handleSubmit
-    } = useAddEditGroup({ editingData })
+    } = useAddEditGroupModal({ editingData })
 
     return (
         <Box
@@ -25,8 +26,9 @@ const GroupsModalForm = (props) => {
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit}
+            sx={{ ...styles.formContainer }}
         >
-            <Stack spacing={2}>
+            <Stack spacing={2} mt={1}>
                 <TextField
                     required
                     label={`Group Name`}
@@ -56,52 +58,58 @@ const GroupsModalForm = (props) => {
                     value={group?.description}
                     onChange={handleChange}
                 />
-                <Autocomplete
-                    value={group?.members}
-                    onChange={(event, newValue) => {
-                        if (newValue?.length > 0) {
-                            setGroup({ ...group, members: newValue })
-                        } else if (newValue?.length === 0) {
-                            setGroup({ ...group, members: [] })
-                        }
-                    }}
-                    options={users?.map((option) => option?.email)}
-                    multiple
-                    noOptionsText='No members found'
-                    disableCloseOnSelect
-                    limitTags={3}
-                    freeSolo
-                    renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                            <Checkbox
-                                icon={<CheckBoxOutlineBlank />}
-                                checkedIcon={<CheckBox />}
-                                checked={selected}
+                <Tooltip title='press Enter to add the email to the members list, if adding manually'>
+                    <Autocomplete
+                        value={group?.members}
+                        onChange={(event, newValue) => {
+                            if (newValue?.length > 0) {
+                                setGroup({ ...group, members: newValue })
+                            } else if (newValue?.length === 0) {
+                                setGroup({ ...group, members: [] })
+                            }
+                        }}
+                        options={users?.map((option) => option?.email)}
+                        multiple
+                        noOptionsText='No members found'
+                        disableCloseOnSelect
+                        limitTags={3}
+                        freeSolo
+                        renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                                <Checkbox
+                                    icon={<CheckBoxOutlineBlank />}
+                                    checkedIcon={<CheckBox />}
+                                    checked={selected}
+                                />
+                                {option}
+                            </li>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Search Members (min. 2 characters)"
+                                name='members'
+                                onChange={(e) => {
+                                    handleSearch(e.target.value);
+                                }}
+                                size='small'
+                                error={errors?.members?.length > 0}
+                                helperText={errors?.members || ''}
                             />
-                            {option}
-                        </li>
-                    )}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Search Members (min. 2 characters)"
-                            name='members'
-                            onChange={(e) => {
-                                handleSearch(e.target.value);
-                            }}
-                            size='small'
-                            error={errors?.members?.length > 0}
-                            helperText={errors?.members || ''}
-                        />
-                    )}
-                />
+                        )}
+                    />
+                </Tooltip>
                 <Button
                     sx={{ ...styles.buttons }}
                     variant='contained'
                     type="submit"
                     disabled={pending}
                 >
-                    {pending ? 'Creating Group...' : 'Create Group'}
+                    {
+                        pending ?
+                            editingData?.id ? 'Updating Group...' : 'Creating Group...' :
+                            editingData?.id ? 'Update Group' : 'Create Group'
+                    }
                 </Button>
             </Stack>
         </Box>
@@ -111,6 +119,11 @@ const GroupsModalForm = (props) => {
 export default GroupsModalForm
 
 const styles = {
+    formContainer: {
+        maxHeight: '400px',
+        overflow: 'auto',
+        ...globalStyles.thinScrollBar
+    },
     buttons: {
         width: '100%',
         fontSize: '11px',

@@ -1,3 +1,5 @@
+import { ITEMS_PER_PAGE } from "./constants"
+
 export const mongoErrorHandler = ({ errorProneFields, mongoError }) => {
     if (mongoError?.error) {
         throw new Error(mongoError?.error?.message)
@@ -34,3 +36,7 @@ export const debounce = (func, delay) => {
         }, delay);
     };
 };
+
+export const getSkipCount = (currentPageNumber) => {
+    return (currentPageNumber - 1) * ITEMS_PER_PAGE
+}

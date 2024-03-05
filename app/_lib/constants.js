@@ -311,3 +311,16 @@ export const departmentCategoryAddEditFormPageDetails = {
         editAction: editCategoryAction
     },
 };
+
+export const groupMembersTableHeaderColumns = [
+    {
+        id: 'email',
+        label: 'Email',
+    },
+    {
+        id: 'type',
+        label: 'Type',
+    }
+]
+
+export const ITEMS_PER_PAGE = 6

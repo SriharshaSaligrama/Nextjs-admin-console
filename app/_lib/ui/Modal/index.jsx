@@ -37,11 +37,9 @@ const Modal = ({ children, title }) => {
         router.back();
     }
 
-    const modalBgColor = theme.palette.mode === 'dark' ? theme.palette.action.selected : theme.palette.background.paper
-
     return createPortal(
-        <Box sx={{ ...styles.modalBackdrop }}>
-            <dialog ref={dialogRef} style={{ ...styles.modal, backgroundColor: modalBgColor, color: theme.palette.text.primary }} onClose={onDismiss}>
+        <Box sx={{ ...styles.modalBackdrop, bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)' }}>
+            <dialog ref={dialogRef} style={{ ...styles.modal, backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }} onClose={onDismiss}>
                 <Stack spacing={2}>
                     <Box sx={{ ...styles.header }}>
                         <Typography sx={{ ...styles.title }}>{title}</Typography>
@@ -66,7 +64,6 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

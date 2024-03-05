@@ -4,7 +4,7 @@ import { getFilteredUsersAction } from "../../db/user/actions"
 import { debounce } from "../../utils"
 import { addEditGroupModalAction } from "../../db/groups/actions"
 
-const useAddEditGroup = ({ editingData = {} }) => {
+const useAddEditGroupModal = ({ editingData = {} }) => {
     const router = useRouter()
 
     const [group, setGroup] = useState({
@@ -83,4 +83,4 @@ const useAddEditGroup = ({ editingData = {} }) => {
     return { group, setGroup, errors, pending, users, handleChange, handleSearch, handleSubmit }
 }
 
-export default useAddEditGroup
+export default useAddEditGroupModal

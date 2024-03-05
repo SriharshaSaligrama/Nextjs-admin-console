@@ -1,55 +1,25 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useFormState } from 'react-dom';
-import { Autocomplete, Box, Checkbox, Stack, TextField } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import { Autocomplete, Box, Checkbox, Stack, TextField, Tooltip } from '@mui/material'
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons'
 import PageHeading from '../PageHeading'
-import { debounce, submitFormData } from '../../utils';
-import { addGroupAction } from '../../db/groups/actions';
+import { submitFormData } from '../../utils';
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import { getFilteredUsersAction } from '../../db/user/actions';
+import useAddEditGroup from './formHook'
 
 const GroupsForm = (props) => {
     const { editingData } = props
 
-    const router = useRouter()
-
-    const initialErrorState = { name: '', code: '', members: '', message: '' }
-
-    const [state, dispatch] = useFormState(addGroupAction, initialErrorState);
-
-    const [users, setUsers] = useState([]);
-
-    const [selectedEmails, setSelectedEmails] = useState(editingData?.members?.length > 0 ? editingData?.members?.map(member => member?.email) : [])
-
-    const [query, setQuery] = useState('')
-
-    useEffect(() => {
-        const fetchUsersData = async () => {
-            const usersList = await getFilteredUsersAction(query)
-            setUsers(usersList)
-        }
-
-        if (query?.length > 1) {
-            fetchUsersData()
-        } else {
-            setUsers([])
-        }
-    }, [query])
-
-    const handleCancelClick = () => {
-        router.push('/groups');
-    }
-
-    const handleSearch = debounce((term) => {
-        if (term && term?.toLowerCase() !== query?.toLowerCase()) {
-            setQuery(term)
-        } else {
-            setQuery('')
-        }
-    }, 500)
+    const {
+        state,
+        dispatch,
+        users,
+        selectedEmails,
+        setSelectedEmails,
+        handleCancelClick,
+        handleSearch
+    } = useAddEditGroup({ editingData })
 
     return (
         <Box
@@ -88,44 +58,46 @@ const GroupsForm = (props) => {
                     name='description'
                     defaultValue={editingData?.description}
                 />
-                <Autocomplete
-                    value={selectedEmails}
-                    onChange={(event, newValue) => {
-                        if (newValue?.length > 0) {
-                            setSelectedEmails(newValue)
-                        } else if (newValue?.length === 0) {
-                            setSelectedEmails([])
-                        }
-                    }}
-                    options={users?.map((option) => option?.email)}
-                    multiple
-                    noOptionsText='No members found'
-                    disableCloseOnSelect
-                    limitTags={3}
-                    freeSolo
-                    renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                            <Checkbox
-                                icon={<CheckBoxOutlineBlank />}
-                                checkedIcon={<CheckBox />}
-                                checked={selected}
+                <Tooltip title='press Enter to add the email to the members list, if adding manually'>
+                    <Autocomplete
+                        value={selectedEmails}
+                        onChange={(event, newValue) => {
+                            if (newValue?.length > 0) {
+                                setSelectedEmails(newValue)
+                            } else if (newValue?.length === 0) {
+                                setSelectedEmails([])
+                            }
+                        }}
+                        options={users?.map((option) => option?.email)}
+                        multiple
+                        noOptionsText='No members found'
+                        disableCloseOnSelect
+                        limitTags={3}
+                        freeSolo
+                        renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                                <Checkbox
+                                    icon={<CheckBoxOutlineBlank />}
+                                    checkedIcon={<CheckBox />}
+                                    checked={selected}
+                                />
+                                {option}
+                            </li>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Search Members (min. 2 characters)"
+                                name='members'
+                                onChange={(e) => {
+                                    handleSearch(e.target.value);
+                                }}
+                                error={state?.members?.length > 0}
+                                helperText={state?.members || ''}
                             />
-                            {option}
-                        </li>
-                    )}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Search Members (min. 2 characters)"
-                            name='members'
-                            onChange={(e) => {
-                                handleSearch(e.target.value);
-                            }}
-                            error={state?.members?.length > 0}
-                            helperText={state?.members || ''}
-                        />
-                    )}
-                />
+                        )}
+                    />
+                </Tooltip>
                 <TextField
                     name='members'
                     sx={{ display: 'none' }}

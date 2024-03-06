@@ -1,12 +1,14 @@
 import React from 'react'
 import { Skeleton, Stack } from '@mui/material'
 
-const HomeSkeleton = () => {
+const HomeSkeleton = (props) => {
+    const { hideAddButton } = props
+
     return (
         <>
             <Stack spacing={1}>
                 <Skeleton variant="text" sx={{ ...styles.title }} />
-                <Skeleton variant="text" sx={{ ...styles.addButton }} />
+                {!hideAddButton && <Skeleton variant="text" sx={{ ...styles.addButton }} />}
                 <Skeleton variant="rectangular" height={'70vh'} />
             </Stack>
         </>

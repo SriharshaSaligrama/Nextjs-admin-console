@@ -95,6 +95,21 @@ export const getUser = async (id) => {
     }
 }
 
+export const getUserType = async (email) => {   //internal or external user, used in groups
+    try {
+        await connectToDatabase()
+        const user = await users.findOne({
+            email,
+            isDeleted: false
+        })
+
+        return user?.email ? 'internal' : 'external'
+    } catch (error) {
+        console.log({ getUserTypeError: error })
+        return error
+    }
+}
+
 export const addUser = async ({ fullName, email, password, role, buildingAssignedTo, managingBuildings, departmentAssignedTo }) => {
     try {
         await connectToDatabase()

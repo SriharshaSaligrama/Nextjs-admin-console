@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { groupValidator } from "../validators";
 import { addGroup, addGroupModal, deleteGroup, editGroup, editGroupModal } from "./controller";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
-import { getUsers } from "../user/controller";
+import { getUserType } from "../user/controller";
 
 export async function addEditGroupAction(prevState, data) {
     try {
@@ -17,14 +17,14 @@ export async function addEditGroupAction(prevState, data) {
             return errors
         }
 
-        const existingUsers = await getUsers()
+        const membersTypePromises = JSON.parse(members)?.length > 0 ? JSON.parse(members)?.map(async (member) => {
+            const data = { email: member };
+            const userType = await getUserType(member);
+            data.type = userType;
+            return data;
+        }) : [];
 
-        const membersType = JSON.parse(members)?.length > 0 ? JSON.parse(members)?.map(member => {
-            const data = { email: member }
-            const internalUser = existingUsers.find(user => user.email === member)
-            internalUser ? data.type = 'internal' : data.type = 'external'
-            return data
-        }) : []
+        const membersType = await Promise.all(membersTypePromises);
 
         const addedOrUpdatedGroupError = id ?
             await editGroup(id, { name, code, description, members: membersType }) :
@@ -50,14 +50,14 @@ export async function addEditGroupModalAction(data) {
             return { errors }
         }
 
-        const existingUsers = await getUsers()
+        const membersTypePromises = members?.length > 0 ? members?.map(async (member) => {
+            const data = { email: member };
+            const userType = await getUserType(member);
+            data.type = userType;
+            return data;
+        }) : [];
 
-        const membersType = members?.length > 0 ? members?.map(member => {
-            const data = { email: member }
-            const internalUser = existingUsers.find(user => user.email === member)
-            internalUser ? data.type = 'internal' : data.type = 'external'
-            return data
-        }) : []
+        const membersType = await Promise.all(membersTypePromises);
 
         const addedOrUpdatedGroup = id ?
             await editGroupModal(id, { name, code, description, members: membersType }) :

@@ -4,15 +4,17 @@ import React from 'react'
 import SearchInput from '../SearchInput'
 import { Box, Button } from '@mui/material'
 import { useRouter } from 'next/navigation'
+import Pagination from '../Pagination'
 
 const SearchBarAddButton = (props) => {
-    const { groupsData } = props
+    const { groupsData, totalPages, currentPage } = props
 
     const router = useRouter()
 
     return (
-        <Box sx={{ ...styles.searchBarAddButton }}>
-            {groupsData?.length > 0 && <SearchInput placeholder="Search groups by name, code or member's email" />}
+        groupsData?.length > 0 && <Box sx={{ ...styles.searchBarAddButton }}>
+            <SearchInput placeholder="Search groups by name, code or member's email" />
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
             <Button
                 variant='contained'
                 onClick={() => router.push(`/groups/add`)}

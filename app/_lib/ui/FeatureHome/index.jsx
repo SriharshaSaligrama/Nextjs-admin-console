@@ -8,7 +8,7 @@ import DataTable from '../DataTable'
 import PageHeading from '../PageHeading'
 
 const Home = (props) => {
-    const { data } = props
+    const { data, hideDataTable } = props
     const router = useRouter()
     const pathname = usePathname()
 
@@ -30,7 +30,7 @@ const Home = (props) => {
                     Add New {currentPage.addButtonLabel}
                 </Button>
             </Box>
-            {!pathname.includes('groups') && <DataTable columns={currentPage.columns} rows={data} />}
+            {!hideDataTable && <DataTable columns={currentPage.columns} rows={data} />}
         </>
     )
 }

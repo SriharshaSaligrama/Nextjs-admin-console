@@ -227,6 +227,15 @@ export const buildingColumns = [
     },
 ]
 
+export const externalEmailsColumns = [
+    {
+        field: 'id',
+        headerName: 'Email',
+        width: 400,
+        editable: false,
+    },
+]
+
 export const userRoles = ["admin", "employee", "facility manager"]
 
 export const pageMappings = [

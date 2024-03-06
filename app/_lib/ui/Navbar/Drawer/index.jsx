@@ -7,7 +7,7 @@ const Drawer = (props) => {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
+            duration: theme.transitions.duration.enteringScreen + 500,
         }),
         overflowX: 'hidden',
     });
@@ -15,7 +15,7 @@ const Drawer = (props) => {
     const closedMixin = (theme) => ({
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
+            duration: theme.transitions.duration.leavingScreen + 500,
         }),
         overflowX: 'hidden',
         width: `calc(${theme.spacing(7)} + 1px)`,

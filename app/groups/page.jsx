@@ -29,7 +29,7 @@ const Groups = async ({ searchParams }) => {
     return (
         <>
             <PageHeading heading='Groups' />
-            <SearchBarAddButton groupsData={groupsData} />
+            <SearchBarAddButton groupsData={groupsData} totalPages={totalPages} currentPage={currentPage} />
             <Card groupsData={groupsData} totalPages={totalPages} currentPage={currentPage} />
         </>
     )

@@ -223,3 +223,42 @@ export const deleteGroup = async ({ id }) => {
         return error
     }
 }
+
+export const getAllExternalEmails = async () => {
+    try {
+        await connectToDatabase()
+        const externalEmails = await groups.aggregate([
+            {
+                $unwind: "$members"
+            },
+            {
+                $match: {
+                    "members.type": "external"
+                }
+            },
+            {
+                $group: {
+                    _id: "$members.email",
+                    groups: {
+                        $push: {
+                            id: "$_id",
+                            name: "$name"
+                        }
+                    }
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: "$_id",
+                    groups: 1,
+                },
+            }
+        ]);
+        return JSON.parse(JSON.stringify(externalEmails))
+    }
+    catch (error) {
+        console.log({ getAllExternalEmailsError: error });
+        return error
+    }
+}

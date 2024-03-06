@@ -1,8 +1,12 @@
 import React from 'react'
+import ExternalEmailsHome from '../_lib/ui/ExternalEmails'
+import { getAllExternalEmails } from '../_lib/db/groups/controller'
 
-const ExternalEmails = () => {
+const ExternalEmails = async () => {
+    const data = await getAllExternalEmails()
+
     return (
-        <div>ExternalEmails</div>
+        <ExternalEmailsHome data={data || []} />
     )
 }
 

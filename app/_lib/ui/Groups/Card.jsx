@@ -5,6 +5,7 @@ import { Box, Grid, IconButton, Paper, Stack, Table, TableContainer, TableHead, 
 import globalStyles from '@/app/globalStyles'
 import { DeleteOutlined, EditOutlined, GroupsOutlined } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Pagination from '../Pagination'
 import { groupMembersTableHeaderColumns } from '../../constants'
 
@@ -61,6 +62,7 @@ const Card = (props) => {
                         <Stack sx={{ ...styles.groupNotFoundContainer }} spacing={2}>
                             <GroupsOutlined sx={{ fontSize: '80px' }} />
                             <Typography fontSize={'20px'}>{currentPage > totalPages ? `No groups found for page ${currentPage}` : 'No groups added'}</Typography>
+                            <Link href={'/groups'}>Return to Groups</Link>
                         </Stack>
                     </Box>
                 </Grid>}

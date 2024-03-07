@@ -17,10 +17,11 @@ const Delete = (props) => {
     const currentPage = departmentCategoryDeletePageDetails[pathname.split('/')[1]] || {
         label: '',
         childrenLabel: '',
+        heading: '',
         returnLink: '',
         deleteAction: () => { }
     };
-    const { label, childrenLabel, returnLink, deleteAction } = currentPage
+    const { label, childrenLabel, heading, returnLink, deleteAction } = currentPage
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
     const ifUsersOfDeletingDepartmentExist = pathname.includes('departments') && usersData?.length > 0
@@ -35,7 +36,7 @@ const Delete = (props) => {
 
     return (
         <>
-            <PageHeading heading='Delete Dependencies' />
+            <PageHeading heading={`Delete ${heading}`} />
             {
                 (childrenData?.length > 0 || ifUsersOfDeletingDepartmentExist) ? <Stack sx={{ ...styles.dependenciesContainer }}>
                     <Stack spacing={2}>

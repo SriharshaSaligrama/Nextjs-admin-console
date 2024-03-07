@@ -113,15 +113,20 @@ export const editDepartment = async (id, { name, code, description, parent }) =>
 }
 
 export const deleteDepartment = async ({ id, parentId, userExists }) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         if (userExists) {
             const updateAssignedDepartmentOfSelectedUsersError = await updateAssignedDepartmentOfSelectedUsers({ deletingDepartmentId: id, transferringDepartmentId: parentId })
             if (updateAssignedDepartmentOfSelectedUsersError) {
-                return updateAssignedDepartmentOfSelectedUsersError
+                throw new Error(updateAssignedDepartmentOfSelectedUsersError?.error?.message || updateAssignedDepartmentOfSelectedUsersError?.message || updateAssignedDepartmentOfSelectedUsersError?.error)
             }
         }
 
         const childrenDepartments = await getChildrenDepartments(id)
+        if (childrenDepartments?.error) {
+            throw new Error(childrenDepartments?.error?.message || childrenDepartments?.message || childrenDepartments?.error)
+        }
 
         if (childrenDepartments.length > 0) {
             const updatedDepartments = await departments.updateMany(
@@ -131,14 +136,18 @@ export const deleteDepartment = async ({ id, parentId, userExists }) => {
 
             if (updatedDepartments.acknowledged && updatedDepartments.modifiedCount > 0) {
                 await departments.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
-            }
+            } else throw new Error('Departments not updated')
         }
         else if (childrenDepartments.length === 0) {
             await departments.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
         }
+        await session.commitTransaction();
+        session.endSession();
     }
     catch (error) {
         console.log({ deleteDepartmentError: error });
+        await session.abortTransaction();
+        session.endSession();
         return error
     }
 }

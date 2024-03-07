@@ -1,13 +1,23 @@
+import DeleteUser from '@/app/_lib/ui/UserManagement/Delete'
 import React from 'react'
+import { notFound } from 'next/navigation'
+import { getUser } from '@/app/_lib/db/user/controller'
 
 export const metadata = {
     title: 'Delete User',
 }
 
-const DeleteUser = () => {
+const DeleteUserPage = async (props) => {
+    const { params } = props
+    const id = params.id
+    const deletingUser = await getUser(id)
+    if (!deletingUser) {
+        notFound()
+    }
+
     return (
-        <div>DeleteUser</div>
+        <DeleteUser deletingData={deletingUser || {}} />
     )
 }
 
-export default DeleteUser
+export default DeleteUserPage

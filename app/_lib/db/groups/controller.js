@@ -262,3 +262,18 @@ export const getAllExternalEmails = async () => {
         return error
     }
 }
+
+export const updateAllGroupsOfAUserByEmail = async (email) => {  //called while deleting a user, if user is a member of any group/s, the user will be removed from those groups
+    try {
+        await connectToDatabase()
+        await groups.updateMany(
+            { "members.email": email, isDeleted: false },
+            { $pull: { members: { email: email } } },
+            { new: true, runValidators: true }
+        )
+    }
+    catch (error) {
+        console.log({ getAllGroupsOfAUserByEmailError: error });
+        return error
+    }
+}

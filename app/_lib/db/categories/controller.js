@@ -112,10 +112,14 @@ export const editCategory = async (id, { name, code, description, parent }) => {
 }
 
 export const deleteCategory = async ({ id, parentId }) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const childrenCategories = await getChildrenCategories(id)
-
-        if (childrenCategories.length > 0) {
+        if (childrenCategories?.error) {
+            throw new Error(childrenCategories?.error?.message || childrenCategories?.message || childrenCategories?.error)
+        }
+        if (childrenCategories?.length > 0) {
             const updatedCategories = await categories.updateMany(
                 { _id: { $in: childrenCategories.map(category => category.id) } },
                 { $set: { parent: parentId } }
@@ -123,14 +127,18 @@ export const deleteCategory = async ({ id, parentId }) => {
 
             if (updatedCategories.acknowledged && updatedCategories.modifiedCount > 0) {
                 await categories.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
-            }
+            } else throw new Error('Categories not updated')
         }
-        else if (childrenCategories.length === 0) {
+        else if (childrenCategories?.length === 0) {
             await categories.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
         }
+        await session.commitTransaction();
+        session.endSession();
     }
     catch (error) {
         console.log({ deleteCategoryError: error });
+        await session.abortTransaction();
+        session.endSession();
         return error
     }
 }

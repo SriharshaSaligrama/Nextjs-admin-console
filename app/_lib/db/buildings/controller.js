@@ -83,21 +83,27 @@ export const editBuilding = async (id, { name }) => {
 }
 
 export const deleteBuilding = async ({ id, transferringBuildingId }) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         if (transferringBuildingId) {
             const updateAssignedBuildingOfSelectedUsersError = await updateAssignedBuildingOfSelectedUsers({ deletingBuildingId: id, transferringBuildingId })
             if (updateAssignedBuildingOfSelectedUsersError) {
-                return updateAssignedBuildingOfSelectedUsersError
+                throw new Error(updateAssignedBuildingOfSelectedUsersError?.error?.message || updateAssignedBuildingOfSelectedUsersError?.message || updateAssignedBuildingOfSelectedUsersError?.error)
             }
         }
         const updateAllManagingBuildingsOfFMsError = await updateAllManagingBuildingsOfFMs(id);
         if (updateAllManagingBuildingsOfFMsError) {
-            return updateAllManagingBuildingsOfFMsError
+            throw new Error(updateAllManagingBuildingsOfFMsError?.error?.message || updateAllManagingBuildingsOfFMsError?.message || updateAllManagingBuildingsOfFMsError?.error)
         }
         await buildings.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
+        await session.commitTransaction();
+        session.endSession();
     }
     catch (error) {
         console.log({ deleteBuildingError: error });
+        await session.abortTransaction();
+        session.endSession();
         return error
     }
 }

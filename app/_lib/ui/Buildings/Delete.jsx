@@ -27,7 +27,7 @@ const DeleteBuilding = (props) => {
 
     return (
         <>
-            <PageHeading heading='Delete Dependencies' />
+            <PageHeading heading='Delete Building' />
             {
                 usersData?.length > 0 ? <Stack sx={{ ...styles.dependenciesContainer }} spacing={2}>
                     <Stack spacing={2}>

@@ -5,6 +5,7 @@ import { departments } from "../departments/model"; //importing departments mode
 import { users } from "./model";
 import { connectToDatabase } from "../mongodb";
 import bcrypt from 'bcrypt';
+import { updateAllGroupsOfAUserByEmail } from "../groups/controller";
 
 export const getUsers = async () => {
     try {
@@ -139,11 +140,22 @@ export const editUser = async (id, { fullName, role, buildingAssignedTo, managin
 }
 
 export const deleteUser = async ({ id }) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-        await users.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
+        const user = await getUser(id)
+        if (user?.id) {
+            const updateGroupError = await updateAllGroupsOfAUserByEmail(user?.email)
+            if (updateGroupError) throw new Error(updateGroupError?.error?.message || updateGroupError?.message || updateGroupError?.error)
+            await users.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
+            await session.commitTransaction();
+            session.endSession();
+        } else throw new Error('User not found')
     }
     catch (error) {
         console.log({ deleteUserError: error });
+        await session.abortTransaction();
+        session.endSession();
         return error
     }
 }
@@ -154,7 +166,7 @@ export const updateAllManagingBuildingsOfFMs = async (buildingId) => { //runs on
         await users.updateMany(
             { managingBuildings: { $in: [buildingId] }, isDeleted: false },
             { $pull: { managingBuildings: buildingId } },
-            { runValidators: true }
+            { new: true, runValidators: true }
         );
     }
     catch (error) {
@@ -169,7 +181,7 @@ export const updateAssignedBuildingOfSelectedUsers = async ({ deletingBuildingId
         await users.updateMany(
             { buildingAssignedTo: new mongoose.Types.ObjectId(deletingBuildingId), isDeleted: false },
             { $set: { buildingAssignedTo: new mongoose.Types.ObjectId(transferringBuildingId) } },
-            { runValidators: true }
+            { new: true, runValidators: true }
         );
     }
     catch (error) {
@@ -184,7 +196,7 @@ export const updateAssignedDepartmentOfSelectedUsers = async ({ deletingDepartme
         await users.updateMany(
             { departmentAssignedTo: new mongoose.Types.ObjectId(deletingDepartmentId), isDeleted: false },
             { $set: { departmentAssignedTo: new mongoose.Types.ObjectId(transferringDepartmentId) } },
-            { runValidators: true }
+            { new: true, runValidators: true }
         );
     }
     catch (error) {

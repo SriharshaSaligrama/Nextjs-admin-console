@@ -295,12 +295,14 @@ export const departmentCategoryDeletePageDetails = {
     'departments': {
         label: 'department',
         childrenLabel: 'departments',
+        heading: 'Department',
         returnLink: '/departments',
         deleteAction: deleteDepartmentAction
     },
     'categories': {
         label: 'category',
         childrenLabel: 'categories',
+        heading: 'Category',
         returnLink: '/categories',
         deleteAction: deleteCategoryAction
     },

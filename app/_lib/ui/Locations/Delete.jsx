@@ -24,7 +24,7 @@ const DeleteLocation = (props) => {
 
     return (
         <>
-            <PageHeading heading='Delete Dependencies' />
+            <PageHeading heading='Delete Location' />
             {
                 dependantBuildings?.length > 0 ? <Stack sx={{ ...styles.dependenciesContainer }} spacing={2}>
                     <Typography><b>{deletingData.name}</b> location has <b>{dependantBuildings.length}</b> building(s):</Typography>

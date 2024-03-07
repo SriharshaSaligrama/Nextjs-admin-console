@@ -6,29 +6,7 @@ import { addLocation, deleteLocation, editLocation } from "./controller";
 import { locationValidator } from "../validators";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
-export async function addLocationAction(prevState, data) {
-    try {
-        const { name } = getFormDataObject(data)
-
-        const errors = await locationValidator({ name })
-
-        if (Object.values(errors).some(error => error.length > 0)) {
-            return errors
-        }
-
-        const addedLocationError = await addLocation({ name })
-
-        mongoErrorHandler({ errorProneFields: ['name'], mongoError: addedLocationError })
-    } catch (error) {
-        console.log({ addLocationError: error })
-        throw new Error(error)
-    }
-
-    revalidatePath("/locations")
-    redirect("/locations")
-}
-
-export async function editLocationAction(prevState, data) {
+export async function addEditLocationAction(prevState, data) {
     try {
         const { id, name } = getFormDataObject(data)
 
@@ -38,12 +16,12 @@ export async function editLocationAction(prevState, data) {
             return errors
         }
 
-        const updatedLocationError = await editLocation(id, { name })
+        const addOrUpdatedLocationError = id ? await editLocation(id, { name }) : await addLocation({ name })
 
-        mongoErrorHandler({ errorProneFields: ['name'], mongoError: updatedLocationError })
+        mongoErrorHandler({ errorProneFields: ['name'], mongoError: addOrUpdatedLocationError })
     }
     catch (error) {
-        console.log({ editLocationError: error })
+        console.log({ addEditLocationError: error })
         throw new Error(error)
     }
 

@@ -16,12 +16,11 @@ const Form = (props) => {
     const currentPage = departmentCategoryAddEditFormPageDetails[pathname.split('/')[1]] || {
         heading: '',
         returnLink: '',
-        addAction: () => { },
-        editAction: () => { }
+        addEditAction: () => { },
     };
-    const { heading, returnLink, addAction, editAction } = currentPage;
+    const { heading, returnLink, addEditAction } = currentPage;
     const initialErrorState = { name: '', code: '', message: '' }
-    const [state, dispatch] = useFormState(editingData?.id ? editAction : addAction, initialErrorState);
+    const [state, dispatch] = useFormState(addEditAction, initialErrorState);
 
     const handleCancelClick = () => {
         router.push(returnLink)

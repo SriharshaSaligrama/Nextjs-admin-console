@@ -1,7 +1,7 @@
 import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined, SpaceDashboardOutlined } from "@mui/icons-material";
 import DataTableActions from "../_lib/ui/FeatureHome/DataTableActions";
-import { addDepartmentAction, deleteDepartmentAction, editDepartmentAction } from "./db/departments/actions";
-import { addCategoryAction, deleteCategoryAction, editCategoryAction } from "./db/categories/actions";
+import { addEditDepartmentAction, deleteDepartmentAction } from "./db/departments/actions";
+import { addEditCategoryAction, deleteCategoryAction } from "./db/categories/actions";
 
 export const navbarListItems = [
     {
@@ -312,14 +312,12 @@ export const departmentCategoryAddEditFormPageDetails = {
     'departments': {
         heading: 'Department',
         returnLink: '/departments',
-        addAction: addDepartmentAction,
-        editAction: editDepartmentAction
+        addEditAction: addEditDepartmentAction,
     },
     'categories': {
         heading: 'Category',
         returnLink: '/categories',
-        addAction: addCategoryAction,
-        editAction: editCategoryAction
+        addEditAction: addEditCategoryAction,
     },
 };
 

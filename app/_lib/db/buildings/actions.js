@@ -7,35 +7,7 @@ import { buildingValidator } from "../validators";
 import { getLocation } from "../locations/controller";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
 
-export async function addBuildingAction(prevState, data) {
-    try {
-        const { name, location } = getFormDataObject(data)
-
-        const errors = await buildingValidator({ name, location })
-
-        if (Object.values(errors).some(error => error.length > 0)) {
-            return errors
-        }
-
-        const locationData = await getLocation(location)
-        if (location && !locationData?.id) {
-            throw new Error('Selected location not found')
-        }
-
-        const addedBuildingError = await addBuilding({ name, location })
-
-        mongoErrorHandler({ errorProneFields: ['name', 'location'], mongoError: addedBuildingError })
-    } catch (error) {
-        console.log({ addBuildingError: error })
-        throw new Error(error)
-    }
-
-    revalidatePath("/buildings")
-    redirect("/buildings")
-}
-
-
-export async function editBuildingAction(prevState, data) {
+export async function addEditBuildingAction(prevState, data) {
     try {
         const { id, name, location } = getFormDataObject(data)
 
@@ -50,12 +22,12 @@ export async function editBuildingAction(prevState, data) {
             throw new Error('Selected location not found')
         }
 
-        const updatedBuildingError = await editBuilding(id, { name })
+        const addedOrUpdatedBuildingError = id ? await editBuilding(id, { name }) : await addBuilding({ name, location })
 
-        mongoErrorHandler({ errorProneFields: ['name', 'location'], mongoError: updatedBuildingError })
+        mongoErrorHandler({ errorProneFields: ['name', 'location'], mongoError: addedOrUpdatedBuildingError })
     }
     catch (error) {
-        console.log({ editBuildingError: error })
+        console.log({ addEditBuildingError: error })
         throw new Error(error)
     }
 

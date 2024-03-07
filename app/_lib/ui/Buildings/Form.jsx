@@ -4,7 +4,7 @@ import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation';
-import { addBuildingAction, editBuildingAction } from '@/app/_lib/db/buildings/actions';
+import { addEditBuildingAction } from '@/app/_lib/db/buildings/actions';
 import FormSubmitCancelButtons from '../FormSubmitCancelButtons';
 import { submitFormData } from '../../utils';
 
@@ -15,7 +15,7 @@ const BuildingsForm = (props) => {
 
     const initialErrorState = { name: '', location: '' }
 
-    const [state, dispatch] = useFormState(editingData?.id ? editBuildingAction : addBuildingAction, initialErrorState);
+    const [state, dispatch] = useFormState(addEditBuildingAction, initialErrorState);
 
     const handleCancelClick = () => {
         router.push('/buildings')

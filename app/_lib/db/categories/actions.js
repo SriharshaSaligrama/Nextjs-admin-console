@@ -16,34 +16,7 @@ const getFormData = async (data) => {
     }
 }
 
-export async function addCategoryAction(prevState, data) {
-    try {
-        const { name, code, description, parent } = await getFormData(data)
-
-        const errors = await categoryValidator({ name, code })
-
-        if (Object.values(errors).some(error => error.length > 0)) {
-            return errors
-        }
-
-        const parentCategory = await getCategory(parent)
-        if (parent && !parentCategory?.id) {
-            throw new Error('Parent category not found')
-        }
-
-        const addedCategoryError = await addCategory({ name, code, description, parent })
-
-        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedCategoryError })
-    } catch (error) {
-        console.log({ addCategoryError: error })
-        throw new Error(error)
-    }
-
-    revalidatePath("/categories")
-    redirect("/categories")
-}
-
-export async function editCategoryAction(prevState, data) {
+export async function addEditCategoryAction(prevState, data) {
     try {
         const { id, name, code, description, parent } = await getFormData(data)
 
@@ -58,11 +31,11 @@ export async function editCategoryAction(prevState, data) {
             throw new Error('Parent category not found')
         }
 
-        const updatedCategoryError = await editCategory(id, { name, code, description, parent })
+        const addedOrUpdatedCategoryError = id ? await editCategory(id, { name, code, description, parent }) : await addCategory({ name, code, description, parent })
 
-        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: updatedCategoryError })
+        mongoErrorHandler({ errorProneFields: ['name', 'code'], mongoError: addedOrUpdatedCategoryError })
     } catch (error) {
-        console.log({ editCategoryError: error })
+        console.log({ addEditCategoryError: error })
         throw new Error(error)
     }
 

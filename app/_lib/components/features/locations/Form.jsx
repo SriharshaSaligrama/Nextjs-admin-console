@@ -4,22 +4,15 @@ import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, Paper, TextField, Typography } from '@mui/material'
 import { addEditLocationAction } from '@/app/_lib/db/locations/actions';
-import { useRouter } from 'next/navigation';
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons';
 import { submitFormData } from '../../../utils';
 
 const LocationsForm = (props) => {
     const { editingData } = props
 
-    const router = useRouter()
-
     const initialErrorState = { name: '' }
 
     const [state, dispatch] = useFormState(addEditLocationAction, initialErrorState);
-
-    const handleCancelClick = () => {
-        router.push('/locations')
-    }
 
     return (
         <Box
@@ -48,7 +41,7 @@ const LocationsForm = (props) => {
                     size='small'
                 />
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink='/locations'
                     submitText={editingData?.id ? `Update Location` : `Create Location`}
                     submitPendingText={editingData?.id ? `Updating Location...` : `Creating Location...`}
                 />

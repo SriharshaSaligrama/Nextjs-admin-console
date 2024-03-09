@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useFormState } from 'react-dom';
 import { Box, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../../ui/pageheading'
 import DeleteCancelButtons from '../../ui/deletecancelbuttons'
@@ -12,7 +12,6 @@ import { submitFormData } from '../../../utils'
 
 const Delete = (props) => {
     const { deletingData, childrenData, parentData, usersData } = props
-    const router = useRouter()
     const pathname = usePathname();
     const currentPage = departmentCategoryDeletePageDetails[pathname.split('/')[1]] || {
         label: '',
@@ -25,10 +24,6 @@ const Delete = (props) => {
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
     const ifUsersOfDeletingDepartmentExist = pathname.includes('departments') && usersData?.length > 0
-
-    const handleCancelClick = () => {
-        router.push(returnLink)
-    }
 
     const initialState = { id: deletingData?.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist }
 
@@ -101,7 +96,7 @@ const Delete = (props) => {
                             noValidate
                             autoComplete="off"
                         >
-                            <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={!parent} />
+                            <DeleteCancelButtons returnLink={returnLink} disabled={!parent} />
                         </Box>
                     </Stack>
                 </Stack> : <Stack spacing={4} sx={{ ...styles.noDependenciesContainer }} >
@@ -113,7 +108,7 @@ const Delete = (props) => {
                         noValidate
                         autoComplete="off"
                     >
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} />
+                        <DeleteCancelButtons returnLink={returnLink} />
                     </Box>
                 </Stack>
             }

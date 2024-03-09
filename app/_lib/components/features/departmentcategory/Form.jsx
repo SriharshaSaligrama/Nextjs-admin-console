@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useFormState } from 'react-dom';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Box, TextField, Stack, MenuItem } from '@mui/material'
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons';
 import PageHeading from '../../ui/pageheading';
@@ -11,7 +11,6 @@ import { submitFormData } from '../../../utils';
 
 const Form = (props) => {
     const { allData, editingData } = props
-    const router = useRouter()
     const pathname = usePathname();
     const currentPage = departmentCategoryAddEditFormPageDetails[pathname.split('/')[1]] || {
         heading: '',
@@ -21,10 +20,6 @@ const Form = (props) => {
     const { heading, returnLink, addEditAction } = currentPage;
     const initialErrorState = { name: '', code: '', message: '' }
     const [state, dispatch] = useFormState(addEditAction, initialErrorState);
-
-    const handleCancelClick = () => {
-        router.push(returnLink)
-    }
 
     return (
         <Box
@@ -76,7 +71,7 @@ const Form = (props) => {
                     ))}
                 </TextField>
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink={returnLink}
                     submitText={editingData?.id ? `Update ${heading}` : `Create ${heading}`}
                     submitPendingText={editingData?.id ? `Updating ${heading}...` : `Creating ${heading}...`}
                 />

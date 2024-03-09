@@ -37,6 +37,14 @@ export const debounce = (func, delay) => {
     };
 };
 
+export const handleSearch = debounce(({ term, query, setQuery }) => {
+    if (term && term?.toLowerCase() !== query?.toLowerCase()) {
+        setQuery(term)
+    } else {
+        setQuery('')
+    }
+}, 500)
+
 export const getSkipCount = (currentPageNumber) => {
     return (currentPageNumber - 1) * ITEMS_PER_PAGE
 }

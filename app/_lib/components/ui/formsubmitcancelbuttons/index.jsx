@@ -1,11 +1,14 @@
 import React from 'react'
 import { useFormStatus } from 'react-dom';
 import { Box, Button } from '@mui/material'
+import useHandleCancelClick from '../../hooks/handleCancelClick';
 
 const FormSubmitCancelButtons = (props) => {
-    const { cancelText, submitText, submitPendingText, handleCancelClick } = props
+    const { cancelText, submitText, submitPendingText, returnLink } = props
 
     const { pending } = useFormStatus()
+
+    const handleCancelClick = useHandleCancelClick(returnLink)
 
     return (
         <Box sx={{ ...styles.buttonsContainer }}>

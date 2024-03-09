@@ -3,8 +3,10 @@
 import React from 'react'
 import { Autocomplete, Box, Button, Checkbox, Stack, TextField, Tooltip } from '@mui/material'
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import useAddEditGroupModal from './formModalHook';
+import useAddEditGroupModal from './hooks/formModal';
 import globalStyles from '@/app/globalStyles';
+import { handleSearch } from '@/app/_lib/utils';
+import useFilteredUsers from './hooks/fetchFilteredUsers';
 
 const GroupsModalForm = (props) => {
     const { editingData } = props
@@ -14,11 +16,11 @@ const GroupsModalForm = (props) => {
         setGroup,
         errors,
         pending,
-        users,
         handleChange,
-        handleSearch,
         handleSubmit
     } = useAddEditGroupModal({ editingData })
+
+    const { users, query, setQuery } = useFilteredUsers();
 
     return (
         <Box
@@ -90,7 +92,7 @@ const GroupsModalForm = (props) => {
                                 label="Search Members (min. 2 characters)"
                                 name='members'
                                 onChange={(e) => {
-                                    handleSearch(e.target.value);
+                                    handleSearch({ term: e.target.value, query, setQuery });
                                 }}
                                 size='small'
                                 error={errors?.members?.length > 0}

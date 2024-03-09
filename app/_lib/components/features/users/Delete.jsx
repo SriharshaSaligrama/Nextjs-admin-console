@@ -5,18 +5,11 @@ import { useFormState } from 'react-dom';
 import PageHeading from '../../ui/pageheading'
 import { Box, Stack, Typography } from '@mui/material'
 import DeleteCancelButtons from '../../ui/deletecancelbuttons'
-import { useRouter } from 'next/navigation'
 import { submitFormData } from '../../../utils'
 import { deleteUserAction } from '../../../db/user/actions';
 
 const DeleteUser = (props) => {
     const { deletingData } = props
-
-    const router = useRouter()
-
-    const handleCancelClick = () => {
-        router.push('/users')
-    }
 
     const initialState = { id: deletingData?.id }
 
@@ -34,7 +27,7 @@ const DeleteUser = (props) => {
                     noValidate
                     autoComplete="off"
                 >
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} />
+                    <DeleteCancelButtons returnLink='/users' />
                 </Box>
             </Stack>
         </>

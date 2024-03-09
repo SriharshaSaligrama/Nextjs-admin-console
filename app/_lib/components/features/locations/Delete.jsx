@@ -3,7 +3,6 @@
 import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import { deleteLocationAction } from '@/app/_lib/db/locations/actions'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../../ui/pageheading'
@@ -12,11 +11,6 @@ import { submitFormData } from '../../../utils'
 
 const DeleteLocation = (props) => {
     const { deletingData, dependantBuildings } = props
-    const router = useRouter()
-
-    const handleCancelClick = () => {
-        router.push('/locations')
-    }
 
     const initialState = { id: deletingData?.id }
 
@@ -38,7 +32,7 @@ const DeleteLocation = (props) => {
                         }
                     </List>
                     <Typography>Please delete all the buildings of this location before deleting this location.</Typography>
-                    <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={dependantBuildings?.length} />
+                    <DeleteCancelButtons returnLink='/locations' disabled={dependantBuildings?.length} />
                 </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
                     <Typography><b>{deletingData.name}</b> location has no building(s).</Typography>
                     <Typography>Are you sure you want to delete <b>{deletingData.name}</b> location?</Typography>
@@ -48,7 +42,7 @@ const DeleteLocation = (props) => {
                         noValidate
                         autoComplete="off"
                     >
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} />
+                        <DeleteCancelButtons returnLink='/locations' />
                     </Box>
                 </Stack>
             }

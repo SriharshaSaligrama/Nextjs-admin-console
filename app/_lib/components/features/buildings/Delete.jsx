@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { useFormState } from 'react-dom';
 import { Box, List, ListItem, ListItemText, MenuItem, Stack, TextField, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import { deleteBuildingAction } from '@/app/_lib/db/buildings/actions'
 import globalStyles from '@/app/globalStyles'
 import PageHeading from '../../ui/pageheading'
@@ -12,17 +11,10 @@ import { submitFormData } from '../../../utils'
 
 const DeleteBuilding = (props) => {
     const { deletingData, usersData, buildingsData } = props
-    const router = useRouter()
     const [transferringBuilding, setTransferringBuilding] = useState('')
     const transferringBuildingData = buildingsData?.find((building) => building.id === transferringBuilding)
     const restOfBuildings = buildingsData?.filter((building) => building?.id !== deletingData.id)
-
-    const handleCancelClick = () => {
-        router.push('/buildings')
-    }
-
     const initialState = { id: deletingData?.id, transferringBuildingId: transferringBuilding }
-
     const [state, dispatch] = useFormState(deleteBuildingAction, initialState);
 
     return (
@@ -75,7 +67,7 @@ const DeleteBuilding = (props) => {
                             noValidate
                             autoComplete="off"
                         >
-                            <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={!transferringBuilding} />
+                            <DeleteCancelButtons returnLink='/buildings' disabled={!transferringBuilding} />
                         </Box>
                     </Stack>
                 </Stack> : <Stack sx={{ ...styles.noDependenciesContainer }} spacing={2}>
@@ -88,7 +80,7 @@ const DeleteBuilding = (props) => {
                         noValidate
                         autoComplete="off"
                     >
-                        <DeleteCancelButtons handleCancelClick={handleCancelClick} disabled={usersData?.length} />
+                        <DeleteCancelButtons returnLink='/buildings' disabled={usersData?.length} />
                     </Box>
                 </Stack>
             }

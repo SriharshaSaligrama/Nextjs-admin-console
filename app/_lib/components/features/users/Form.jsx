@@ -3,7 +3,6 @@
 import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, MenuItem, Stack, TextField } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons'
 import PageHeading from '../../ui/pageheading'
 import { addUserAction } from '../../../db/user/actions';
@@ -13,8 +12,6 @@ import PasswordInput from '../../ui/passwordinput';
 
 const UserForm = (props) => {
     const { allBuildings, allDepartments } = props
-
-    const router = useRouter()
 
     const initialErrorState = {
         fullName: '',
@@ -27,10 +24,6 @@ const UserForm = (props) => {
     }
 
     const [state, dispatch] = useFormState(addUserAction, initialErrorState);
-
-    const handleCancelClick = () => {
-        router.push('/users')
-    }
 
     return (
         <Box
@@ -117,7 +110,7 @@ const UserForm = (props) => {
                     ))}
                 </TextField>
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink='/users'
                     submitText={`Create User`}
                     submitPendingText={`Creating User...`}
                 />

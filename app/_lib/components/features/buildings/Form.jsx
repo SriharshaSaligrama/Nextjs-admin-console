@@ -3,7 +3,6 @@
 import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation';
 import { addEditBuildingAction } from '@/app/_lib/db/buildings/actions';
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons';
 import { submitFormData } from '../../../utils';
@@ -11,15 +10,9 @@ import { submitFormData } from '../../../utils';
 const BuildingsForm = (props) => {
     const { editingData, allLocations } = props
 
-    const router = useRouter()
-
     const initialErrorState = { name: '', location: '' }
 
     const [state, dispatch] = useFormState(addEditBuildingAction, initialErrorState);
-
-    const handleCancelClick = () => {
-        router.push('/buildings')
-    }
 
     return (
         <Box
@@ -65,7 +58,7 @@ const BuildingsForm = (props) => {
                     <Typography sx={{ textAlign: 'center' }}><b>Location:</b> {editingData?.location?.name}</Typography>
                 )}
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink='/buildings'
                     submitText={editingData?.id ? 'Update Building' : 'Create Building'}
                     submitPendingText={editingData?.id ? `Updating Building...` : `Creating Building...`}
                 />

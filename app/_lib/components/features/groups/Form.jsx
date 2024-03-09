@@ -4,9 +4,10 @@ import React from 'react'
 import { Autocomplete, Box, Checkbox, Stack, TextField, Tooltip } from '@mui/material'
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons'
 import PageHeading from '../../ui/pageheading'
-import { submitFormData } from '../../../utils';
+import { handleSearch, submitFormData } from '../../../utils';
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import useAddEditGroup from './formHook'
+import useAddEditGroup from './hooks/form'
+import useFilteredUsers from './hooks/fetchFilteredUsers'
 
 const GroupsForm = (props) => {
     const { editingData } = props
@@ -14,12 +15,11 @@ const GroupsForm = (props) => {
     const {
         state,
         dispatch,
-        users,
         selectedEmails,
         setSelectedEmails,
-        handleCancelClick,
-        handleSearch
     } = useAddEditGroup({ editingData })
+
+    const { users, query, setQuery } = useFilteredUsers();
 
     return (
         <Box
@@ -90,7 +90,7 @@ const GroupsForm = (props) => {
                                 label="Search Members (min. 2 characters)"
                                 name='members'
                                 onChange={(e) => {
-                                    handleSearch(e.target.value);
+                                    handleSearch({ term: e.target.value, query, setQuery });
                                 }}
                                 error={state?.members?.length > 0}
                                 helperText={state?.members || ''}
@@ -104,7 +104,7 @@ const GroupsForm = (props) => {
                     defaultValue={JSON.stringify(selectedEmails)}
                 />
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink='/groups'
                     submitText={editingData?.id ? `Update Group` : `Create Group`}
                     submitPendingText={editingData?.id ? `Updating Group...` : `Creating Group...`}
                 />

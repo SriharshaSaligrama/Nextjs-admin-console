@@ -3,7 +3,6 @@
 import React from 'react'
 import { useFormState } from 'react-dom';
 import { Box, MenuItem, Stack, TextField } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons'
 import PageHeading from '../../ui/pageheading'
 import { editUserAction } from '../../../db/user/actions';
@@ -12,8 +11,6 @@ import { submitFormData } from '../../../utils';
 
 const EditUserForm = (props) => {
     const { allBuildings, allDepartments, editingData } = props
-
-    const router = useRouter()
 
     const initialErrorState = {
         fullName: '',
@@ -24,10 +21,6 @@ const EditUserForm = (props) => {
     }
 
     const [state, dispatch] = useFormState(editUserAction, initialErrorState);
-
-    const handleCancelClick = () => {
-        router.push('/users')
-    }
 
     return (
         <Box
@@ -114,7 +107,7 @@ const EditUserForm = (props) => {
                     ))}
                 </TextField>
                 <FormSubmitCancelButtons
-                    handleCancelClick={handleCancelClick}
+                    returnLink='/users'
                     submitText={`Update User`}
                     submitPendingText={`Updating User...`}
                 />

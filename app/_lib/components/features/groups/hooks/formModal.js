@@ -1,8 +1,6 @@
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { getFilteredUsersAction } from "../../../db/user/actions"
-import { debounce } from "../../../utils"
-import { addEditGroupModalAction } from "../../../db/groups/actions"
+import { useState } from "react"
+import { addEditGroupModalAction } from "../../../../db/groups/actions"
 
 const useAddEditGroupModal = ({ editingData = {} }) => {
     const router = useRouter()
@@ -18,31 +16,6 @@ const useAddEditGroupModal = ({ editingData = {} }) => {
     const [pending, setPending] = useState(false)
 
     const [errors, setErrors] = useState({ name: '', code: '', members: '', message: '' })
-
-    const [users, setUsers] = useState([]);
-
-    const [query, setQuery] = useState('')
-
-    useEffect(() => {
-        const fetchUsersData = async () => {
-            const usersList = await getFilteredUsersAction(query)
-            setUsers(usersList)
-        }
-
-        if (query?.length > 1) {
-            fetchUsersData()
-        } else {
-            setUsers([])
-        }
-    }, [query])
-
-    const handleSearch = debounce((term) => {
-        if (term && term?.toLowerCase() !== query?.toLowerCase()) {
-            setQuery(term)
-        } else {
-            setQuery('')
-        }
-    }, 500)
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -80,7 +53,7 @@ const useAddEditGroupModal = ({ editingData = {} }) => {
         };
     }
 
-    return { group, setGroup, errors, pending, users, handleChange, handleSearch, handleSubmit }
+    return { group, setGroup, errors, pending, handleChange, handleSubmit }
 }
 
 export default useAddEditGroupModal

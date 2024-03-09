@@ -13,9 +13,7 @@ export const getPaginatedGroups = async (currentPage = 1) => {
         await connectToDatabase()
 
         const [result] = await groups.aggregate([
-            {
-                $match: { isDeleted: false }
-            },
+            { $match: { isDeleted: false } },
             {
                 $facet: {
                     "groupsByPage": [

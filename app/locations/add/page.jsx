@@ -1,4 +1,4 @@
-import LocationsForm from '@/app/_lib/ui/Locations/Form'
+import LocationsForm from '@/app/_lib/components/features/locations/Form'
 import React from 'react'
 import { unstable_noStore as noStore } from 'next/cache';
 

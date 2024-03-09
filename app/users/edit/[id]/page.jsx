@@ -1,4 +1,4 @@
-import EditUserForm from '@/app/_lib/ui/UserManagement/EditForm'
+import EditUserForm from '@/app/_lib/components/features/users/EditForm'
 import React from 'react'
 import { notFound } from 'next/navigation'
 import { getBuildings } from '@/app/_lib/db/buildings/controller'

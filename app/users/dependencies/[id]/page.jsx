@@ -1,4 +1,4 @@
-import DeleteUser from '@/app/_lib/ui/UserManagement/Delete'
+import DeleteUser from '@/app/_lib/components/features/users/Delete'
 import React from 'react'
 import { notFound } from 'next/navigation'
 import { getUser } from '@/app/_lib/db/user/controller'

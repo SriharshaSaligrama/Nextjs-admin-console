@@ -1,7 +1,7 @@
 import React from 'react'
 import { getBuilding } from '@/app/_lib/db/buildings/controller'
 import { notFound } from 'next/navigation'
-import BuildingsForm from '@/app/_lib/ui/Buildings/Form'
+import BuildingsForm from '@/app/_lib/components/features/buildings/Form'
 import { getLocations } from '@/app/_lib/db/locations/controller'
 
 export const metadata = {

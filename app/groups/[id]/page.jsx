@@ -1,8 +1,8 @@
 import { getGroup } from '@/app/_lib/db/groups/controller'
 import React from 'react'
 import { notFound } from 'next/navigation'
-import Card from '@/app/_lib/ui/Groups/Card'
-import PageHeading from '@/app/_lib/ui/PageHeading'
+import Card from '@/app/_lib/components/features/groups/Card'
+import PageHeading from '@/app/_lib/components/ui/pageheading'
 
 export const metadata = {
     title: 'View Group',

@@ -1,5 +1,5 @@
 import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined, SpaceDashboardOutlined } from "@mui/icons-material";
-import DataTableActions from "../_lib/ui/FeatureHome/DataTableActions";
+import DataTableActions from "./components/features/featurehome/DataTableActions";
 import { addEditDepartmentAction, deleteDepartmentAction } from "./db/departments/actions";
 import { addEditCategoryAction, deleteCategoryAction } from "./db/categories/actions";
 
@@ -236,6 +236,51 @@ export const externalEmailsColumns = [
     },
 ]
 
+export const notificationsColumns = [
+    {
+        field: 'services',
+        headerName: 'Services',
+        width: 250,
+        editable: false,
+    },
+    {
+        field: 'categories',
+        headerName: 'Categories',
+        width: 150,
+        editable: false,
+    },
+    {
+        field: 'departments',
+        headerName: 'Departments',
+        width: 150,
+        editable: false,
+    },
+    {
+        field: 'groups',
+        headerName: 'Groups',
+        width: 150,
+        editable: false,
+    },
+    {
+        field: 'locations',
+        headerName: 'Locations',
+        width: 250,
+        editable: false,
+    },
+    {
+        field: 'buildings',
+        headerName: 'Buildings',
+        width: 250,
+        editable: false,
+    },
+    {
+        field: 'Actions',
+        renderCell: (cellValues) => (<DataTableActions cellValues={cellValues} />),
+        width: 150,
+        editable: false,
+    },
+]
+
 export const userRoles = ["admin", "employee", "facility manager"]
 
 export const pageMappings = [
@@ -280,6 +325,13 @@ export const pageMappings = [
         returnLink: 'groups',
         addButtonLabel: 'Group',
         columns: []
+    },
+    {
+        keyword: 'notifications',
+        heading: 'Notifications mapping',
+        returnLink: 'notifications',
+        addButtonLabel: 'Notification Map',
+        columns: notificationsColumns
     },
 ];
 

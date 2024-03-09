@@ -1,5 +1,5 @@
 import React from 'react'
-import Home from '../_lib/ui/FeatureHome'
+import Home from '../_lib/components/features/featurehome'
 import { getUsers } from '../_lib/db/user/controller'
 import { unstable_noStore as noStore } from 'next/cache';
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { unstable_noStore as noStore } from 'next/cache';
-import Card from '../_lib/ui/Groups/Card';
+import Card from '../_lib/components/features/groups/Card';
 import { getPaginatedGroups, getQueryFilteredPaginatedGroups } from '../_lib/db/groups/controller';
-import PageHeading from '../_lib/ui/PageHeading';
-import SearchBarAddButton from '../_lib/ui/Groups/SearchBarAddButton';
+import PageHeading from '../_lib/components/ui/pageheading';
+import SearchBarAddButton from '../_lib/components/features/groups/SearchBarAddButton';
 
 export const metadata = {
     title: 'Groups',

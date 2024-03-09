@@ -1,6 +1,6 @@
 import { getGroup } from '@/app/_lib/db/groups/controller'
-import GroupsModalForm from '@/app/_lib/ui/Groups/FormModal'
-import Modal from '@/app/_lib/ui/Modal'
+import GroupsModalForm from '@/app/_lib/components/features/groups/FormModal'
+import Modal from '@/app/_lib/components/ui/modal'
 import React from 'react'
 import { notFound } from 'next/navigation'
 

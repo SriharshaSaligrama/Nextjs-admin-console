@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DefaultError from '@/app/_lib/ui/Error'
+import DefaultError from '@/app/_lib/components/ui/error'
 
 const Error = ({ error, reset }) => {
     return (

@@ -2,7 +2,7 @@ import React from 'react'
 import { notFound } from 'next/navigation'
 import { getBuilding, getBuildings } from '@/app/_lib/db/buildings/controller'
 import { getUsersByBuildingId } from '@/app/_lib/db/user/controller'
-import DeleteBuilding from '@/app/_lib/ui/Buildings/Delete'
+import DeleteBuilding from '@/app/_lib/components/features/buildings/Delete'
 
 export const metadata = {
     title: 'Delete Building',

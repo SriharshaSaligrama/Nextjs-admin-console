@@ -1,5 +1,5 @@
 import { getDepartments } from '@/app/_lib/db/departments/controller'
-import Form from '@/app/_lib/ui/DepartmentCategory/Form'
+import Form from '@/app/_lib/components/features/departmentcategory/Form'
 import React from 'react'
 import { unstable_noStore as noStore } from 'next/cache';
 

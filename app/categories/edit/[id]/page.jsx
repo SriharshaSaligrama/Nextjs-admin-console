@@ -1,5 +1,5 @@
 import { getCategory, getParentCategories } from '@/app/_lib/db/categories/controller'
-import Form from '@/app/_lib/ui/DepartmentCategory/Form'
+import Form from '@/app/_lib/components/features/departmentcategory/Form'
 import React from 'react'
 import { notFound } from 'next/navigation'
 

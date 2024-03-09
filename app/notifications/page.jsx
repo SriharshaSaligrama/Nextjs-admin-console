@@ -1,8 +1,9 @@
 import React from 'react'
+import Home from '../_lib/components/features/featurehome'
 
 const NotificationMappings = () => {
     return (
-        <div>NotificationMappings</div>
+        <Home data={[]} />
     )
 }
 

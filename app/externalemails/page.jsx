@@ -1,5 +1,5 @@
 import React from 'react'
-import ExternalEmailsHome from '../_lib/ui/ExternalEmails'
+import ExternalEmailsHome from '../_lib/components/features/externalemails'
 import { getAllExternalEmails } from '../_lib/db/groups/controller'
 
 export const metadata = {

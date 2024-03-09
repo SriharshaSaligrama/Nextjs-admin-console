@@ -1,7 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
 import { getLocation } from '@/app/_lib/db/locations/controller'
-import LocationsForm from '@/app/_lib/ui/Locations/Form'
+import LocationsForm from '@/app/_lib/components/features/locations/Form'
 
 export const metadata = {
     title: 'Edit Location',

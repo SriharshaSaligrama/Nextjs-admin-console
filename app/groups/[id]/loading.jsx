@@ -1,4 +1,4 @@
-import CardSkeleton from '@/app/_lib/ui/Groups/CardSkeleton'
+import CardSkeleton from '@/app/_lib/components/features/groups/CardSkeleton'
 import React from 'react'
 
 const Loading = () => {

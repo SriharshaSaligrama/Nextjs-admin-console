@@ -1,5 +1,5 @@
 import { getGroup } from '@/app/_lib/db/groups/controller'
-import GroupsForm from '@/app/_lib/ui/Groups/Form'
+import GroupsForm from '@/app/_lib/components/features/groups/Form'
 import React from 'react'
 import { notFound } from 'next/navigation'
 

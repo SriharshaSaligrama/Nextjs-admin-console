@@ -1,6 +1,6 @@
 import React from 'react'
 import { getChildrenDepartments, getDepartment, getParentDepartments } from '@/app/_lib/db/departments/controller'
-import Delete from '@/app/_lib/ui/DepartmentCategory/Delete'
+import Delete from '@/app/_lib/components/features/departmentcategory/Delete'
 import { notFound } from 'next/navigation'
 import { getUsersByDepartmentId } from '@/app/_lib/db/user/controller'
 

@@ -1,5 +1,5 @@
 import { getLocations } from '@/app/_lib/db/locations/controller'
-import BuildingsForm from '@/app/_lib/ui/Buildings/Form'
+import BuildingsForm from '@/app/_lib/components/features/buildings/Form'
 import React from 'react'
 import { unstable_noStore as noStore } from 'next/cache';
 

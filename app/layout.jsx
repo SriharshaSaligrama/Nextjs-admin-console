@@ -2,8 +2,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { CssBaseline } from '@mui/material';
-import Navbar from './_lib/ui/Navbar';
-import Theme from './_lib/ui/Theme';
+import Navbar from './_lib/components/ui/navbar';
+import Theme from './_lib/components/ui/theme';
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
 import { getLocation } from '@/app/_lib/db/locations/controller'
-import DeleteLocation from '@/app/_lib/ui/Locations/Delete'
+import DeleteLocation from '@/app/_lib/components/features/locations/Delete'
 import { getBuildingsByLocationId } from '@/app/_lib/db/buildings/controller'
 
 export const metadata = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { getDepartments } from '../_lib/db/departments/controller'
-import Home from '../_lib/ui/FeatureHome'
+import Home from '../_lib/components/features/featurehome'
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const metadata = {

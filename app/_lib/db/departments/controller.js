@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { departments } from "./model";
 import { connectToDatabase } from "../mongodb";
 import { updateAssignedDepartmentOfSelectedUsers } from "../user/controller";
+// import { filterChildren } from "../../utils";
 
 export const getDepartments = async () => {
     try {

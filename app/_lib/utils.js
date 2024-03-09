@@ -1,5 +1,3 @@
-import { ITEMS_PER_PAGE } from "./constants"
-
 export const mongoErrorHandler = ({ errorProneFields, mongoError }) => {
     if (mongoError?.error) {
         throw new Error(mongoError?.error?.message)
@@ -45,6 +43,23 @@ export const handleSearch = debounce(({ term, query, setQuery }) => {
     }
 }, 500)
 
-export const getSkipCount = (currentPageNumber) => {
-    return (currentPageNumber - 1) * ITEMS_PER_PAGE
+export const getSkipCount = ({ currentPage, itemsPerPage }) => {
+    return (currentPage - 1) * itemsPerPage
+}
+
+export const filterChildren = (item, allItems) => {  //used in departments and categories for getting parent departments
+    const children = []
+
+    const recursiveFilter = (item) => {
+        children.push(String(item?.id), item?.name)
+        const descendants = allItems?.filter(child => child?.parent?.id?.toString() === item?.id?.toString())
+        for (let child of descendants) {
+            recursiveFilter(child)
+        }
+    }
+
+    recursiveFilter(item)
+
+    const parentItems = allItems.filter(parent => !children.includes(String(parent?.id)))
+    return JSON.parse(JSON.stringify(parentItems))
 }

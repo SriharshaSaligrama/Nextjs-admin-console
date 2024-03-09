@@ -3,10 +3,11 @@ import { groups } from "./model";
 import { users } from "../user/model";
 import { connectToDatabase } from "../mongodb";
 import { getSkipCount } from "../../utils";
-import { ITEMS_PER_PAGE } from "../../constants";
+
+const itemsPerPage = 6;
 
 export const getPaginatedGroups = async (currentPage = 1) => {
-    const skipCount = getSkipCount(currentPage)
+    const skipCount = getSkipCount({ currentPage, itemsPerPage })
 
     try {
         await connectToDatabase()
@@ -20,19 +21,11 @@ export const getPaginatedGroups = async (currentPage = 1) => {
                     "groupsByPage": [
                         { $sort: { createdAt: -1 } },
                         { $skip: skipCount },
-                        { $limit: ITEMS_PER_PAGE },
-                        {
-                            $addFields: {
-                                "id": "$_id" // Add a new field 'id' with the value of '_id'
-                            }
-                        },
-                        {
-                            $unset: "_id" // Remove the '_id' field
-                        }
+                        { $limit: itemsPerPage },
+                        { $addFields: { "id": "$_id" } }, // Add a new field 'id' with the value of '_id'
+                        { $unset: "_id" } // Remove the '_id' field
                     ],
-                    "totalGroupsCount": [
-                        { $count: "count" }
-                    ]
+                    "totalGroupsCount": [{ $count: "count" }]
                 }
             },
             {
@@ -42,7 +35,7 @@ export const getPaginatedGroups = async (currentPage = 1) => {
                         $ceil: {
                             $divide: [
                                 { $arrayElemAt: ["$totalGroupsCount.count", 0] },
-                                ITEMS_PER_PAGE
+                                itemsPerPage
                             ]
                         }
                     }
@@ -61,7 +54,7 @@ export const getPaginatedGroups = async (currentPage = 1) => {
 
 export const getQueryFilteredPaginatedGroups = async (query, currentPage = 1) => {
     try {
-        const skipCount = getSkipCount(currentPage)
+        const skipCount = getSkipCount({ currentPage, itemsPerPage })
 
         const [result] = await groups.aggregate([
             {
@@ -83,19 +76,11 @@ export const getQueryFilteredPaginatedGroups = async (query, currentPage = 1) =>
                     "filteredGroupsByPage": [
                         { $sort: { createdAt: -1 } },
                         { $skip: skipCount },
-                        { $limit: ITEMS_PER_PAGE },
-                        {
-                            $addFields: {
-                                "id": "$_id" // Add a new field 'id' with the value of '_id'
-                            }
-                        },
-                        {
-                            $unset: "_id" // Remove the '_id' field
-                        }
+                        { $limit: itemsPerPage },
+                        { $addFields: { "id": "$_id" } }, // Add a new field 'id' with the value of '_id'
+                        { $unset: "_id" } // Remove the '_id' field
                     ],
-                    "filteredGroupsCount": [
-                        { $count: "count" }
-                    ]
+                    "filteredGroupsCount": [{ $count: "count" }]
                 }
             },
             {
@@ -105,7 +90,7 @@ export const getQueryFilteredPaginatedGroups = async (query, currentPage = 1) =>
                         $ceil: {
                             $divide: [
                                 { $arrayElemAt: ["$filteredGroupsCount.count", 0] },
-                                ITEMS_PER_PAGE
+                                itemsPerPage
                             ]
                         }
                     }
@@ -228,14 +213,8 @@ export const getAllExternalEmails = async () => {
     try {
         await connectToDatabase()
         const externalEmails = await groups.aggregate([
-            {
-                $unwind: "$members"
-            },
-            {
-                $match: {
-                    "members.type": "external"
-                }
-            },
+            { $unwind: "$members" },
+            { $match: { "members.type": "external" } },
             {
                 $group: {
                     _id: "$members.email",

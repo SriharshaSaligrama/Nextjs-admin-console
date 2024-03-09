@@ -383,5 +383,3 @@ export const groupMembersTableHeaderColumns = [
         label: 'Type',
     }
 ]
-
-export const ITEMS_PER_PAGE = 6

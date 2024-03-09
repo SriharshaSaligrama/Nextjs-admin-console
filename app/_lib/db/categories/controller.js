@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { categories } from "./model";
 import { connectToDatabase } from "../mongodb";
+import { filterChildren } from "../../utils";
 
 export const getCategories = async () => {
     try {
@@ -46,19 +47,7 @@ export const getParentCategories = async (id) => {
         const allCategories = await getCategories()
         const category = await getCategory(id)
         if (category?.id) {
-            const childrenCategories = []
-
-            const filterChildrenCategories = (category) => {
-                childrenCategories.push(String(category.id), category.name)
-                const children = allCategories.filter(dept => dept.parent?.id?.toString() === category.id?.toString())
-                for (let child of children) {
-                    filterChildrenCategories(child)
-                }
-            }
-
-            filterChildrenCategories(category)
-            const parentCategories = allCategories.filter(category => !childrenCategories.includes(String(category.id)))
-            return JSON.parse(JSON.stringify(parentCategories))
+            return filterChildren(category, allCategories);
         }
         return []
     }

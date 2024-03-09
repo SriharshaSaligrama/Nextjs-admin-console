@@ -11,14 +11,7 @@ import useFilteredUsers from './hooks/fetchFilteredUsers';
 const GroupsModalForm = (props) => {
     const { editingData } = props
 
-    const {
-        group,
-        setGroup,
-        errors,
-        pending,
-        handleChange,
-        handleSubmit
-    } = useAddEditGroupModal({ editingData })
+    const { group, setGroup, errors, pending, handleChange, handleSubmit } = useAddEditGroupModal({ editingData })
 
     const { users, query, setQuery } = useFilteredUsers();
 

@@ -24,9 +24,7 @@ const Delete = (props) => {
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
     const ifUsersOfDeletingDepartmentExist = pathname.includes('departments') && usersData?.length > 0
-
     const initialState = { id: deletingData?.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist }
-
     const [state, dispatch] = useFormState(deleteAction, initialState);
 
     return (

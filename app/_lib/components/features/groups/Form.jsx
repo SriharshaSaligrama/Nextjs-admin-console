@@ -12,12 +12,7 @@ import useFilteredUsers from './hooks/fetchFilteredUsers'
 const GroupsForm = (props) => {
     const { editingData } = props
 
-    const {
-        state,
-        dispatch,
-        selectedEmails,
-        setSelectedEmails,
-    } = useAddEditGroup({ editingData })
+    const { state, dispatch, selectedEmails, setSelectedEmails } = useAddEditGroup({ editingData })
 
     const { users, query, setQuery } = useFilteredUsers();
 

@@ -107,3 +107,61 @@ export const deleteBuilding = async ({ id, transferringBuildingId }) => {
         return error
     }
 }
+
+export const getLocationsWithBuildings = async () => {
+    try {
+        await connectToDatabase()
+        const locationsWithBuildings = await locations.aggregate([
+            {
+                $lookup: {
+                    from: "buildings",
+                    localField: "_id",
+                    foreignField: "location",
+                    as: "buildings",
+                },
+            },
+            {
+                $match: {
+                    isDeleted: false,
+                    buildings: {
+                        $exists: true,
+                        $ne: [],
+                    },
+                },
+            },
+            {
+                $project: {
+                    id: "$_id",
+                    _id: 0,
+                    name: 1,
+                    buildings: {
+                        $map: {
+                            input: {
+                                $filter: {
+                                    input: "$buildings",
+                                    as: "building",
+                                    cond: {
+                                        $eq: [
+                                            "$$building.isDeleted",
+                                            false,
+                                        ],
+                                    },
+                                },
+                            },
+                            as: "building",
+                            in: {
+                                id: "$$building._id",
+                                name: "$$building.name",
+                            },
+                        },
+                    },
+                },
+            },
+        ]);
+        return JSON.parse(JSON.stringify(locationsWithBuildings))
+    }
+    catch (error) {
+        console.log({ getLocationsWithBuildingsError: error });
+        throw new Error(error)
+    }
+}

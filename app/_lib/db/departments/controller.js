@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { departments } from "./model";
 import { connectToDatabase } from "../mongodb";
 import { updateAssignedDepartmentOfSelectedUsers } from "../user/controller";
-// import { filterChildren } from "../../utils";
+import { filterChildren } from "../../utils";
 
 export const getDepartments = async () => {
     try {
@@ -48,19 +48,7 @@ export const getParentDepartments = async (id) => {
         const allDepartments = await getDepartments()
         const department = await getDepartment(id)
         if (department?.id) {
-            const childrenDepartments = []
-
-            const filterChildrenDepartments = (department) => {
-                childrenDepartments.push(String(department.id), department.name)
-                const children = allDepartments.filter(dept => dept.parent?.id?.toString() === department.id?.toString())
-                for (let child of children) {
-                    filterChildrenDepartments(child)
-                }
-            }
-
-            filterChildrenDepartments(department)
-            const parentDepartments = allDepartments.filter(department => !childrenDepartments.includes(String(department.id)))
-            return JSON.parse(JSON.stringify(parentDepartments))
+            return filterChildren(department, allDepartments);
         }
         return []
     }

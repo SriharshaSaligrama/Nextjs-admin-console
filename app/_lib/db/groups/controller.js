@@ -44,7 +44,7 @@ export const getPaginatedGroups = async (currentPage = 1) => {
         return JSON.parse(JSON.stringify(result)) //JSON.parse(JSON.stringify()) is being used to avoid warning of toJSON method.
     }
     catch (error) {
-        console.log({ getGroupsError: error });
+        console.log({ getPaginatedGroupsError: error });
         console.log({ users })
         throw new Error(error)
     }
@@ -103,6 +103,18 @@ export const getQueryFilteredPaginatedGroups = async (query, currentPage = 1) =>
     }
 }
 
+export const getGroups = async () => {
+    try {
+        await connectToDatabase()
+        const allGroups = await groups.find({ isDeleted: false });
+        return JSON.parse(JSON.stringify(allGroups)) //JSON.parse(JSON.stringify()) is being used to avoid warning of toJSON method.
+    }
+    catch (error) {
+        console.log({ getGroupsError: error });
+        return error
+    }
+};
+
 export const getAllGroupsIncludingDeleted = async () => {
     try {
         await connectToDatabase()
@@ -110,7 +122,7 @@ export const getAllGroupsIncludingDeleted = async () => {
         return JSON.parse(JSON.stringify(allGroups)) //JSON.parse(JSON.stringify()) is being used to avoid warning of toJSON method.
     }
     catch (error) {
-        console.log({ getGroupsError: error });
+        console.log({ getAllGroupsIncludingDeletedError: error });
         return error
     }
 };

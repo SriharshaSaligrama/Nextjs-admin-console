@@ -235,3 +235,34 @@ export const groupValidator = async ({ name, code, members, editId }) => {
         return { errors: { message: error.message } }
     }
 }
+
+export const noficationMappingValidator = async ({ services, categories, departments, groups, locations }) => {
+    try {
+        const errors = {}
+
+        if (services?.every(service => !service?.isActive)) {
+            errors.services = 'Atleast one service should be selected'
+        }
+        else if (services?.filter(service => service?.isActive && !(service.notificationType.sms || service.notificationType.email))?.length) {
+            errors.notificationType = 'A service should have at least one notification type selected'
+        }
+        else if (!categories?.length) {
+            errors.categories = 'Atleast one category should be selected'
+        }
+        else if (!(departments?.length ^ groups.length)) {
+            errors.departments = 'Either departments or groups should be selected but not both'
+            errors.groups = 'Either departments or groups should be selected but not both'
+        }
+        else if (!departments?.length && groups.length && !locations?.length) {
+            errors.locations = 'Location should be selected'
+        }
+        else if (locations?.some(location => !location.buildings?.length)) {
+            errors.buildings = 'The selected location/s should have at least one building'
+        }
+
+        return errors
+    } catch (error) {
+        console.log({ noficationMappingValidatorError: error })
+        return { errors: { message: error.message } }
+    }
+}

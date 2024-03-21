@@ -3,20 +3,24 @@ import { Grid, Skeleton, Stack } from '@mui/material'
 
 const CardSkeleton = ({ cardItemsLength, hideSearchAddButton }) => {
     return (
-        <Stack spacing={1}>
-            <Skeleton variant="text" sx={{ ...styles.title }} />
-            {!hideSearchAddButton && <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-                <Skeleton variant="text" sx={{ ...styles.searchInput }} />
-                <Skeleton variant="text" sx={{ ...styles.addButton }} />
-            </Stack>}
-            <Grid container gap={2} >
-                {new Array(cardItemsLength || 6).fill(undefined).map((_, index) => (
-                    <Grid key={index} item xs={12} sm={6} md={3.9}>
-                        <Skeleton variant="rectangular" sx={{ ...styles.card }} />
-                    </Grid>
-                ))}
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Stack spacing={1}>
+                    <Skeleton variant="text" sx={{ ...styles.title }} />
+                    {!hideSearchAddButton && <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+                        <Skeleton variant="text" sx={{ ...styles.searchInput }} />
+                        <Skeleton variant="text" sx={{ ...styles.addButton }} />
+                    </Stack>}
+                </Stack>
             </Grid>
-        </Stack>
+            {new Array(cardItemsLength || 6).fill(undefined).map((_, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Stack spacing={1} >
+                        <Skeleton variant="rectangular" sx={{ ...styles.card }} />
+                    </Stack>
+                </Grid>
+            ))}
+        </Grid>
     )
 }
 

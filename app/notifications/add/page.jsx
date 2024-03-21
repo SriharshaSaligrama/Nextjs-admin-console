@@ -4,12 +4,15 @@ import { getCategories } from '@/app/_lib/db/categories/controller'
 import { getDepartments } from '@/app/_lib/db/departments/controller'
 import { getGroups } from '@/app/_lib/db/groups/controller'
 import React from 'react'
+import { unstable_noStore as noStore } from 'next/cache';
 
 export const metadata = {
     title: 'Add Notification Mapping',
 }
 
 const AddNotificationMappings = async () => {
+    noStore()
+
     const categories = await getCategories()
     const departments = await getDepartments()
     const groups = await getGroups()

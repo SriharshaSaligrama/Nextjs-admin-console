@@ -29,7 +29,7 @@ const NotificationMappingForm = (props) => {
             onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
-                <PageHeading heading="Add Notification Mapping" />
+                <PageHeading heading={`${updatingNotificationMap?.id ? 'Edit' : 'Add'} Notification Mapping`} />
                 <ServiceCheckBox {...{ notifications, errors, dispatch }} />
                 <MultipleSelectTextField
                     label='Select categories'

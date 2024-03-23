@@ -8,6 +8,7 @@ import { addUser, deleteUser, editUser, getFilteredUsers } from "./controller";
 import { getBuilding } from "../buildings/controller";
 import { getDepartment } from "../departments/controller";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
+import { signIn } from "@/auth";
 
 const getFormData = async (data) => {
     const formData = getFormDataObject(data)
@@ -174,5 +175,18 @@ export const getFilteredUsersAction = async (query) => {
     } catch (error) {
         console.log({ getFilteredUsersError: error })
         throw new Error(error)
+    }
+}
+
+export const authenticate = async (prevState, data) => {
+    try {
+        const { email, password } = Object.fromEntries(data)
+        await signIn('credentials', { email, password })
+    } catch (error) {
+        if (error.type === 'CredentialsSignin') {
+            return 'CredentialSignin';
+        }
+        console.log({ error })
+        throw error
     }
 }

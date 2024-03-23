@@ -42,6 +42,18 @@ export const getFilteredUsers = async (query) => { // used by groups for searchi
     }
 }
 
+export const getUserByEmailId = async (email) => {
+    try {
+        await connectToDatabase()
+        const user = await users.findOne({ email, isDeleted: false });
+        return JSON.parse(JSON.stringify(user))
+    }
+    catch (error) {
+        console.log({ getUserByEmailIdError: error });
+        throw new Error(error)
+    }
+}
+
 export const getUsersByBuildingId = async (buildingId) => {
     try {
         await connectToDatabase()

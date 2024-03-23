@@ -3,7 +3,7 @@ import { InputAdornment, IconButton, TextField } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const PasswordInput = (props) => {
-    const { name, error, helperText } = props
+    const { name, error, helperText, fullWidth } = props
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -21,6 +21,7 @@ const PasswordInput = (props) => {
             error={!!error}
             helperText={helperText || ''}
             type={showPassword ? 'text' : 'password'}
+            fullWidth={!!fullWidth}
             InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">

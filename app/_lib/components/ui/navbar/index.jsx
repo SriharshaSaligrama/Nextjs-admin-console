@@ -10,6 +10,7 @@ import Drawer from './drawer';
 import AppBar from './appbar';
 import useNavbar from './hook';
 import { navbarListItems } from '@/app/_lib/constants';
+import LoginPage from '@/app/login/page';
 
 const drawerWidth = 240;
 
@@ -27,7 +28,7 @@ const Navbar = (props) => {
     const { children, ...rest } = props
 
     return (
-        <Box sx={{ display: 'flex' }} {...rest}>
+        pathname === '/login' ? <LoginPage /> : <Box sx={{ display: 'flex' }} {...rest}>
             <AppBar position="fixed" open={open} drawerWidth={drawerWidth}>
                 <Toolbar>
                     <IconButton

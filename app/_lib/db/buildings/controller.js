@@ -17,6 +17,18 @@ export const getBuildings = async () => {
     }
 };
 
+export const getRestOfTheBuildings = async (buildingId) => {
+    try {
+        await connectToDatabase()
+        const restOfTheBuildings = await buildings.find({ _id: { $nin: [buildingId] }, isDeleted: false }).sort({ createdAt: -1 }).populate('location');
+        return JSON.parse(JSON.stringify(restOfTheBuildings)) //JSON.parse(JSON.stringify()) is being used to avoid warning of toJSON method.
+    }
+    catch (error) {
+        console.log({ getRestOfTheBuildingsError: error });
+        throw new Error(error)
+    }
+};
+
 export const getBuildingsByLocationId = async (locationId) => {
     try {
         await connectToDatabase()

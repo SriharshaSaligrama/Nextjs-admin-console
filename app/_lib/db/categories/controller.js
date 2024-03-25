@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { categories } from "./model";
 import { connectToDatabase } from "../mongodb";
 import { filterChildren } from "../../utils";
+import { updateCategoriesOfNotificationMapping } from "../notifications/controller";
 
 export const getCategories = async () => {
     try {
@@ -100,10 +101,17 @@ export const editCategory = async (id, { name, code, description, parent }) => {
     }
 }
 
-export const deleteCategory = async ({ id, parentId }) => {
+export const deleteCategory = async ({ id, parentId, notificationExists }) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
+        if (notificationExists) {
+            const updateCategoriesOfNotificationMappingError = await updateCategoriesOfNotificationMapping({ deletingCategoryId: id, transferringCategoryId: parentId })
+            if (updateCategoriesOfNotificationMappingError) {
+                throw new Error(updateCategoriesOfNotificationMappingError?.error?.message || updateCategoriesOfNotificationMappingError?.message || updateCategoriesOfNotificationMappingError?.error)
+            }
+        }
+
         const childrenCategories = await getChildrenCategories(id)
         if (childrenCategories?.error) {
             throw new Error(childrenCategories?.error?.message || childrenCategories?.message || childrenCategories?.error)

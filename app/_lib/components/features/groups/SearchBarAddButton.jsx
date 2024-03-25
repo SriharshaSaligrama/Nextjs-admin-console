@@ -12,9 +12,13 @@ const SearchBarAddButton = (props) => {
     const router = useRouter()
 
     return (
-        groupsData?.length > 0 && <Box sx={{ ...styles.searchBarAddButton }}>
-            <SearchInput placeholder="Search groups by name, code or member's email" />
-            <Pagination totalPages={totalPages} currentPage={currentPage} returnLink='/groups' />
+        <Box sx={{ ...styles.searchBarAddButton, justifyContent: groupsData?.length > 0 ? 'space-between' : 'flex-end' }}>
+            {
+                groupsData?.length > 0 && <>
+                    <SearchInput placeholder="Search groups by name, code or member's email" />
+                    <Pagination totalPages={totalPages} currentPage={currentPage} returnLink='/groups' />
+                </>
+            }
             <Button
                 variant='contained'
                 onClick={() => router.push(`/groups/add`)}
@@ -30,7 +34,6 @@ export default SearchBarAddButton
 const styles = {
     searchBarAddButton: {
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         mb: 2,
     }

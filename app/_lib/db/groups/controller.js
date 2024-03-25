@@ -3,6 +3,7 @@ import { groups } from "./model";
 import { users } from "../user/model";
 import { connectToDatabase } from "../mongodb";
 import { getSkipCount } from "../../utils";
+import { updateGroupsOfNotificationMapping } from "../notifications/controller";
 
 const itemsPerPage = 6;
 
@@ -102,6 +103,18 @@ export const getQueryFilteredPaginatedGroups = async (query, currentPage = 1) =>
         throw new Error(error)
     }
 }
+
+export const getRestOfTheGroups = async (groupId) => {
+    try {
+        await connectToDatabase()
+        const restOfTheGroups = await groups.find({ _id: { $nin: [groupId] }, isDeleted: false });
+        return JSON.parse(JSON.stringify(restOfTheGroups)) //JSON.parse(JSON.stringify()) is being used to avoid warning of toJSON method.
+    }
+    catch (error) {
+        console.log({ getRestOfTheGroupsError: error });
+        throw new Error(error)
+    }
+};
 
 export const getGroups = async () => {
     try {
@@ -208,13 +221,24 @@ export const editGroupModal = async (id, { name, code, description, members }) =
     }
 }
 
-export const deleteGroup = async ({ id }) => {
+export const deleteGroup = async ({ id, transferringGroupId }) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-        await connectToDatabase()
+        if (transferringGroupId) {
+            const updateNotificationError = await updateGroupsOfNotificationMapping({ deletingGroupId: id, transferringGroupId })
+            if (updateNotificationError) {
+                throw new Error(updateNotificationError?.error?.message || updateNotificationError?.message || updateNotificationError?.error)
+            }
+        }
         await groups.findByIdAndUpdate(id, { isDeleted: true }, { new: true, runValidators: true });
+        await session.commitTransaction();
+        session.endSession();
     }
     catch (error) {
         console.log({ deleteGroupError: error });
+        await session.abortTransaction();
+        session.endSession();
         return error
     }
 }
@@ -224,7 +248,12 @@ export const getAllExternalEmails = async () => {
         await connectToDatabase()
         const externalEmails = await groups.aggregate([
             { $unwind: "$members" },
-            { $match: { "members.type": "external" } },
+            {
+                $match: {
+                    "members.type": "external",
+                    isDeleted: false,
+                }
+            },
             {
                 $group: {
                     _id: "$members.email",

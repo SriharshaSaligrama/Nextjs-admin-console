@@ -10,10 +10,9 @@ import DeleteCancelButtons from '../../ui/deletecancelbuttons'
 import { submitFormData } from '../../../utils'
 
 const DeleteBuilding = (props) => {
-    const { deletingData, usersData, buildingsData } = props
+    const { deletingData, usersData, buildingsData, restOfBuildings } = props
     const [transferringBuilding, setTransferringBuilding] = useState('')
     const transferringBuildingData = buildingsData?.find((building) => building.id === transferringBuilding)
-    const restOfBuildings = buildingsData?.filter((building) => building?.id !== deletingData.id)
     const initialState = { id: deletingData?.id, transferringBuildingId: transferringBuilding }
     const [state, dispatch] = useFormState(deleteBuildingAction, initialState);
 
@@ -42,7 +41,7 @@ const DeleteBuilding = (props) => {
                                     name='building'
                                     size='small'
                                     value={transferringBuilding}
-                                    onChange={(event) => setTransferringBuilding(event.target.value)}
+                                    onChange={(event) => { setTransferringBuilding(event.target.value); state.transferringBuildingId = event.target.value }}
                                 >
                                     {
                                         restOfBuildings?.map((building) => (

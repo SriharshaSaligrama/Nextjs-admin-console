@@ -43,14 +43,14 @@ export async function addEditDepartmentAction(prevState, data) {
     redirect("/departments")
 }
 
-export async function deleteDepartmentAction({ id, parentId, userExists }) {
+export async function deleteDepartmentAction({ id, parentId, userExists, notificationExists }) {
     try {
         const parentDepartment = await getDepartment(parentId)
         if (parentId && !parentDepartment?.id) {
             throw new Error('Parent department not found')
         }
 
-        const deleteDepartmentError = await deleteDepartment({ id, parentId, userExists })
+        const deleteDepartmentError = await deleteDepartment({ id, parentId, userExists, notificationExists })
 
         mongoErrorHandler({ mongoError: deleteDepartmentError })
     } catch (error) {

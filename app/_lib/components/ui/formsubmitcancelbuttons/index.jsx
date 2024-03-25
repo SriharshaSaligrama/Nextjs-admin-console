@@ -4,7 +4,7 @@ import { Box, Button } from '@mui/material'
 import useHandleCancelClick from '../../hooks/handleCancelClick';
 
 const FormSubmitCancelButtons = (props) => {
-    const { cancelText, submitText, submitPendingText, returnLink } = props
+    const { cancelText, submitText, submitPendingText, returnLink, pending: pendingWithoutUseFormStatus } = props
 
     const { pending } = useFormStatus()
 
@@ -24,9 +24,9 @@ const FormSubmitCancelButtons = (props) => {
                 sx={{ ...styles.buttons }}
                 variant='contained'
                 type="submit"
-                disabled={pending}
+                disabled={!!pendingWithoutUseFormStatus || pending}
             >
-                {pending ? submitPendingText : submitText}
+                {(pending || pendingWithoutUseFormStatus) ? submitPendingText : submitText}
             </Button>
         </Box>
     )

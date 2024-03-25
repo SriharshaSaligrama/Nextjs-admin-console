@@ -39,21 +39,22 @@ export async function addEditNotificationAction(data) {
             errors.categories = "No Categories added. Please add a category to continue."
         }
 
-        if (!selectedCategories?.length) {
-            errors.categories = "Categories not found, they might have been deleted or doesn't exist"
+        if (!data?.categories?.length) {
+            errors.categories = "Atleast one category should be selected"
+
+            if (selectedCategories?.length !== data?.categories?.length) {
+                errors.categories = 'Selected Categories not found'
+            }
         }
 
-        if (selectedCategories?.length !== data?.categories?.length) {
-            errors.categories = 'Selected Categories not found'
-        }
 
         if (!data?.groups?.length) {
             if (!allDepartmentsLength) {
                 errors.departments = "No Departments added. Please add a department to continue."
             }
 
-            if (!selectedDepartments?.length) {
-                errors.departments = "Departments not found, they might have been deleted or doesn't exist"
+            if (allDepartmentsLength && !data?.departments?.length) {
+                errors.departments = "Either a group or department must be selected"
             }
 
             if (selectedDepartments?.length !== data?.departments?.length) {
@@ -66,8 +67,8 @@ export async function addEditNotificationAction(data) {
                 errors.groups = "No Groups added. Please add a group to continue."
             }
 
-            if (!selectedGroups?.length) {
-                errors.groups = "Groups not found, they might have been deleted or doesn't exist"
+            if (allGroupsLength && !data?.groups?.length) {
+                errors.groups = "Either a group or department must be selected"
             }
 
             if (selectedGroups?.length !== data?.groups?.length) {
@@ -78,8 +79,8 @@ export async function addEditNotificationAction(data) {
                 errors.locations = "No Locations added. Please add a location to continue."
             }
 
-            if (!selectedLocations?.length) {
-                errors.locations = "Locations not found, they might have been deleted or doesn't exist"
+            if (allLocationsLength && !data?.locations?.length) {
+                errors.locations = "Atleast one location should be selected"
             }
 
             if (selectedLocations?.length !== data?.locations?.length) {

@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from "react"
 import { useRouter } from 'next/navigation'
 import { defaultNotifications, notificationReducer } from "./notificationReducer"
 import { addEditNotificationAction } from '@/app/_lib/db/notifications/actions'
+import { formValidator } from "./utils"
 
 const useNotificationMap = ({ locations = [], updatingNotificationMap = {} }) => {
     const [notifications, dispatch] = useReducer(notificationReducer, defaultNotifications)
@@ -39,35 +40,7 @@ const useNotificationMap = ({ locations = [], updatingNotificationMap = {} }) =>
         if (!ignore) {
             setPending(true)
 
-            if (notifications?.selectedLocation && !notifications?.selectedLocationBuildings?.length) {
-                setErrors({
-                    services: '',
-                    notificationType: '',
-                    categories: '',
-                    departments: '',
-                    groups: '',
-                    locations: '',
-                    buildings: 'The selected location should have at least one building'
-                })
-                setPending(false)
-                return
-            } else if (
-                notifications?.locations?.length === 0 &&
-                notifications?.selectedLocation &&
-                notifications?.selectedLocationBuildings?.length
-            ) {
-                setErrors({
-                    services: '',
-                    notificationType: '',
-                    categories: '',
-                    departments: '',
-                    groups: '',
-                    locations: '',
-                    buildings: 'Add the selected location and buildings to buildings list',
-                })
-                setPending(false)
-                return
-            }
+            formValidator({ locations, setErrors, setPending, notifications })
 
             const addedOrUpdatedNotification = await addEditNotificationAction(notifications)
 

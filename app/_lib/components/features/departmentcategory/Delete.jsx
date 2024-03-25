@@ -9,9 +9,10 @@ import PageHeading from '../../ui/pageheading'
 import DeleteCancelButtons from '../../ui/deletecancelbuttons'
 import { departmentCategoryDeletePageDetails } from '../../../constants'
 import { submitFormData } from '../../../utils'
+import { ViewNotificationMapping } from '../notifications/View';
 
 const Delete = (props) => {
-    const { deletingData, childrenData, parentData, usersData } = props
+    const { deletingData, childrenData, parentData, usersData, notificationsData } = props
     const pathname = usePathname();
     const currentPage = departmentCategoryDeletePageDetails[pathname.split('/')[1]] || {
         label: '',
@@ -24,15 +25,15 @@ const Delete = (props) => {
     const [parent, setParent] = useState('')
     const transferringParent = parentData?.find((data) => data.id === parent)
     const ifUsersOfDeletingDepartmentExist = pathname.includes('departments') && usersData?.length > 0
-    const initialState = { id: deletingData?.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist }
+    const initialState = { id: deletingData?.id, parentId: parent, userExists: ifUsersOfDeletingDepartmentExist, notificationExists: notificationsData?.length > 0 }
     const [state, dispatch] = useFormState(deleteAction, initialState);
 
     return (
-        <>
+        <Stack spacing={2}>
             <PageHeading heading={`Delete ${heading}`} />
             {
-                (childrenData?.length > 0 || ifUsersOfDeletingDepartmentExist) ? <Stack sx={{ ...styles.dependenciesContainer }}>
-                    <Stack spacing={2}>
+                (childrenData?.length > 0 || ifUsersOfDeletingDepartmentExist || notificationsData?.length > 0) ? <Stack sx={{ ...styles.dependenciesContainer }}>
+                    <Stack spacing={2} sx={{ ...styles.dependenciesStack }}>
                         {
                             childrenData?.length > 0 && <>
                                 <Typography><b>{deletingData.name}</b> {label} has <b>{childrenData.length}</b> children {label}(s):</Typography>
@@ -62,14 +63,24 @@ const Delete = (props) => {
                             </>
                         }
                         {
+                            notificationsData?.length > 0 && <>
+                                <Typography><b>{deletingData.name}</b> {label} has <b>{notificationsData.length}</b> notification mapping(s):</Typography>
+                                <Stack sx={{ ...styles.viewNotificationsMapping }} spacing={2}>
+                                    {notificationsData.map((notification) => (
+                                        <ViewNotificationMapping notificationMap={notification} key={notification?.id} hideHeader />
+                                    ))}
+                                </Stack>
+                            </>
+                        }
+                        {
                             (parentData?.length > 0) ? <>
-                                <Typography>Please select a {label} from the list to which you need to transfer the children {childrenLabel} {childrenData?.length === 0 && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'}</Typography>
+                                <Typography>Please select a {label} from the list to which you need to transfer the children {childrenLabel} / notification mapping(s) {(childrenData?.length === 0 || notificationsData?.length === 0) && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'}</Typography>
                                 <TextField
                                     select
                                     name='parent'
                                     size='small'
                                     value={parent}
-                                    onChange={(event) => setParent(event.target.value)}
+                                    onChange={(event) => { setParent(event.target.value); state.parentId = event.target.value }}
                                 >
                                     {
                                         parentData?.map((parent) => (
@@ -78,13 +89,13 @@ const Delete = (props) => {
                                     }
                                 </TextField>
                             </> : <>
-                                <Typography maxWidth={'650px'}>There are no parent {childrenLabel} available to transfer the above children {childrenLabel} {childrenData?.length === 0 && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'}.</Typography>
-                                <Typography maxWidth={'650px'}>Please either add a new parent {label} to transfer the above children {childrenLabel} {childrenData?.length === 0 && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'} or delete the above children {childrenLabel} {ifUsersOfDeletingDepartmentExist && 'and remove the assigned department of the user(s)'} and then delete the <b>{deletingData.name}</b> {label}</Typography>
+                                <Typography maxWidth={'650px'}>There are no parent {childrenLabel} available to transfer the above children {childrenLabel} / notification mapping(s) {(childrenData?.length === 0 || notificationsData?.length === 0) && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'}.</Typography>
+                                <Typography maxWidth={'650px'}>Please either add a new parent {label} to transfer the above children {childrenLabel} / notification mapping(s) {(childrenData?.length === 0 || notificationsData?.length === 0) && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'} or delete the above children {childrenLabel}/ notification mapping(s) {ifUsersOfDeletingDepartmentExist && 'and remove the assigned department of the user(s)'} and then delete the <b>{deletingData.name}</b> {label}</Typography>
                             </>
                         }
                         {
                             parent && <>
-                                <Typography>The children {childrenLabel} {childrenData?.length === 0 && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'} listed above will be transferred to <b>{transferringParent?.name}</b> {label}</Typography>
+                                <Typography>The children {childrenLabel} / notification mapping(s) {(childrenData?.length === 0 || notificationsData?.length === 0) && '(if any)'} {ifUsersOfDeletingDepartmentExist && 'and the user(s)'} listed above will be transferred to <b>{transferringParent?.name}</b> {label}</Typography>
                                 <Typography>Are you sure to delete <b>{deletingData.name}</b> {label}?</Typography>
                             </>
                         }
@@ -110,7 +121,7 @@ const Delete = (props) => {
                     </Box>
                 </Stack>
             }
-        </>
+        </Stack>
     )
 }
 
@@ -120,18 +131,21 @@ const styles = {
     dependenciesContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: '80dvh'
     },
     noDependenciesContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         height: '80dvh'
     },
+    dependenciesStack: {
+        overflow: 'auto',
+        ...globalStyles.thinScrollBar
+    },
     childList: {
         margin: 0,
         padding: 0,
         paddingLeft: 2,
-        maxHeight: '150px',
+        maxHeight: '250px',
         overflow: 'auto',
         ...globalStyles.thinScrollBar
     },
@@ -139,5 +153,11 @@ const styles = {
         margin: 0,
         padding: 0,
         paddingBottom: 1
+    },
+    viewNotificationsMapping: {
+        maxHeight: '220px',
+        overflow: 'auto',
+        p: 2,
+        ...globalStyles.thinScrollBar
     }
 }

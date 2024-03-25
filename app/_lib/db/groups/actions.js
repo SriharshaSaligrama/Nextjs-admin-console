@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { groupValidator } from "../validators";
-import { addGroup, addGroupModal, deleteGroup, editGroup, editGroupModal } from "./controller";
+import { addGroup, addGroupModal, deleteGroup, editGroup, editGroupModal, getGroup } from "./controller";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
 import { getUserType } from "../user/controller";
 
@@ -75,9 +75,13 @@ export async function addEditGroupModalAction(data) {
     }
 }
 
-export async function deleteGroupAction({ id }) {
+export async function deleteGroupAction({ id, transferringGroupId }) {
     try {
-        const deleteGroupError = await deleteGroup({ id })
+        const transferringGroup = await getGroup(transferringGroupId)
+        if (transferringGroupId && !transferringGroup?.id) {
+            throw new Error('Transferring group not found')
+        }
+        const deleteGroupError = await deleteGroup({ id, transferringGroupId })
 
         mongoErrorHandler({ mongoError: deleteGroupError })
     } catch (error) {

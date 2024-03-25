@@ -108,6 +108,42 @@ export const LocationsTable = ({ notificationMap }) => {
     </>
 }
 
+export const ViewNotificationMapping = ({ notificationMap, hideHeader }) => {
+    return (
+        <>
+            {!hideHeader && <Header id={notificationMap?.id} />}
+            <Stack spacing={2} p={2} useFlexGap component={Paper} elevation={5}>
+                <Typography sx={{ ...styles.groupsTable.heading }}>Services:</Typography>
+                {notificationMap?.services?.map((service) => (
+                    (service?.notificationType?.sms || service?.notificationType?.email) ?
+                        <Typography key={service?.name} sx={{ pl: 3 }}>
+                            {service?.name}: {
+                                (service?.notificationType?.sms && service?.notificationType?.email) ? 'sms, email' :
+                                    service?.notificationType?.sms ? 'sms' : service?.notificationType?.email ? 'email' : ''
+                            }
+                        </Typography> : null
+                ))}
+                {
+                    notificationMap?.categories?.length > 0 &&
+                    <CategoryDepartment entities={notificationMap?.categories || []} heading={'Categories'} />
+                }
+                {
+                    notificationMap?.departments?.length > 0 &&
+                    <CategoryDepartment entities={notificationMap?.departments || []} heading={'Departments'} />
+                }
+                {
+                    notificationMap?.groups?.length > 0 &&
+                    <GroupsTable notificationMap={notificationMap} />
+                }
+                {
+                    notificationMap?.locations?.length > 0 &&
+                    <LocationsTable notificationMap={notificationMap} />
+                }
+            </Stack>
+        </>
+    )
+}
+
 const styles = {
     header: {
         container: {
@@ -137,4 +173,3 @@ const styles = {
         },
     }
 }
-

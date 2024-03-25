@@ -43,14 +43,14 @@ export async function addEditCategoryAction(prevState, data) {
     redirect("/categories")
 }
 
-export async function deleteCategoryAction({ id, parentId }) {
+export async function deleteCategoryAction({ id, parentId, notificationExists }) {
     try {
         const parentCategory = await getCategory(parentId)
         if (parentId && !parentCategory?.id) {
             throw new Error('Parent category not found')
         }
 
-        const deleteCategoryError = await deleteCategory({ id, parentId })
+        const deleteCategoryError = await deleteCategory({ id, parentId, notificationExists })
 
         mongoErrorHandler({ mongoError: deleteCategoryError })
     } catch (error) {

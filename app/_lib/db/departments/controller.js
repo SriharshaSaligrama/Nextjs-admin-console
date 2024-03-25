@@ -3,6 +3,7 @@ import { departments } from "./model";
 import { connectToDatabase } from "../mongodb";
 import { updateAssignedDepartmentOfSelectedUsers } from "../user/controller";
 import { filterChildren } from "../../utils";
+import { updateDepartmentsOfNotificationMapping } from "../notifications/controller";
 
 export const getDepartments = async () => {
     try {
@@ -101,7 +102,7 @@ export const editDepartment = async (id, { name, code, description, parent }) =>
     }
 }
 
-export const deleteDepartment = async ({ id, parentId, userExists }) => {
+export const deleteDepartment = async ({ id, parentId, userExists, notificationExists }) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
@@ -109,6 +110,13 @@ export const deleteDepartment = async ({ id, parentId, userExists }) => {
             const updateAssignedDepartmentOfSelectedUsersError = await updateAssignedDepartmentOfSelectedUsers({ deletingDepartmentId: id, transferringDepartmentId: parentId })
             if (updateAssignedDepartmentOfSelectedUsersError) {
                 throw new Error(updateAssignedDepartmentOfSelectedUsersError?.error?.message || updateAssignedDepartmentOfSelectedUsersError?.message || updateAssignedDepartmentOfSelectedUsersError?.error)
+            }
+        }
+
+        if (notificationExists) {
+            const updateDepartmentsOfNotificationMappingError = await updateDepartmentsOfNotificationMapping({ deletingDepartmentId: id, transferringDepartmentId: parentId })
+            if (updateDepartmentsOfNotificationMappingError) {
+                throw new Error(updateDepartmentsOfNotificationMappingError?.error?.message || updateDepartmentsOfNotificationMappingError?.message || updateDepartmentsOfNotificationMappingError?.error)
             }
         }
 

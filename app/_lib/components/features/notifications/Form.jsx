@@ -7,7 +7,8 @@ import ServiceCheckBox from './ServiceCheckBox'
 import MultipleSelectTextField from './MultipleSelectTextField'
 import SelectedLocationsTable from './SelectedLocationsTable'
 import useNotificationMap from './hook'
-import SubmitCancelButtons from './SubmitCancelButtons'
+import FormSubmitCancelButtons from '../../ui/formsubmitcancelbuttons'
+import { textFieldsProps } from './utils'
 
 const NotificationMappingForm = (props) => {
     const { categories, departments, groups, locations, updatingNotificationMap } = props
@@ -21,6 +22,15 @@ const NotificationMappingForm = (props) => {
         pending
     } = useNotificationMap({ locations, updatingNotificationMap })
 
+    const textFields = textFieldsProps({
+        notifications,
+        dispatch,
+        errors,
+        categories,
+        departments,
+        groups
+    })
+
     return (
         <Box
             component="form"
@@ -29,43 +39,16 @@ const NotificationMappingForm = (props) => {
             onSubmit={handleSubmit}
         >
             <Stack spacing={2}>
-                <PageHeading heading={`${updatingNotificationMap?.id ? 'Edit' : 'Add'} Notification Mapping`} />
+                <PageHeading
+                    heading={`${updatingNotificationMap?.id ? 'Edit' : 'Add'} Notification Mapping`}
+                />
                 <ServiceCheckBox {...{ notifications, errors, dispatch }} />
-                <MultipleSelectTextField
-                    label='Select categories'
-                    value={notifications?.categories}
-                    onChange={(event) => dispatch({
-                        type: 'handleCategoriesChange',
-                        categories: event?.target?.value
-                    })}
-                    error={errors?.categories?.length > 0}
-                    helperText={errors?.categories}
-                    options={categories || []}
-                />
-                <MultipleSelectTextField
-                    label='Select departments'
-                    value={notifications?.departments}
-                    onChange={(event) => dispatch({
-                        type: 'handleDepartmentsChange',
-                        departments: event?.target?.value
-                    })}
-                    error={errors?.departments?.length > 0}
-                    helperText={errors?.departments}
-                    options={departments || []}
-                    disabled={notifications?.groups?.length > 0}
-                />
-                <MultipleSelectTextField
-                    label='Select groups'
-                    value={notifications?.groups}
-                    onChange={(event) => dispatch({
-                        type: 'handleGroupsChange',
-                        groups: event?.target?.value
-                    })}
-                    error={errors?.groups?.length > 0}
-                    helperText={errors?.groups}
-                    options={groups || []}
-                    disabled={notifications?.departments?.length > 0}
-                />
+                {textFields.map((textField) => (
+                    <MultipleSelectTextField
+                        key={textField?.label}
+                        {...textField}
+                    />
+                ))}
                 {
                     notifications?.groups?.length > 0 && (
                         <TextField
@@ -123,7 +106,18 @@ const NotificationMappingForm = (props) => {
                         <SelectedLocationsTable {...{ notifications, locations, dispatch }} />
                     )
                 }
-                <SubmitCancelButtons {...{ pending, updatingNotificationMap }} />
+                <FormSubmitCancelButtons
+                    pending={pending}
+                    returnLink='/notifications'
+                    submitText={updatingNotificationMap?.id ?
+                        'Update Notification Map' :
+                        'Add Notification Map'
+                    }
+                    submitPendingText={updatingNotificationMap?.id ?
+                        'Updating Notification Map ...' :
+                        'Adding Notification Map ...'
+                    }
+                />
             </Stack>
         </Box>
     )

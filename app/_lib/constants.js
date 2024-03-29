@@ -1,14 +1,9 @@
-import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined, SpaceDashboardOutlined } from "@mui/icons-material";
+import { AccountTreeOutlined, ApartmentOutlined, ForwardToInboxOutlined, GridViewOutlined, GroupsOutlined, ManageAccountsOutlined, NotificationsOutlined, RoomOutlined } from "@mui/icons-material";
 import DataTableActions from "./components/features/featurehome/DataTableActions";
 import { addEditDepartmentAction, deleteDepartmentAction } from "./db/departments/actions";
 import { addEditCategoryAction, deleteCategoryAction } from "./db/categories/actions";
 
 export const navbarListItems = [
-    {
-        title: 'Dashboard',
-        icon: <SpaceDashboardOutlined />,
-        path: '/',
-    },
     {
         title: 'Locations',
         icon: <RoomOutlined />,

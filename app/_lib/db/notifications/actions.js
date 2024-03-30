@@ -35,12 +35,10 @@ export async function addEditNotificationAction(data) {
 
         const errors = await noficationMappingValidator(data)
 
-        if (!allCategoriesLength) {
-            errors.categories = "No Categories added. Please add a category to continue."
-        }
-
         if (!data?.categories?.length) {
-            errors.categories = "Atleast one category should be selected"
+            if (!allCategoriesLength) {
+                errors.categories = "No Categories added. Please add a category to continue."
+            }
 
             if (selectedCategories?.length !== data?.categories?.length) {
                 errors.categories = 'Selected Categories not found'

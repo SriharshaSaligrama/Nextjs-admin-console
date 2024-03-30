@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material';
 import Navbar from './_lib/components/ui/navbar';
 import Theme from './_lib/components/ui/theme';
 import { getSession } from '@/auth';
+import { getUserByEmailId } from './_lib/db/user/controller';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,14 +19,15 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
     const session = await getSession();
+    const loggedInUser = await getUserByEmailId(session?.email);
 
     return (
         <html lang="en">
             <body className={inter.className}>
                 <AppRouterCacheProvider>
-                    <Theme>
+                    <Theme loggedInUser={loggedInUser}>
                         <CssBaseline />
-                        <Navbar session={session}>
+                        <Navbar session={session} loggedInUser={loggedInUser}>
                             {children}
                             <div id="modal-root" />
                         </Navbar>

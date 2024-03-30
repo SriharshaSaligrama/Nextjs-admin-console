@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
     const session = await getSession();
-    if (session?.exp) redirect("/locations")
+    if (session?.email) redirect("/locations")
 
     return (
-        !session?.exp ? <LoginPage session={session} /> : <Typography >Home Page</Typography>
+        !session?.email ? <LoginPage session={session} /> : <Typography >Home Page</Typography>
     )
 }

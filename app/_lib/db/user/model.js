@@ -49,6 +49,15 @@ const usersSchema = new mongoose.Schema({
         ref: "departments",
         default: null
     },
+    theme: {
+        type: String,
+        trim: true,
+        enum: {
+            values: ['light', 'dark'],
+            message: 'Theme must be either light or dark',
+        },
+        default: 'light',
+    },
     isDeleted: {
         type: Boolean,
         default: false,

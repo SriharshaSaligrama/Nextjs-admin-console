@@ -136,12 +136,12 @@ export const addUser = async ({ fullName, email, password, role, buildingAssigne
     }
 }
 
-export const editUser = async (id, { fullName, role, buildingAssignedTo, managingBuildings, departmentAssignedTo }) => {
+export const editUser = async (id, { fullName, role, buildingAssignedTo, managingBuildings, departmentAssignedTo, theme }) => {
     try {
         await connectToDatabase()
         await users.findOneAndUpdate(
             { _id: id, isDeleted: false },
-            { $set: { fullName, role, buildingAssignedTo, managingBuildings, departmentAssignedTo } },
+            { $set: { fullName, role, buildingAssignedTo, managingBuildings, departmentAssignedTo, theme } },
             { new: true, runValidators: true }
         );
     }

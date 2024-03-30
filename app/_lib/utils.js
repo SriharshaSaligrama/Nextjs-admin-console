@@ -14,6 +14,14 @@ export const mongoErrorHandler = ({ errorProneFields, mongoError }) => {
     }
 }
 
+export const createFormData = object => {
+    const objectFormData = Object.keys(object).reduce((formData, key) => {
+        formData.append(key, object[key]);
+        return formData;
+    }, new FormData())
+    return objectFormData
+};
+
 export const getFormDataObject = (formData) => {
     const formObject = Object.fromEntries(formData.entries())
     return formObject

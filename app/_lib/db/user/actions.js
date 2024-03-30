@@ -17,7 +17,7 @@ const getFormData = async (data) => {
         ...formData,
         buildingAssignedTo: ((!formData?.buildingAssignedTo || formData?.buildingAssignedTo.trim() === '') ? null : new mongoose.Types.ObjectId(formData?.buildingAssignedTo)),
         managingBuildings: formData?.managingBuildings?.length > 0 ? formData?.managingBuildings.split(',').map((id) => new mongoose.Types.ObjectId(id)) : [],
-        departmentAssignedTo: ((!formData?.departmentAssignedTo || formData?.departmentAssignedTo.trim() === '' || formData?.departmentAssignedTo.trim() === 'selectDepartment') ? null : new mongoose.Types.ObjectId(formData?.departmentAssignedTo))
+        departmentAssignedTo: ((!formData?.departmentAssignedTo || formData?.departmentAssignedTo.trim() === '' || formData?.departmentAssignedTo.trim() === 'null' || formData?.departmentAssignedTo.trim() === 'selectDepartment') ? null : new mongoose.Types.ObjectId(formData?.departmentAssignedTo))
     }
 }
 
@@ -98,7 +98,8 @@ export async function editUserAction(prevState, data) {
             role,
             buildingAssignedTo,
             managingBuildings,
-            departmentAssignedTo
+            departmentAssignedTo,
+            theme
         } = await getFormData(data)
 
         const errors = await editUserValidator({
@@ -141,7 +142,8 @@ export async function editUserAction(prevState, data) {
             role,
             buildingAssignedTo,
             managingBuildings,
-            departmentAssignedTo
+            departmentAssignedTo,
+            theme
         })
 
         mongoErrorHandler({ errorProneFields: ['fullName', 'role', 'buildingAssignedTo'], mongoError: updatedUserError })

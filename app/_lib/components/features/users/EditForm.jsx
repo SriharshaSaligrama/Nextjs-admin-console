@@ -106,6 +106,11 @@ const EditUserForm = (props) => {
                         </MenuItem>
                     ))}
                 </TextField>
+                <TextField
+                    name='theme'
+                    defaultValue={editingData?.theme}
+                    sx={{ display: 'none' }}
+                />
                 <FormSubmitCancelButtons
                     returnLink='/users'
                     submitText={`Update User`}

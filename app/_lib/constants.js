@@ -186,13 +186,13 @@ export const locationColumns = [
     {
         field: 'name',
         headerName: 'Name',
-        width: 700,
+        minWidth: 600,
         editable: false,
     },
     {
         field: 'Actions',
         renderCell: (cellValues) => (<DataTableActions cellValues={cellValues} />),
-        width: 700,
+        minWidth: 400,
         editable: false,
     },
 ]

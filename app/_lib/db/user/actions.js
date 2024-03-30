@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import mongoose from "mongoose";
 import { addUserValidator, editUserValidator } from "../validators";
-import { addUser, deleteUser, editUser, getFilteredUsers } from "./controller";
+import { addUser, deleteUser, editUser, getFilteredUsers, getUser } from "./controller";
 import { getBuilding } from "../buildings/controller";
 import { getDepartment } from "../departments/controller";
 import { getFormDataObject, mongoErrorHandler } from "../../utils";
@@ -91,6 +91,7 @@ export async function addUserAction(prevState, data) {
 }
 
 export async function editUserAction(prevState, data) {
+    let themeUpdated = false
     try {
         const {
             id,
@@ -101,6 +102,11 @@ export async function editUserAction(prevState, data) {
             departmentAssignedTo,
             theme
         } = await getFormData(data)
+
+        const editingUser = await getUser(id)
+        if (editingUser?.theme !== theme) {
+            themeUpdated = true
+        }
 
         const errors = await editUserValidator({
             fullName,
@@ -153,7 +159,7 @@ export async function editUserAction(prevState, data) {
     }
 
     revalidatePath("/users")
-    redirect("/users")
+    if (!themeUpdated) redirect("/users")
 }
 
 export async function deleteUserAction({ id }) {

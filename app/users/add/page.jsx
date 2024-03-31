@@ -10,8 +10,9 @@ export const metadata = {
 
 const AddUser = async () => {
     noStore()
-    const allBuildings = await getBuildings()
-    const allDepartments = await getDepartments()
+    const allBuildingsData = getBuildings()
+    const allDepartmentsData = getDepartments()
+    const [allBuildings, allDepartments] = await Promise.all([allBuildingsData, allDepartmentsData])
 
     return (
         <UserForm allBuildings={allBuildings || []} allDepartments={allDepartments || []} />

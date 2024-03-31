@@ -20,10 +20,11 @@ const EditNotificationMapping = async (props) => {
         notFound()
     }
 
-    const categories = await getCategories()
-    const departments = await getDepartments()
-    const groups = await getGroups()
-    const locations = await getLocationsWithBuildings()
+    const categoriesData = getCategories()
+    const departmentsData = getDepartments()
+    const groupsData = getGroups()
+    const locationsData = getLocationsWithBuildings()
+    const [categories, departments, groups, locations] = await Promise.all([categoriesData, departmentsData, groupsData, locationsData])
 
     return (
         <NotificationMappingForm

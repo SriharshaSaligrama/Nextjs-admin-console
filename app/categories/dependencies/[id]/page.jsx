@@ -15,16 +15,19 @@ const DeleteDependencies = async (props) => {
     if (!deletingCategory) {
         notFound()
     }
-    const childrenCategories = await getChildrenCategories(id)
-    const parentCategories = await getParentCategories(id)
-    const notificationsData = await getNotificationMappingByCategoryId(id)
+    const childrenCategoriesData = getChildrenCategories(id)
+    const parentCategoriesData = getParentCategories(id)
+    const notificationsData = getNotificationMappingByCategoryId(id)
+    const [childrenCategories, parentCategories, notifications] = await Promise.all([
+        childrenCategoriesData, parentCategoriesData, notificationsData
+    ])
 
     return (
         <Delete
             deletingData={deletingCategory || {}}
             childrenData={childrenCategories || []}
             parentData={parentCategories || []}
-            notificationsData={notificationsData || []}
+            notificationsData={notifications || []}
         />
     )
 }

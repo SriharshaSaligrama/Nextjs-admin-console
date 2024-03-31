@@ -17,8 +17,9 @@ const EditUser = async (props) => {
         notFound()
     }
 
-    const allBuildings = await getBuildings()
-    const allDepartments = await getDepartments()
+    const allBuildingsData = getBuildings()
+    const allDepartmentsData = getDepartments()
+    const [allBuildings, allDepartments] = await Promise.all([allBuildingsData, allDepartmentsData])
 
     return (
         <EditUserForm allBuildings={allBuildings || []} allDepartments={allDepartments || []} editingData={editingUser} />

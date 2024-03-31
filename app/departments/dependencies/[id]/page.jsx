@@ -16,10 +16,13 @@ const DeleteDependencies = async (props) => {
     if (!deletingDepartment) {
         notFound()
     }
-    const childrenDepartments = await getChildrenDepartments(id)
-    const parentDepartments = await getParentDepartments(id)
-    const usersOfdeletingDepartment = await getUsersByDepartmentId(id)
-    const notificationsData = await getNotificationMappingByDepartmentId(id)
+    const childrenDepartmentsData = getChildrenDepartments(id)
+    const parentDepartmentsData = getParentDepartments(id)
+    const usersOfdeletingDepartmentData = getUsersByDepartmentId(id)
+    const notificationsData = getNotificationMappingByDepartmentId(id)
+    const [childrenDepartments, parentDepartments, usersOfdeletingDepartment, notifications] = await Promise.all([
+        childrenDepartmentsData, parentDepartmentsData, usersOfdeletingDepartmentData, notificationsData
+    ])
 
     return (
         <Delete
@@ -27,7 +30,7 @@ const DeleteDependencies = async (props) => {
             childrenData={childrenDepartments || []}
             parentData={parentDepartments || []}
             usersData={usersOfdeletingDepartment || []}
-            notificationsData={notificationsData || []}
+            notificationsData={notifications || []}
         />
     )
 }

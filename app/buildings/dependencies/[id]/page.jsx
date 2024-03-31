@@ -15,9 +15,14 @@ const DeleteDependencies = async (props) => {
     if (!deletingBuilding) {
         notFound()
     }
-    const usersofSelectedBuilding = await getUsersByBuildingId(id)
-    const allBuildings = await getBuildings()
-    const restOfBuildings = await getRestOfTheBuildings(id)
+
+    const usersofSelectedBuildingData = getUsersByBuildingId(id)
+    const allBuildingsData = getBuildings()
+    const restOfBuildingsData = getRestOfTheBuildings(id)
+
+    const [usersofSelectedBuilding, allBuildings, restOfBuildings] = await Promise.all([
+        usersofSelectedBuildingData, allBuildingsData, restOfBuildingsData
+    ])
 
     return (
         <DeleteBuilding

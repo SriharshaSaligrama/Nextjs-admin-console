@@ -15,16 +15,19 @@ const DeleteDependencies = async (props) => {
     if (!deletingGroup) {
         notFound()
     }
-    const allGroups = await getGroups()
-    const restOfGroups = await getRestOfTheGroups(id)
-    const notificationsData = await getNotificationMappingByGroupId(id)
+    const allGroupsData = getGroups()
+    const restOfGroupsData = getRestOfTheGroups(id)
+    const notificationsData = getNotificationMappingByGroupId(id)
+    const [allGroups, restOfGroups, notifications] = await Promise.all([
+        allGroupsData, restOfGroupsData, notificationsData
+    ])
 
     return (
         <DeleteGroup
             deletingData={deletingGroup || {}}
             groupsData={allGroups || []}
             restOfGroups={restOfGroups || []}
-            notificationsData={notificationsData || []}
+            notificationsData={notifications || []}
         />
     )
 }

@@ -1,7 +1,8 @@
 'use client'
 
-import React, { createContext, useMemo, useState } from 'react'
-import { ThemeProvider, createTheme } from '@mui/material';
+import React, { createContext, useState } from 'react'
+import { ThemeProvider } from '@mui/material';
+import useSetTheme from './hook';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -10,13 +11,7 @@ const Theme = (props) => {
 
     const [mode, setMode] = useState(loggedInUser?.theme || 'light');
 
-    const colorMode = useMemo(() => ({
-        toggleColorMode: () => {
-            setMode(mode === 'light' ? 'dark' : 'light');
-        },
-    }), [mode]);
-
-    const theme = useMemo(() => createTheme({ palette: { mode: loggedInUser?.theme } }), [loggedInUser?.theme]);
+    const { theme, colorMode } = useSetTheme({ mode, setMode, loggedInUser })
 
     return (
         <ColorModeContext.Provider value={colorMode}>

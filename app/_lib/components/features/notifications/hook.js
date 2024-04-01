@@ -35,36 +35,29 @@ const useNotificationMap = ({ locations = [], updatingNotificationMap = {} }) =>
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        let ignore = false
+        setPending(true)
 
-        if (!ignore) {
-            setPending(true)
+        formValidator({ locations, setErrors, setPending, notifications })
 
-            formValidator({ locations, setErrors, setPending, notifications })
+        const addedOrUpdatedNotification = await addEditNotificationAction(notifications)
 
-            const addedOrUpdatedNotification = await addEditNotificationAction(notifications)
-
-            if (addedOrUpdatedNotification?.errors) {
-                setErrors({
-                    services: '',
-                    notificationType: '',
-                    categories: '',
-                    departments: '',
-                    groups: '',
-                    locations: '',
-                    ...addedOrUpdatedNotification.errors
-                })
-                setPending(false)
-            }
-            if (addedOrUpdatedNotification?.id) {
-                setPending(false)
-                router.push('/notifications')
-            }
+        if (addedOrUpdatedNotification?.errors) {
+            setErrors({
+                services: '',
+                notificationType: '',
+                categories: '',
+                departments: '',
+                groups: '',
+                locations: '',
+                ...addedOrUpdatedNotification.errors
+            })
+            setPending(false)
         }
 
-        return () => {
-            ignore = true;
-        };
+        if (addedOrUpdatedNotification?.id) {
+            setPending(false)
+            router.push('/notifications')
+        }
     }
 
     return { handleSubmit, notifications, errors, dispatch, selectedLocation, pending }

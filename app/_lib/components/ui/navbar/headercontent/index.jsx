@@ -22,13 +22,12 @@ const ThemeButton = () => {
 const HeaderContent = (props) => {
     const { open, handleDrawerOpen, handleUserMenuClick, session, loggedInUser } = props
 
-    const [state, dispatch] = useFormState(editUserAction, {});
+    const [, dispatch] = useFormState(editUserAction, {});
 
     const theme = useTheme();
 
     const handleToggleDarkMode = () => {
         dispatch(createFormData({ ...loggedInUser, theme: theme.palette.mode === 'dark' ? 'light' : 'dark' }));
-        if (state) state.mode = theme.palette.mode
     }
 
     return (

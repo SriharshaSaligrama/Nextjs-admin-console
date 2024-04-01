@@ -3,7 +3,7 @@
 import React from 'react'
 import { Autocomplete, Box, Button, Checkbox, Stack, TextField, Tooltip } from '@mui/material'
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import useAddEditGroupModal from './hooks/formModal';
+import { useAddEditGroupModalFormEventHandler, useAddEditGroupModalFormSubmit } from './hooks/formModal';
 import globalStyles from '@/app/globalStyles';
 import { handleSearch } from '@/app/_lib/utils';
 import useFilteredUsers from './hooks/fetchFilteredUsers';
@@ -11,7 +11,9 @@ import useFilteredUsers from './hooks/fetchFilteredUsers';
 const GroupsModalForm = (props) => {
     const { editingData } = props
 
-    const { group, setGroup, errors, pending, handleChange, handleSubmit } = useAddEditGroupModal({ editingData })
+    const { group, setGroup, handleGroupFormChange } = useAddEditGroupModalFormEventHandler({ editingData })
+
+    const { errors, pending, handleSubmit } = useAddEditGroupModalFormSubmit({ group })
 
     const { users, query, setQuery } = useFilteredUsers();
 
@@ -30,7 +32,7 @@ const GroupsModalForm = (props) => {
                     name='name'
                     size='small'
                     value={group?.name}
-                    onChange={handleChange}
+                    onChange={handleGroupFormChange}
                     error={errors?.name?.length > 0}
                     helperText={errors?.name || ''}
                 />
@@ -40,7 +42,7 @@ const GroupsModalForm = (props) => {
                     name='code'
                     size='small'
                     value={group?.code}
-                    onChange={handleChange}
+                    onChange={handleGroupFormChange}
                     error={errors?.code?.length > 0}
                     helperText={errors?.code || ''}
                 />
@@ -51,7 +53,7 @@ const GroupsModalForm = (props) => {
                     size='small'
                     name='description'
                     value={group?.description}
-                    onChange={handleChange}
+                    onChange={handleGroupFormChange}
                 />
                 <Tooltip title='press Enter to add the email to the members list, if adding manually'>
                     <Autocomplete

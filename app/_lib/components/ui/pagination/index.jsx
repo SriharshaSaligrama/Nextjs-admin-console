@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Pagination as MuiPagination } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation';
+import useSetCurrentPage from './hook';
+import handleChange from './utils';
 
 const Pagination = ({ totalPages, currentPage, returnLink, sx }) => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
 
-    const queryPage = searchParams.get('page')
-
-    const [page, setPage] = useState(+currentPage || 1);
-
-    useEffect(() => {
-        if (queryPage) {
-            setPage(+queryPage)
-        }
-    }, [queryPage]);
-
-    const handleChange = (event, value) => {
-        setPage(+value);
-        const params = new URLSearchParams(searchParams);
-        params.set('page', value.toString());
-        router.push(`${returnLink}?${params.toString()}`);
-    };
+    const { page, setPage } = useSetCurrentPage({ currentPage, searchParams });
 
     return (
         <MuiPagination
             count={totalPages}
             sx={{ ...styles.align, ...sx }}
             page={page}
-            onChange={handleChange}
+            onChange={(event, value) => handleChange(event, value, { setPage, searchParams, router, returnLink })}
         />
     )
 }

@@ -1,49 +1,24 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material';
 import { CloseOutlined } from '@mui/icons-material';
+import useModal from './hook';
 
 const Modal = ({ children, title }) => {
     const router = useRouter();
     const theme = useTheme()
-    const dialogRef = useRef(null);
-
-    useEffect(() => {
-        const handleOutsideClick = (event) => {
-            // Check if the click is outside the modal
-            const clickTarget = event.target;
-
-            if (
-                !clickTarget.closest('dialog') &&
-                !clickTarget.closest('.MuiAutocomplete-listbox') &&
-                clickTarget !== dialogRef.current
-            ) {
-                router.back();
-            }
-        };
-
-        document.addEventListener('click', handleOutsideClick);
-
-        return () => {
-            document.removeEventListener('click', handleOutsideClick);
-        };
-    }, [router]);
-
-
-    function onDismiss() {
-        router.back();
-    }
+    const dialogRef = useModal(null);
 
     return createPortal(
         <Box sx={{ ...styles.modalBackdrop, bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)' }}>
-            <dialog ref={dialogRef} style={{ ...styles.modal, backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }} onClose={onDismiss}>
+            <dialog ref={dialogRef} style={{ ...styles.modal, backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }} onClose={() => router.back()}>
                 <Stack spacing={2}>
                     <Box sx={{ ...styles.header }}>
                         <Typography sx={{ ...styles.title }}>{title}</Typography>
-                        <IconButton color='error' onClick={onDismiss}>
+                        <IconButton color='error' onClick={() => router.back()}>
                             <CloseOutlined />
                         </IconButton>
                     </Box>

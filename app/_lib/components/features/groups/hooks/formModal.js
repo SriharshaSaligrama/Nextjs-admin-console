@@ -2,9 +2,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { addEditGroupModalAction } from "../../../../db/groups/actions"
 
-const useAddEditGroupModal = ({ editingData = {} }) => {
-    const router = useRouter()
-
+export const useAddEditGroupModalFormEventHandler = ({ editingData = {} }) => {
     const [group, setGroup] = useState({
         id: editingData?.id || null,
         name: editingData?.name || '',
@@ -13,47 +11,44 @@ const useAddEditGroupModal = ({ editingData = {} }) => {
         members: editingData?.members?.length > 0 ? editingData?.members?.map(member => member?.email) : []
     })
 
-    const [pending, setPending] = useState(false)
-
-    const [errors, setErrors] = useState({ name: '', code: '', members: '', message: '' })
-
-    const handleChange = (e) => {
+    const handleGroupFormChange = (e) => {
         const { name, value } = e.target
         setGroup({ ...group, [name]: value })
     }
 
+    return { group, setGroup, handleGroupFormChange }
+}
+
+export const useAddEditGroupModalFormSubmit = ({ group = {} }) => {
+    const router = useRouter()
+
+    const [pending, setPending] = useState(false)
+
+    const [errors, setErrors] = useState({ name: '', code: '', members: '', message: '' })
+
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        let ignore = false
+        setPending(true)
 
-        if (!ignore) {
-            setPending(true)
+        const addedOrUpdatedGroup = await addEditGroupModalAction(group)
 
-            const addedOrUpdatedGroup = await addEditGroupModalAction(group)
-
-            if (addedOrUpdatedGroup.errors) {
-                setErrors({
-                    name: '',
-                    code: '',
-                    members: '',
-                    message: '',
-                    ...addedOrUpdatedGroup.errors
-                })
-                setPending(false)
-            }
-            if (addedOrUpdatedGroup?.id) {
-                setPending(false)
-                router.back()
-            }
+        if (addedOrUpdatedGroup.errors) {
+            setErrors({
+                name: '',
+                code: '',
+                members: '',
+                message: '',
+                ...addedOrUpdatedGroup.errors
+            })
+            setPending(false)
         }
 
-        return () => {
-            ignore = true;
-        };
+        if (addedOrUpdatedGroup?.id) {
+            setPending(false)
+            router.back()
+        }
     }
 
-    return { group, setGroup, errors, pending, handleChange, handleSubmit }
+    return { errors, pending, handleSubmit }
 }
-
-export default useAddEditGroupModal

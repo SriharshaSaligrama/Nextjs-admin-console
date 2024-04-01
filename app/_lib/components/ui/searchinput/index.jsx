@@ -3,28 +3,12 @@
 import React from 'react'
 import { InputAdornment, TextField, Tooltip } from '@mui/material'
 import { SearchOutlined } from '@mui/icons-material'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { debounce } from '../../../utils';
+import { useSearchInput } from './hook'
 
 const SearchInput = (props) => {
     const { placeholder } = props
 
-    const searchParams = useSearchParams();
-
-    const pathname = usePathname();
-
-    const { replace } = useRouter();
-
-    const handleSearch = debounce((term) => {
-        const params = new URLSearchParams(searchParams);
-        params.set('page', '1');
-        if (term) {
-            params.set('query', term);
-        } else {
-            params.delete('query');
-        }
-        replace(`${pathname}?${params.toString()}`);
-    }, 500);
+    const { handleSearch, searchParams } = useSearchInput()
 
     return (
         <TextField
